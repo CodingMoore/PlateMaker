@@ -13,7 +13,7 @@ using Emgu.CV.CvEnum;
 using Emgu.CV.Util;
 
 
-namespace PlateScanner
+namespace PlateMaker
 {
     class Plate
     {
@@ -42,7 +42,7 @@ namespace PlateScanner
             // Defines the full directory path for saving the file
             HtmlFilePath = new FileInfo($"{fileSavingDirectoryStart}html Files\\");
 
-            PlateImage = new Image<Bgr, Byte>(file);
+            PlateImage = new Image<Bgr, byte>(file);
             OutputMat = null;
             XGreenDot = 0;
             YGreenDot = 0;
@@ -55,7 +55,7 @@ namespace PlateScanner
 
         public Image<Bgr, byte> NoiseSuppression()
         {
-            Image<Bgr, byte> erodedImage = this.PlateImage.Erode(3);
+            Image<Bgr, byte> erodedImage = PlateImage.Erode(3);
             return erodedImage; //.SmoothGaussian(9);
         }
 
@@ -82,13 +82,13 @@ namespace PlateScanner
                 double centerPointPerimeter = CvInvoke.ArcLength(centerPointContours[i], true);
                 VectorOfPoint centerPointApprox = new VectorOfPoint();
                 CvInvoke.ApproxPolyDP(centerPointContours[i], centerPointApprox, 0.04 * centerPointPerimeter, true);
-                CvInvoke.DrawContours(this.PlateImage, centerPointContours, i, new MCvScalar(255, 0, 255), 2);
+                CvInvoke.DrawContours(PlateImage, centerPointContours, i, new MCvScalar(255, 0, 255), 2);
 
                 var moments = CvInvoke.Moments(centerPointContours[i]);
-                this.XPlateCenter = (int)(moments.M10 / moments.M00);
-                this.YPlateCenter = (int)(moments.M01 / moments.M00);
+                XPlateCenter = (int)(moments.M10 / moments.M00);
+                YPlateCenter = (int)(moments.M01 / moments.M00);
 
-                CvInvoke.Line(redDotPlateImage, new Point(this.XPlateCenter, this.YPlateCenter), new Point(this.XPlateCenter, this.YPlateCenter), new MCvScalar(0, 0, 255), 5, LineType.EightConnected, 0);
+                CvInvoke.Line(redDotPlateImage, new Point(XPlateCenter, YPlateCenter), new Point(XPlateCenter, YPlateCenter), new MCvScalar(0, 0, 255), 5, LineType.EightConnected, 0);
             }
 
             ImageViewer centerDotViewer = new ImageViewer(redDotPlateImage);
@@ -121,13 +121,13 @@ namespace PlateScanner
                 double greenDotPointPerimeter = CvInvoke.ArcLength(greenDotPointContours[i], true);
                 VectorOfPoint greenDotPointApprox = new VectorOfPoint();
                 CvInvoke.ApproxPolyDP(greenDotPointContours[i], greenDotPointApprox, 0.04 * greenDotPointPerimeter, true);
-                CvInvoke.DrawContours(this.PlateImage, greenDotPointContours, i, new MCvScalar(255, 0, 255), 2);
+                CvInvoke.DrawContours(PlateImage, greenDotPointContours, i, new MCvScalar(255, 0, 255), 2);
 
                 var moments = CvInvoke.Moments(greenDotPointContours[i]);
-                this.XGreenDot = (int)(moments.M10 / moments.M00);
-                this.YGreenDot = (int)(moments.M01 / moments.M00);
+                XGreenDot = (int)(moments.M10 / moments.M00);
+                YGreenDot = (int)(moments.M01 / moments.M00);
 
-                CvInvoke.Line(greenDotPlateImage, new Point(this.XGreenDot, this.YGreenDot), new Point(this.XGreenDot, this.YGreenDot), new MCvScalar(0, 0, 255), 5, LineType.EightConnected, 0);
+                CvInvoke.Line(greenDotPlateImage, new Point(XGreenDot, YGreenDot), new Point(XGreenDot, YGreenDot), new MCvScalar(0, 0, 255), 5, LineType.EightConnected, 0);
             }
 
             ImageViewer greenDotViewer = new ImageViewer(smoothedPlateImage);
@@ -140,15 +140,15 @@ namespace PlateScanner
         {
             // translate image to match centerDot to image center
 
-            this.XImageCenter = this.PlateImage.Width / 2;
-            this.YImageCenter = this.PlateImage.Height / 2;
+            XImageCenter = PlateImage.Width / 2;
+            YImageCenter = PlateImage.Height / 2;
 
-            int xDistance = this.XPlateCenter - this.XImageCenter;
-            int yDistance = this.YPlateCenter - this.YImageCenter;
+            int xDistance = XPlateCenter - XImageCenter;
+            int yDistance = YPlateCenter - YImageCenter;
 
             PointF[] sourcePoints = new PointF[]
             {
-                new PointF(this.XPlateCenter,this.YPlateCenter),
+                new PointF(XPlateCenter,YPlateCenter),
                 new PointF(1, 0),
                 new PointF(0, 1)
 
@@ -156,7 +156,7 @@ namespace PlateScanner
 
             PointF[] destinationPoints = new PointF[]
             {
-                new PointF(this.XImageCenter, this.YImageCenter),
+                new PointF(XImageCenter, YImageCenter),
                 new PointF(1 - xDistance, 0 - yDistance),
                 new PointF(0 - xDistance, 1 - yDistance)
 
@@ -166,7 +166,7 @@ namespace PlateScanner
             Mat translationMap = CvInvoke.GetAffineTransform(sourcePoints, destinationPoints);
 
             // Make the translation move
-            CvInvoke.WarpAffine(this.PlateImage, smoothedPlateImage, translationMap, new Size(this.PlateImage.Width, this.PlateImage.Height)); //Check source and destination and return on this.
+            CvInvoke.WarpAffine(PlateImage, smoothedPlateImage, translationMap, new Size(PlateImage.Width, PlateImage.Height)); //Check source and destination and return on this.
 
             ImageViewer translationViewer = new ImageViewer(smoothedPlateImage);
             translationViewer.Image = smoothedPlateImage;
@@ -182,27 +182,27 @@ namespace PlateScanner
             bool topSide = false;
 
             // Quadrant checks
-            leftSide = (this.XPlateCenter - this.XGreenDot) > 0 ? true : false;
-            topSide = (this.YPlateCenter - this.YGreenDot) > 0 ? true : false;
+            leftSide = XPlateCenter - XGreenDot > 0 ? true : false;
+            topSide = YPlateCenter - YGreenDot > 0 ? true : false;
 
             if (leftSide && topSide) // Top Left quadrant
             {
-                this.RotationAngle = (180 / Math.PI) * Math.Atan2((this.XPlateCenter - this.XGreenDot), (this.YPlateCenter - this.YGreenDot));
+                RotationAngle = 180 / Math.PI * Math.Atan2(XPlateCenter - XGreenDot, YPlateCenter - YGreenDot);
             }
             else if (!leftSide && topSide) // Top Right quadrant
             {
-                this.RotationAngle = -(180 / Math.PI) * Math.Atan2((this.XGreenDot - this.XPlateCenter), (this.YPlateCenter - this.YGreenDot));
+                RotationAngle = -(180 / Math.PI) * Math.Atan2(XGreenDot - XPlateCenter, YPlateCenter - YGreenDot);
             }
             else if (leftSide && !topSide) // Bottom Left quadrant
             {
-                this.RotationAngle = 180 - ((180 / Math.PI) * Math.Atan2((this.XPlateCenter - this.XGreenDot), (this.YGreenDot - this.YPlateCenter)));
+                RotationAngle = 180 - 180 / Math.PI * Math.Atan2(XPlateCenter - XGreenDot, YGreenDot - YPlateCenter);
             }
             else // Bottom Right Quadrant
             {
-                this.RotationAngle = -(180 - (180 / Math.PI) * Math.Atan2((this.XGreenDot - this.XPlateCenter), (this.YGreenDot - this.YPlateCenter)));
+                RotationAngle = -(180 - 180 / Math.PI * Math.Atan2(XGreenDot - XPlateCenter, YGreenDot - YPlateCenter));
             }
 
-            var rotatedPlateImage = translatedPlateImage.Rotate(this.RotationAngle, new Bgr(150, 150, 150), true);
+            var rotatedPlateImage = translatedPlateImage.Rotate(RotationAngle, new Bgr(150, 150, 150), true);
 
             ImageViewer rotationViewer = new ImageViewer(rotatedPlateImage);
             rotationViewer.Image = rotatedPlateImage;
@@ -229,7 +229,7 @@ namespace PlateScanner
             Mat forgroundMat = new Mat();
             Mat outputMat = new Mat(binaryPlateImage.Size, DepthType.Cv8U, 1);
 
-            this.OutputMat = outputMat;
+            OutputMat = outputMat;
 
             VectorOfVectorOfPoint contours = new VectorOfVectorOfPoint();
 
@@ -268,7 +268,7 @@ namespace PlateScanner
                 double contourArea = CvInvoke.ContourArea(contours[i]);
 
                 int diameter = contourHeight > contourWidth ? contourHeight : contourWidth;
-                int radius = (diameter / 2) + 1;
+                int radius = diameter / 2 + 1;
 
 
                 //alternate binary radious calculation
@@ -331,10 +331,10 @@ namespace PlateScanner
             string svgString = svgStringBuilder.ToString();
 
             // Creates the file directory if the directory does not already exist.  If the directory does already exist, this method does nothing.
-            this.SvgFilePath.Directory.Create();
+            SvgFilePath.Directory.Create();
 
             // Writes the svg file to disk based on the svgString
-            File.WriteAllText($"{this.SvgFilePath}{this.FileName}.svg", svgString);
+            File.WriteAllText($"{SvgFilePath}{FileName}.svg", svgString);
 
             return svgString;
 
@@ -373,10 +373,10 @@ namespace PlateScanner
             string htmlString = htmlStringBuilder.ToString();
 
             // Creates the file directory if the directory does not already exist.  If the directory does already exist, this method does nothing.
-            this.HtmlFilePath.Directory.Create();
+            HtmlFilePath.Directory.Create();
 
             // Writes the html file to disk based on the htmlString, which in turn is based partially on the svgString
-            File.WriteAllText($"{this.HtmlFilePath}\\index.html", htmlString);
+            File.WriteAllText($"{HtmlFilePath}\\index.html", htmlString);
 
         }
 
@@ -418,8 +418,8 @@ namespace PlateScanner
             // for every center and radius in our list, create a sub string to be use the the svg file
             for (int i = 0; i < stellarObjectData.Count; i++)
             {
-                double cxScaledAndTranslatedInt = (double.Parse(stellarObjectData[i][0]) * plateScalingMultiplier) + (400 * plateScalingMultiplier);
-                double cyScaledAndTranslatedInt = (double.Parse(stellarObjectData[i][1]) * plateScalingMultiplier) + (400 * plateScalingMultiplier);
+                double cxScaledAndTranslatedInt = double.Parse(stellarObjectData[i][0]) * plateScalingMultiplier + 400 * plateScalingMultiplier;
+                double cyScaledAndTranslatedInt = double.Parse(stellarObjectData[i][1]) * plateScalingMultiplier + 400 * plateScalingMultiplier;
 
                 string cxScaledAndTranslatedString = cxScaledAndTranslatedInt.ToString();
                 string cyScaledAndTranslatedString = cyScaledAndTranslatedInt.ToString();
@@ -439,10 +439,10 @@ namespace PlateScanner
             string svgString = svgStringBuilder.ToString();
 
             // Creates the file directory if the directory does not already exist.  If the directory does already exist, this method does nothing.
-            this.SvgFilePath.Directory.Create();
+            SvgFilePath.Directory.Create();
 
             // Writes the svg file to disk based on the svgString
-            File.WriteAllText($"{this.SvgFilePath}{this.FileName}.svg", svgString);
+            File.WriteAllText($"{SvgFilePath}{FileName}.svg", svgString);
 
             return svgString;
         }
@@ -494,10 +494,10 @@ namespace PlateScanner
             string htmlString = htmlStringBuilder.ToString();
 
             // Creates the file directory if the directory does not already exist.  If the directory does already exist, this method does nothing.
-            this.HtmlFilePath.Directory.Create();
+            HtmlFilePath.Directory.Create();
 
             // Writes the html file to disk based on the htmlString, which in turn is based partially on the svgString
-            File.WriteAllText($"{this.HtmlFilePath}{this.FileName}.html", htmlString);
+            File.WriteAllText($"{HtmlFilePath}{FileName}.html", htmlString);
 
         }
 

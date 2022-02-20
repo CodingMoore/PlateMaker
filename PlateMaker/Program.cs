@@ -9,7 +9,7 @@ using Emgu.CV.CvEnum;
 using Emgu.CV.Util;
 using System.Text.RegularExpressions;
 
-namespace PlateScanner
+namespace PlateMaker
 {
     class Program
     {

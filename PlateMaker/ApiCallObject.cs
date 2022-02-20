@@ -12,7 +12,7 @@ using RestSharp.Extensions;
 using System.Web;
 using Newtonsoft.Json;
 
-namespace PlateScanner
+namespace PlateMaker
 {
     class ApiCallObject
     {
@@ -36,7 +36,7 @@ namespace PlateScanner
                 "WHERE" + " " +
                $"s.plate = {plateNumber}" + " " +
                 "Order by xFocal asc";
-            EncodedQueryString = HttpUtility.UrlEncode(this.QueryString);
+            EncodedQueryString = HttpUtility.UrlEncode(QueryString);
             ContentFormat = "&format=jsonx";
             ApiResponse = null;
         }
@@ -45,7 +45,7 @@ namespace PlateScanner
         {
 
             var client = new RestClient();
-            var request = new RestRequest(this.BaseUrl + this.EncodedQueryString + this.ContentFormat);
+            var request = new RestRequest(BaseUrl + EncodedQueryString + ContentFormat);
 
             var response = client.ExecuteAsync(request, Method.GET).GetAwaiter().GetResult();
 
@@ -62,7 +62,7 @@ namespace PlateScanner
 
                 //Console.WriteLine(response.Content);
                 // deserializes json response
-                this.ApiResponse = JsonConvert.DeserializeObject(response.Content);
+                ApiResponse = JsonConvert.DeserializeObject(response.Content);
             }
 
             //Console.WriteLine("EncodedQueryString" + this.EncodedQueryString);
@@ -78,21 +78,21 @@ namespace PlateScanner
 
 
 
-            for (int i = 0; i < this.ApiResponse[0]["Rows"].Count; i++)
+            for (int i = 0; i < ApiResponse[0]["Rows"].Count; i++)
             {
 
-                    string[] objectDataString = new string[] { 
-                        this.ApiResponse[0]["Rows"][i]["xFocal"].ToString(), 
-                        this.ApiResponse[0]["Rows"][i]["yFocal"].ToString(), 
-                        this.ApiResponse[0]["Rows"][i]["ObjId"].ToString(), 
-                        this.ApiResponse[0]["Rows"][i]["plate"].ToString(),
-                        this.ApiResponse[0]["Rows"][i]["ra"].ToString(),
-                        this.ApiResponse[0]["Rows"][i]["dec"].ToString(),
+                string[] objectDataString = new string[] {
+                        ApiResponse[0]["Rows"][i]["xFocal"].ToString(),
+                        ApiResponse[0]["Rows"][i]["yFocal"].ToString(),
+                        ApiResponse[0]["Rows"][i]["ObjId"].ToString(),
+                        ApiResponse[0]["Rows"][i]["plate"].ToString(),
+                        ApiResponse[0]["Rows"][i]["ra"].ToString(),
+                        ApiResponse[0]["Rows"][i]["dec"].ToString(),
                     };
 
-                    stellarObjectData.Add(i, objectDataString);
+                stellarObjectData.Add(i, objectDataString);
             }
-            
+
             //foreach(var item in this.ApiResponse[0]["Rows"])
             //{
             //    string objectIdAsString = item["ObjId"].ToString();
@@ -105,8 +105,8 @@ namespace PlateScanner
 
 
         }
-        
-       
+
+
     }
 }
 
