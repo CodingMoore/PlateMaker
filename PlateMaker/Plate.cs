@@ -60,9 +60,13 @@ namespace PlateMaker
             int ySvgPlateCenter = yViewBoxMax / 2;
             int SvgPlateRadius = 394 * plateScalingMultiplier;
 
-            // Creates our opening and closing svg strings to be tacked on to the Stringbuilder
+            // Creates our opening svg string to be tacked on to the beginning of the Stringbuilder
             string svgOpen = $"<svg id='svgImage' width='100vw' height='100vh' viewBox='{xViewBoxMin} {yViewBoxMin} {xViewBoxMax} {yViewBoxMax}' transform-origin='0 0'>";
+
+            // Creates the plate border to be added to the Stringbuilder
             string svgPlateEdge = $"<circle cx='{xSvgPlateCenter}' cy='{ySvgPlateCenter}' r='{SvgPlateRadius}' strok='grey' stroke-width='1' />";
+
+            // Creates our closing svg string to be tacked on to the end of the Stringbuilder
             string svgClose = "</svg>";
 
             // Adds the opening SVG string to the Stringbuilder
