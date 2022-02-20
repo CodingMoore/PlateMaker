@@ -36,37 +36,37 @@ namespace PlateMaker
                 // Creates a new plate object for the individual image file
                 Plate plate = new Plate(file, fileSavingDirectoryStart);
 
-                // noise suppression
-                //Image<Bgr, byte> smoothedPlateImage = plate.NoiseSuppression();
+                //// noise suppression
+                ////Image<Bgr, byte> smoothedPlateImage = plate.NoiseSuppression();
 
-                // Get the coordinates of the center of the plate based on red colored blob/shape
-                plate.GetPlateCenter(plate.PlateImage);
+                //// Get the coordinates of the center of the plate based on red colored blob/shape
+                //plate.GetPlateCenter(plate.PlateImage);
 
-                // Get the coordinates of the top of the plate based on a green colored blob/shape
-                plate.GetPlateTopPoint(plate.PlateImage);
+                //// Get the coordinates of the top of the plate based on a green colored blob/shape
+                //plate.GetPlateTopPoint(plate.PlateImage);
 
-                // Translate position of plate so that its center matches that of the image center
-                Image<Bgr, byte> translatedPlateImage = plate.TranslatePlateCenter(plate.PlateImage);
+                //// Translate position of plate so that its center matches that of the image center
+                //Image<Bgr, byte> translatedPlateImage = plate.TranslatePlateCenter(plate.PlateImage);
 
-                // Rotates the plate so that it is perfectly vertical (based on the position of the red(center) and green(top) blobs/shapes
-                Image<Bgr, byte> rotatedPlateImage = plate.RotatePlatetoVertical(translatedPlateImage);
+                //// Rotates the plate so that it is perfectly vertical (based on the position of the red(center) and green(top) blobs/shapes
+                //Image<Bgr, byte> rotatedPlateImage = plate.RotatePlatetoVertical(translatedPlateImage);
 
-                // Because the rotation algorithm blurs the contours/shapes, creating grey squares, we need to get the image back to being binary.
-                Image<Gray, byte> binaryPlateImage = plate.MakeImageBinary(rotatedPlateImage);
+                //// Because the rotation algorithm blurs the contours/shapes, creating grey squares, we need to get the image back to being binary.
+                //Image<Gray, byte> binaryPlateImage = plate.MakeImageBinary(rotatedPlateImage);
 
-                // Creates a plate image where all blobs/shapes are selected
-                List<int[]> centerAndRadius = plate.FindContoursCenterAndRadius(binaryPlateImage);
+                //// Creates a plate image where all blobs/shapes are selected
+                //List<int[]> centerAndRadius = plate.FindContoursCenterAndRadius(binaryPlateImage);
 
-                // Creates SVG file from contours (and saves it to disk), and returns the svg as a string so we can make an Html file with it.
-                string svgString = plate.CreateSvgFromPhoto(centerAndRadius);
+                //// Creates SVG file from contours (and saves it to disk), and returns the svg as a string so we can make an Html file with it.
+                //string svgString = plate.CreateSvgFromPhoto(centerAndRadius);
 
-                // Creates an Html file based on the htmlString
-                plate.CreateHtml(svgString);
+                //// Creates an Html file based on the htmlString
+                //plate.CreateHtml(svgString);
 
-                // Display the plate image
-                //ImageViewer viewer = new ImageViewer(binaryAllContoursPlateMat);
-                //viewer.Image = binaryAllContoursPlateMat;
-                //viewer.ShowDialog();
+                //// Display the plate image
+                ////ImageViewer viewer = new ImageViewer(binaryAllContoursPlateMat);
+                ////viewer.Image = binaryAllContoursPlateMat;
+                ////viewer.ShowDialog();
 
                 // pulls the plate number from the file name, since every file should be named by its number.
                 string plateNumber = plate.FileName;
