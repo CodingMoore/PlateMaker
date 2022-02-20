@@ -19,7 +19,7 @@ namespace PlateMaker
             Console.WriteLine("Program Started");
 
             // Defines the directory in which to look for the plate image files
-            string imageImportDirectory = "C:\\Users\\Randel\\source\\repos\\PlateScanner\\PlateScanner\\Images\\";
+            string imageImportDirectory = "C:\\Users\\Randel\\source\\repos\\PlateMaker\\PlateMaker\\Images\\";
 
             // Creates an array of all files found in the specified directory that contain the specified value.
             string[] files = { };

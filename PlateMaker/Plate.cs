@@ -66,6 +66,7 @@ namespace PlateMaker
             // Creates the plate border to be added to the Stringbuilder
             string svgPlateEdge = $"<circle cx='{xSvgPlateCenter}' cy='{ySvgPlateCenter}' r='{SvgPlateRadius}' strok='grey' stroke-width='1' />";
 
+
             // Creates our closing svg string to be tacked on to the end of the Stringbuilder
             string svgClose = "</svg>";
 
