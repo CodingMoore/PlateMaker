@@ -63,6 +63,8 @@ namespace PlateMaker
 
             string plateFillStyle = "style='fill:rgb(92,92,92);'";
 
+            string plateEighthInchCenterHoleStyle = "style='fill:rgb(76,0,255);'";
+
             string plateQuarterInchHoleStyle = "style='fill:rgb(255,0,0);'";
 
             string plateHalfInch180DegreeSpacedHoleStyle = "style='fill:rgb(0,181,255);'";
@@ -141,6 +143,15 @@ namespace PlateMaker
                     $"{plateFillStyle}/>" +
                 "</svg >";
 
+            // Creates a fill for the 1/8 inch hole in the center of the plate, which will be added to the Stringbuilder
+            string svgPlateEighthInchCenterHole =
+                "<svg viewBox='0 0 120 120' style='fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:2;'>" +
+                    "<g id='_1-8-inch-center-hole' serif:id='1/8 inch center hole' transform='matrix(0.0391862,0,0,0.0391862,57.5523,57.6538)'>" +
+                        $"<circle cx='62.463' cy='59.874' r='5.104' {plateEighthInchCenterHoleStyle}/>" +
+                    "</g>" +
+                "</svg>";
+
+
             // Creates a fill for the three evenly space (120 Degrees apart) 1/4 inch holes in the plate, which will be added to the Stringbuilder
             string svgPlateQuarterInchHoles =
                 "<svg viewBox='0 0 120 120' style='fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:2;'>" +
@@ -213,7 +224,6 @@ namespace PlateMaker
                     "</g>" +
                 "</svg>";
 
-
             // Creates a new StringBuilder object
             var svgStringBuilder = new StringBuilder();
 
@@ -221,6 +231,7 @@ namespace PlateMaker
             svgStringBuilder.Append(svgOpenOuter);
             svgStringBuilder.Append(svgPlateBorder);
             svgStringBuilder.Append(svgPlateFill);
+            svgStringBuilder.Append(svgPlateEighthInchCenterHole);
             svgStringBuilder.Append(svgPlateQuarterInchHoles);
             svgStringBuilder.Append(svgPlateHalfInch180DegreeSpacedHoles);
             svgStringBuilder.Append(svgPlateHalfInch30DegreeSpacedHoles);
