@@ -59,7 +59,9 @@ namespace PlateMaker
             // If you change the strokeWidthScaler, then you change the stroke width relative to the dot size.
             double strokeWidthScaler = .5;
 
-            string plateBorderStyle = "style='stroke:rgb(46,46,46);'";
+
+            // Styling constants
+            string plateBorderStyle = "style='stroke:rgb(46,46,46); stroke-width:1%;'";
 
             string plateFillStyle = "style='fill:rgb(92,92,92);'";
 
