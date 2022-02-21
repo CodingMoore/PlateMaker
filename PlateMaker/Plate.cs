@@ -65,7 +65,9 @@ namespace PlateMaker
 
             string plateQuarterInchHoleStyle = "style='fill:rgb(255,0,0);'";
 
-            string svgPlateHalfInch30DegreeSpacedHoleStyle = "style='fill:rgb(102,255,0);'";
+            string plateHalfInch180DegreeSpacedHoleStyle = "style='fill:rgb(0,181,255);'";
+
+            string plateHalfInch30DegreeSpacedHoleStyle = "style='fill:rgb(102,255,0);'";
 
             ////////////////////////////////
             ////////////////////////////////
@@ -139,7 +141,7 @@ namespace PlateMaker
                     $"{plateFillStyle}/>" +
                 "</svg >";
 
-            // Creates a fill for the three 1/4 inch holes in the plate, which will be added to the Stringbuilder
+            // Creates a fill for the three evenly space (120 Degrees apart) 1/4 inch holes in the plate, which will be added to the Stringbuilder
             string svgPlateQuarterInchHoles =
                 "<svg viewBox='0 0 120 120' style='fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:2;'>" +
                     "<g id='_1-4-inch-holes'" +
@@ -155,45 +157,58 @@ namespace PlateMaker
                     "</g>" +
                 "</svg>";
 
-            // Creates a fill for the twelve evently spaced 1/2 inch holes in the plate, which will be added to the Stringbuilder
+            // Creates a fill for the two evently spaced (180 Degrees apart) 1/2 inch holes in the plate, which will be added to the Stringbuilder
+            string svgPlateHalfInch180DegreeSpacedHoles =
+                "<svg viewBox='0 0 120 120' style='fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:2;'>" +
+                    "<g id='_1-2-inch-holes--180-degree-spacing-'>" +
+                        "<g transform='matrix(0.579984,0.270451,-0.270451,0.579984,48.2348,-5.80127)'>" +
+                            $"<circle cx='60.118' cy='15.413' r='1.25' {plateHalfInch180DegreeSpacedHoleStyle}/>" +
+                        "</g>" +
+                        "<g transform='matrix(-0.579984,-0.270451,0.270451,-0.579984,71.7652,125.801)'>" +
+                            $"<circle cx='60.118' cy='15.413' r='1.25' {plateHalfInch180DegreeSpacedHoleStyle}/>" +
+                        "</g>" +
+                    "</g>" +
+                "</svg>";
+
+            // Creates a fill for the twelve evently spaced (30 Degrees apart) 1/2 inch holes in the plate, which will be added to the Stringbuilder
             string svgPlateHalfInch30DegreeSpacedHoles =
                 "<svg viewBox='0 0 120 120' style='fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:2;'>" +
                     "<g id='_1-2-inch-holes--30-degree-spacing--'>" +
                         "<g transform='matrix(0.452507,-0.452507,0.452507,0.452507,-5.8569,48.5503)'>" +
-                            $"<circle cx='60.118' cy='15.413' r='1.25' {svgPlateHalfInch30DegreeSpacedHoleStyle}/>" +
+                            $"<circle cx='60.118' cy='15.413' r='1.25' {plateHalfInch30DegreeSpacedHoleStyle}/>" +
                         "</g>" +
                         "<g transform='matrix(0.165629,-0.618136,0.618136,0.165629,-2.75859,83.0127)'>" +
-                            $"<circle cx='60.118' cy='15.413' r='1.25' {svgPlateHalfInch30DegreeSpacedHoleStyle}/>" +
+                            $"<circle cx='60.118' cy='15.413' r='1.25' {plateHalfInch30DegreeSpacedHoleStyle}/>" +
                         "</g>" +
                         "<g transform='matrix(-0.165629,-0.618136,0.618136,-0.165629,17.1558,111.309)'>" +
-                            $"<circle cx='60.118' cy='15.413' r='1.25' {svgPlateHalfInch30DegreeSpacedHoleStyle}/>" +
+                            $"<circle cx='60.118' cy='15.413' r='1.25' {plateHalfInch30DegreeSpacedHoleStyle}/>" +
                         "</g>" +
                         "<g transform='matrix(-0.452507,-0.452507,0.452507,-0.452507,48.5503,125.857)'>" +
-                            $"<circle cx='60.118' cy='15.413' r='1.25' {svgPlateHalfInch30DegreeSpacedHoleStyle}/>" +
+                            $"<circle cx='60.118' cy='15.413' r='1.25' {plateHalfInch30DegreeSpacedHoleStyle}/>" +
                         "</g>" +
                         "<g transform='matrix(-0.618136,-0.165629,0.165629,-0.618136,83.0127,122.759)'>" +
-                            $"<circle cx='60.118' cy='15.413' r='1.25' {svgPlateHalfInch30DegreeSpacedHoleStyle}/>" +
+                            $"<circle cx='60.118' cy='15.413' r='1.25' {plateHalfInch30DegreeSpacedHoleStyle}/>" +
                         "</g>" +
                         "<g transform='matrix(-0.618136,0.165629,-0.165629,-0.618136,111.309,102.844)'>" +
-                            $"<circle cx='60.118' cy='15.413' r='1.25' {svgPlateHalfInch30DegreeSpacedHoleStyle}/>" +
+                            $"<circle cx='60.118' cy='15.413' r='1.25' {plateHalfInch30DegreeSpacedHoleStyle}/>" +
                         "</g>" +
                         "<g transform='matrix(-0.452507,0.452507,-0.452507,-0.452507,125.857,71.4497)'>" +
-                            $"<circle cx='60.118' cy='15.413' r='1.25' {svgPlateHalfInch30DegreeSpacedHoleStyle}/>" +
+                            $"<circle cx='60.118' cy='15.413' r='1.25' {plateHalfInch30DegreeSpacedHoleStyle}/>" +
                         "</g>" +
                         "<g transform='matrix(-0.165629,0.618136,-0.618136,-0.165629,122.759,36.9873)'>" +
-                            $"<circle cx='60.118' cy='15.413' r='1.25' {svgPlateHalfInch30DegreeSpacedHoleStyle}/>" +
+                            $"<circle cx='60.118' cy='15.413' r='1.25' {plateHalfInch30DegreeSpacedHoleStyle}/>" +
                         "</g>" +
                         "<g transform='matrix(0.165629,0.618136,-0.618136,0.165629,102.844,8.6911)'>" +
-                            $"<circle cx='60.118' cy='15.413' r='1.25' {svgPlateHalfInch30DegreeSpacedHoleStyle}/>" +
+                            $"<circle cx='60.118' cy='15.413' r='1.25' {plateHalfInch30DegreeSpacedHoleStyle}/>" +
                         "</g>" +
                         "<g transform='matrix(0.452507,0.452507,-0.452507,0.452507,71.4497,-5.8569)'>" +
-                            $"<circle cx='60.118' cy='15.413' r='1.25' {svgPlateHalfInch30DegreeSpacedHoleStyle}/>" +
+                            $"<circle cx='60.118' cy='15.413' r='1.25' {plateHalfInch30DegreeSpacedHoleStyle}/>" +
                         "</g>" +
                         "<g transform='matrix(0.618136,0.165629,-0.165629,0.618136,36.9873,-2.75859)'>" +
-                            $"<circle cx='60.118' cy='15.413' r='1.25' {svgPlateHalfInch30DegreeSpacedHoleStyle}/>" +
+                            $"<circle cx='60.118' cy='15.413' r='1.25' {plateHalfInch30DegreeSpacedHoleStyle}/>" +
                         "</g>" +
                         "<g transform='matrix(0.618136,-0.165629,0.165629,0.618136,8.6911,17.1558)'>" +
-                            $"<circle cx='60.118' cy='15.413' r='1.25' {svgPlateHalfInch30DegreeSpacedHoleStyle}/>" +
+                            $"<circle cx='60.118' cy='15.413' r='1.25' {plateHalfInch30DegreeSpacedHoleStyle}/>" +
                         "</g>" +
                     "</g>" +
                 "</svg>";
@@ -207,6 +222,7 @@ namespace PlateMaker
             svgStringBuilder.Append(svgPlateBorder);
             svgStringBuilder.Append(svgPlateFill);
             svgStringBuilder.Append(svgPlateQuarterInchHoles);
+            svgStringBuilder.Append(svgPlateHalfInch180DegreeSpacedHoles);
             svgStringBuilder.Append(svgPlateHalfInch30DegreeSpacedHoles);
 
 
