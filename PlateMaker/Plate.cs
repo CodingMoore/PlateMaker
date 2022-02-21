@@ -274,6 +274,23 @@ namespace PlateMaker
 
         public void CreateHtmlFromSvgFromApi(string svgStringFromApi)
         {
+
+            ////////////////////////////////
+            ///// Adjustable Constants /////
+            ////////////////////////////////
+            
+            // Creates the Background Color of the website behind the plate svg
+            string backgroundColor = "style='background-color:rgb(0,0,0);'";
+
+            // Creates a limit on how far panzoom will zoom into the plate svg
+            string maxScale = "maxScale: 50";
+
+            // Creates a limit on how far panzoom will zoom out of the plate svg
+            string minScale = "minScale: .75";
+
+            ////////////////////////////////
+            ////////////////////////////////
+
             // Creates a new StringBuilder object
             StringBuilder htmlStringBuilder = new StringBuilder();
 
@@ -288,7 +305,7 @@ namespace PlateMaker
                     "<title>Document</title>" +
                     "<script src='https://www.unpkg.com/@panzoom/panzoom/dist/panzoom.js'></script>" +
                 "</head>" +
-                "<body>" +
+                $"<body {backgroundColor}>" +
                     "<div id='svgWrapper' style='display: flex; justify-content: center; align-items: center'>" +
                  "";
 
@@ -299,8 +316,8 @@ namespace PlateMaker
                         // the below reads like it has a "const" at the beginning because of the comma from the above line.
                         "panzoom = Panzoom(element, {" +
                         // options here
-                        "maxScale: 50," +
-                        "minScale: .75" +
+                        $"{maxScale}," +
+                        $"{minScale}" +
                         "});" +
                         // enable mouse wheel
                         "const parent = element.parentElement;" +
