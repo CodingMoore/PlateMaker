@@ -59,9 +59,11 @@ namespace PlateMaker
             // If you change the strokeWidthScaler, then you change the stroke width relative to the dot size.
             double strokeWidthScaler = .5;
 
-            string plateBorderStyle = "style = 'stroke:rgb(46,46,46);'";
+            string plateBorderStyle = "style='stroke:rgb(46,46,46);'";
 
-            string plateFillStyle = "style = 'fill:rgb(92,92,92);'";
+            string plateFillStyle = "style='fill:rgb(92,92,92);'";
+
+            string plateQuarterInchHoleStyle = "style='fill:rgb(255,0,0);'";
 
             ////////////////////////////////
             ////////////////////////////////
@@ -135,14 +137,30 @@ namespace PlateMaker
                     $"{plateFillStyle}/>" +
                 "</svg >";
 
+            // Creates a fill for the three 1/4 inch holes in the plate, which will be added to the Stringbuilder
+            string svgPlateQuarterInchHoles =
+                "<svg viewBox='0 0 120 120' style='fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:2;'>" +
+                    "<g id='_1-4-inch-holes' serif:id='1/4 inch holes'>" +
+                        "<g transform='matrix(-0.430075,-0.744911,0.744911,-0.430075,36.5204,131.127)'>" +
+                            $"<circle cx='57.964' cy='12.901' r='0.465' {plateQuarterInchHoleStyle}/> " +
+                        "</g>" +
+                        "<g transform='matrix(-0.430075,0.744911,-0.744911,-0.430075,133.337,44.7706)'>" +
+                            $"<circle cx='57.964' cy='12.901' r='0.465' {plateQuarterInchHoleStyle}/>" +
+                        "</g>" +
+                        "<g transform='matrix(0.860149,0,0,0.860149,10.1423,4.10277)'>" +
+                            $"<circle cx='57.964' cy='12.901' r='0.465' {plateQuarterInchHoleStyle}/>" +
+                        "</g>" +
+                    "</g>" +
+                "</svg>";
 
-                                        // Creates a new StringBuilder object
+            // Creates a new StringBuilder object
             var svgStringBuilder = new StringBuilder();
 
-            // Adds the opening SVG string to the Stringbuilder
+            // Adds the some of the SVG strings to the Stringbuilder
             svgStringBuilder.Append(svgOpenOuter);
             svgStringBuilder.Append(svgPlateBorder);
             svgStringBuilder.Append(svgPlateFill);
+            svgStringBuilder.Append(svgPlateQuarterInchHoles);
 
 
             // for every center and radius in our list, create a sub string to be use the the svg file
