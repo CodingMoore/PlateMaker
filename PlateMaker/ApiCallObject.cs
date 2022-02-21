@@ -28,7 +28,7 @@ namespace PlateMaker
             BaseUrl = "http://skyserver.sdss.org/dr17/en/tools/search/x_results.aspx?searchtool=SQL&TaskName=Skyserver.Search.SQL&syntax=NoSyntax&ReturnHtml=true&cmd=";
             QueryString = "" +
                 "SELECT" + " " +
-                "plate, ObjId, xFocal, yFocal, s.ra, s.dec" + " " +
+                "plate, ObjId, xFocal, yFocal, s.ra, s.dec, class" + " " +
                 "FROM" + " " +
                 "PhotoObj AS p" + " " +
                 "JOIN" + " " +
@@ -82,13 +82,16 @@ namespace PlateMaker
             {
 
                 string[] objectDataString = new string[] {
-                        ApiResponse[0]["Rows"][i]["xFocal"].ToString(),
-                        ApiResponse[0]["Rows"][i]["yFocal"].ToString(),
-                        ApiResponse[0]["Rows"][i]["ObjId"].ToString(),
-                        ApiResponse[0]["Rows"][i]["plate"].ToString(),
-                        ApiResponse[0]["Rows"][i]["ra"].ToString(),
-                        ApiResponse[0]["Rows"][i]["dec"].ToString(),
-                    };
+                    ApiResponse[0]["Rows"][i]["xFocal"].ToString(),
+                    ApiResponse[0]["Rows"][i]["yFocal"].ToString(),
+                    ApiResponse[0]["Rows"][i]["ObjId"].ToString(),
+                    ApiResponse[0]["Rows"][i]["plate"].ToString(),
+                    ApiResponse[0]["Rows"][i]["ra"].ToString(),
+                    ApiResponse[0]["Rows"][i]["dec"].ToString(),
+                    ApiResponse[0]["Rows"][i]["class"].ToString(),
+                    //might try the image thing later
+                    //ApiResponse[0]["Rows"][i]["img"].ToString(),
+                };
 
                 stellarObjectData.Add(i, objectDataString);
             }

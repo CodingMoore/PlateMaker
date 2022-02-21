@@ -73,6 +73,22 @@ namespace PlateMaker
 
             string plateHalfInch30DegreeSpacedHoleStyle = "style='fill:rgb(102,255,0);'";
 
+            // default colors for the dot stroke and fill
+            string dotStrokeColor = "rgb(255, 255, 255)";
+            string dotFillColor = "rgb(255, 255, 255)";
+
+            // GALAXY - colors for dot stroke and fill
+            string galaxyStrokeColor = "rgb(255, 0, 132)";
+            string galaxyFillColor = "rgb(255, 255, 255)";
+
+            // STAR - colors for dot stroke and fill
+            string starStrokeColor = "rgb(0,181,255)";
+            string starFillColor = "rgb(255, 255, 255)";
+
+            // QSO - colors for dot stroke and fill
+            string qsoStrokeColor = "rgb(102,255,0)";
+            string qsoFillColor = "rgb(255, 255, 255)";
+
             ////////////////////////////////
             ////////////////////////////////
 
@@ -251,10 +267,28 @@ namespace PlateMaker
                 string cxScaledAndTranslatedString = cxScaledAndTranslatedInt.ToString();
                 string cyScaledAndTranslatedString = cyScaledAndTranslatedInt.ToString();
 
+                switch (stellarObjectData[i][6])
+                {
+                    case "GALAXY":
+                        dotStrokeColor = galaxyStrokeColor;
+                        dotFillColor = galaxyFillColor;
+                        break;
+                    case "STAR":
+                        dotStrokeColor = starStrokeColor;
+                        dotFillColor = starFillColor;
+                        break;
+                    case "QSO":
+                        dotStrokeColor = qsoStrokeColor;
+                        dotFillColor = qsoFillColor;
+                        break;
+                    default:
+                        break;
+                }
+
                 svgStringBuilder.Append(
                     // Ampersands "&" in the href query string have been replaced with "&amp;" since a regular Ampersand is a escapement character in XML (svg).
                     $"<a href='https://skyserver.sdss.org/dr17/VisualTools/navi?ra={stellarObjectData[i][4]}&amp;dec={stellarObjectData[i][5]}&amp;scale={photoScaler}' target='_blank'> " +
-                    $"<circle cx='{cxScaledAndTranslatedString}' cy='{cyScaledAndTranslatedString}' r='{dotAreaScaler}' stroke='black' stroke-width='{strokeWidth}' fill='red'/>" +
+                    $"<circle cx='{cxScaledAndTranslatedString}' cy='{cyScaledAndTranslatedString}' r='{dotAreaScaler}' stroke='{dotStrokeColor}' stroke-width='{strokeWidth}' fill='{dotFillColor}'/>" +
                     $"{stellarObjectData[i][2]}, plate: {stellarObjectData[i][3]}</a>"
                 );
             }
