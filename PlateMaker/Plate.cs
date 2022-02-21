@@ -59,6 +59,10 @@ namespace PlateMaker
             // If you change the strokeWidthScaler, then you change the stroke width relative to the dot size.
             double strokeWidthScaler = .5;
 
+            string plateBorderStyle = "style = 'stroke:rgb(46,46,46);'";
+
+            string plateFillStyle = "style = 'fill:rgb(92,92,92);'";
+
             ////////////////////////////////
             ////////////////////////////////
 
@@ -91,7 +95,7 @@ namespace PlateMaker
                     "109.424 10.576,87.278 10.576,60C10.576,33.215 31.929,11.377 58.526,10.597ZM61.3,9.266L61.3,10.767C87.882," +
                     "11.457 109.25,33.253 109.25,60C109.25,87.182 87.182,109.25 60,109.25C32.818,109.25 10.75,87.182 10.75,60C10.75," +
                     "33.253 32.118,11.457 58.7,10.767L58.7,9.266C59.132,9.255 59.565,9.25 60,9.25C60.435,9.25 60.868,9.255 61.3,9.266Z'" +
-                    "style = 'stroke:rgb(46,46,46);' />" +
+                    $"{plateBorderStyle}/>" +
                 "</svg>";
 
             // Creates the plate fill, which will be added to the Stringbuilder
@@ -128,7 +132,7 @@ namespace PlateMaker
                     "16.933C72.254,17.359 71.815,17.613 71.388,17.499C70.962,17.384 70.708,16.945 70.823,16.519C70.937,16.092 71.376," +
                     "15.839 71.802,15.953ZM60,14.799C60.221,14.799 60.4,14.979 60.4,15.199C60.4,15.42 60.221,15.599 60,15.599C59.779,15.599 59.6," +
                     "15.42 59.6,15.199C59.6,14.979 59.779,14.799 60,14.799Z' " +
-                    "style = 'fill:rgb(92,92,92);' />" +
+                    $"{plateFillStyle}/>" +
                 "</svg >";
 
 
