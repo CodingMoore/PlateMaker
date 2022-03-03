@@ -162,10 +162,15 @@ namespace PlateMaker
                 "</svg >";
 
             // Creates a fill for the 1/8 inch hole in the center of the plate, which will be added to the Stringbuilder
+            // The 'dominant-baseline='middle' text-anchor='middle' centers the tex.
+            // There seems to be an issue that the this center dot is not acutally centered (see its cx and cy).
+            // For some reason the text's x coordinate needs to be a 52% instead of 50% to get it centered.
             string svgPlateEighthInchCenterHole =
                 "<svg viewBox='0 0 120 120' style='fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:2;'>" +
+                    "" +
                     "<g id='_1-8-inch-center-hole' serif:id='1/8 inch center hole' transform='matrix(0.0391862,0,0,0.0391862,57.5523,57.6538)'>" +
                         $"<circle cx='62.463' cy='59.874' r='5.104' {plateEighthInchCenterHoleStyle}/>" +
+                        "<text font-size='1.5px' x='52%' y='50%' fill='black' dominant-baseline='middle' text-anchor='middle'>Plate Center</text>" +
                     "</g>" +
                 "</svg>";
 
