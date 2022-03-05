@@ -6,14 +6,121 @@
 	<meta name='viewport' content='width=device-width, initial-scale=1.0'>   
 	<title>Document</title>   
 	<link href='../css/bootstrap.css' rel='stylesheet' type='text/css'>   
-	<link href='../css/plateStyles.css' rel='stylesheet' type='text/css'>   
-	<script src='../js/jquery-3.6.0.js' type='module'></script>   
+	<!-- The custom style sheet should only be used if you move the contents of the styling tag to it -->   
+	<!-- <link href='../css/plateStyles.css' rel='stylesheet' type='text/css'> -->   
+	<!-- jQuery from local file should only be used if you are not using the CDN reference -->   
+	<!-- <script src='../js/jquery-3.6.0.js' type='module'></script> -->   
+	<script src='https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js'></script>   
 	<script src='https://www.unpkg.com/@panzoom/panzoom/dist/panzoom.js'></script>   
-	<script src='../js/plateScripts.js' type='module'></script>   
+	<!-- The custom scripts file should only be used if you move the contents of the scipts tag (from the bottom of the page) to it. -->   
+	<!-- <script src='../js/plateScripts.js' type='module'></script> -->   
+
+	<style>   
+		#headerWrapper {   
+			height: 75px;   
+			position: -webkit-sticky;   
+			position: sticky;   
+			top: 0;   
+			display: grid;   
+			/* To keep the header on top of the plate */   
+			z-index: 1;   
+		}   
+
+		#headerBackgroundBox {   
+			background-color: rgb(46, 46, 46);   
+			margin: auto;   
+			padding: 10px 20px;   
+		}   
+		@media (max-width: 400px) {   
+			#headerBackgroundBox {   
+				padding: 10px 10px;   
+			}   
+		}   
+
+		#headerTextBox {   
+			display: flex;   
+			justify-content: center;   
+			align-items: center;   
+		}   
+		@media (max-width: 520px) {   
+			#headerTextBox {   
+				display: block;   
+			}   
+		}    
+
+		.headerText {   
+			display: flex;   
+			justify-content: center;   
+			align-items: center;   
+			white-space: nowrap;   
+			font-size: 20px;   
+			color: rgb(220, 220, 220);   
+			padding: 0px 5px;   
+		}   
+
+		#plateKey {   
+			display: flex;   
+			justify-content: center;   
+			max-width: 480px;   
+			height: 30px;   
+			margin: 5px 0px;   
+		}   
+		@media (max-width: 599px) {   
+			#plateKey {   
+				justify-content: space-around;   
+			}   
+		}   
+
+		.keyItem {   
+			display: flex;   
+			justify-content: center;   
+			align-items: center;   
+			margin: 0px 20px;   
+		}   
+		@media (max-width: 599px) {   
+			.keyItem {   
+				margin: 0px 0px;   
+			}   
+		}   
+
+		.keyDot {   
+			min-width: 20px;   
+			min-height: 30px;   
+		}   
+
+		.keyText {   
+			padding-left: 10px;   
+			padding-right: 10px;   
+			color: rgb(220, 220, 220);   
+		}   
+
+		#plateButtonBox {   
+			display: flex;   
+			justify-content: center;   
+			padding-top: 5px;   
+		}   
+		@media (max-width: 599px) {   
+			#plateButtonBox {   
+				justify-content: space-around;   
+			}   
+		}   
+
+		.plateButton {   
+			margin: 0px 20px;   
+			background-color: lightgray;   
+			border-radius: 8px;   
+		}   
+		@media (max-width: 599px) {   
+			.plateButton {   
+				margin: 0px 0px;   
+			}   
+		}   
+	</style>   
+
 </head>   
 <body style='background-color:rgb(0,0,0);'>   
 
-	//This is the Plate Header   
+	<!--This is the Plate Header-->   
 	<div class='container'>   
 		<div id='headerWrapper'>   
 			<div id='headerBackgroundBox'>   

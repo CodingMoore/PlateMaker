@@ -355,10 +355,128 @@ namespace PlateMaker
                 "\t<meta name='viewport' content='width=device-width, initial-scale=1.0'>   \n" +
                 "\t<title>Document</title>   \n" +
                 "\t<link href='../css/bootstrap.css' rel='stylesheet' type='text/css'>   \n" +
-                "\t<link href='../css/plateStyles.css' rel='stylesheet' type='text/css'>   \n" +
-                "\t<script src='../js/jquery-3.6.0.js' type='module'></script>   \n" +
+                "\t<!-- The custom style sheet should only be used if you move the contents of the styling tag to it -->   \n" +
+                "\t<!-- <link href='../css/plateStyles.css' rel='stylesheet' type='text/css'> -->   \n" +
+                "\t<!-- jQuery from local file should only be used if you are not using the CDN reference -->   \n" +
+                "\t<!-- <script src='../js/jquery-3.6.0.js' type='module'></script> -->   \n" +
+                "\t<script src='https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js'></script>   \n" +
                 "\t<script src='https://www.unpkg.com/@panzoom/panzoom/dist/panzoom.js'></script>   \n" +
-                "\t<script src='../js/plateScripts.js' type='module'></script>   \n" +
+                "\t<!-- The custom scripts file should only be used if you move the contents of the scipts tag (from the bottom of the page) to it. -->   \n" +
+                "\t<!-- <script src='../js/plateScripts.js' type='module'></script> -->   \n" +
+                "\n" +
+
+                "\t<style>   \n" +
+                "\t\t#headerWrapper {   \n" +
+                "\t\t\theight: 75px;   \n" +
+                "\t\t\tposition: -webkit-sticky;   \n" +
+                "\t\t\tposition: sticky;   \n" +
+                "\t\t\ttop: 0;   \n" +
+                "\t\t\tdisplay: grid;   \n" +
+                "\t\t\t/* To keep the header on top of the plate */   \n" +
+                "\t\t\tz-index: 1;   \n" +
+                "\t\t}   \n" +
+                "\n" +
+
+                "\t\t#headerBackgroundBox {   \n" +
+                "\t\t\tbackground-color: rgb(46, 46, 46);   \n" +
+                "\t\t\tmargin: auto;   \n" +
+                "\t\t\tpadding: 10px 20px;   \n" +
+                "\t\t}   \n" +
+                "\t\t@media (max-width: 400px) {   \n" +
+                "\t\t\t#headerBackgroundBox {   \n" +
+                "\t\t\t\tpadding: 10px 10px;   \n" +
+                "\t\t\t}   \n" +
+                "\t\t}   \n" +
+                "\n" +
+
+                "\t\t#headerTextBox {   \n" +
+                "\t\t\tdisplay: flex;   \n" +
+                "\t\t\tjustify-content: center;   \n" +
+                "\t\t\talign-items: center;   \n" +
+                "\t\t}   \n" +
+                "\t\t@media (max-width: 520px) {   \n" +
+                "\t\t\t#headerTextBox {   \n" +
+                "\t\t\t\tdisplay: block;   \n" +
+                "\t\t\t}   \n" +
+                "\t\t}    \n" +
+                "\n" +
+
+                "\t\t.headerText {   \n" +
+                "\t\t\tdisplay: flex;   \n" +
+                "\t\t\tjustify-content: center;   \n" +
+                "\t\t\talign-items: center;   \n" +
+                "\t\t\twhite-space: nowrap;   \n" +
+                "\t\t\tfont-size: 20px;   \n" +
+                "\t\t\tcolor: rgb(220, 220, 220);   \n" +
+                "\t\t\tpadding: 0px 5px;   \n" +
+                "\t\t}   \n" +
+                "\n" +
+
+                "\t\t#plateKey {   \n" +
+                "\t\t\tdisplay: flex;   \n" +
+                "\t\t\tjustify-content: center;   \n" +
+                "\t\t\tmax-width: 480px;   \n" +
+                "\t\t\theight: 30px;   \n" +
+                "\t\t\tmargin: 5px 0px;   \n" +
+                "\t\t}   \n" +
+                "\t\t@media (max-width: 599px) {   \n" +
+                "\t\t\t#plateKey {   \n" +
+                "\t\t\t\tjustify-content: space-around;   \n" +
+                "\t\t\t}   \n" +
+                "\t\t}   \n" +
+                "\n" +
+
+                "\t\t.keyItem {   \n" +
+                "\t\t\tdisplay: flex;   \n" +
+                "\t\t\tjustify-content: center;   \n" +
+                "\t\t\talign-items: center;   \n" +
+                "\t\t\tmargin: 0px 20px;   \n" +
+                "\t\t}   \n" +
+                "\t\t@media (max-width: 599px) {   \n" +
+                "\t\t\t.keyItem {   \n" +
+                "\t\t\t\tmargin: 0px 0px;   \n" +
+                "\t\t\t}   \n" +
+                "\t\t}   \n" +
+                "\n" +
+
+                "\t\t.keyDot {   \n" +
+                "\t\t\tmin-width: 20px;   \n" +
+                "\t\t\tmin-height: 30px;   \n" +
+                "\t\t}   \n" +
+                "\n" +
+
+                "\t\t.keyText {   \n" +
+                "\t\t\tpadding-left: 10px;   \n" +
+                "\t\t\tpadding-right: 10px;   \n" +
+                "\t\t\tcolor: rgb(220, 220, 220);   \n" +
+                "\t\t}   \n" +
+                "\n" +
+
+                "\t\t#plateButtonBox {   \n" +
+                "\t\t\tdisplay: flex;   \n" +
+                "\t\t\tjustify-content: center;   \n" +
+                "\t\t\tpadding-top: 5px;   \n" +
+                "\t\t}   \n" +
+                "\t\t@media (max-width: 599px) {   \n" +
+                "\t\t\t#plateButtonBox {   \n" +
+                "\t\t\t\tjustify-content: space-around;   \n" +
+                "\t\t\t}   \n" +
+                "\t\t}   \n" +
+                "\n" +
+
+                "\t\t.plateButton {   \n" +
+                "\t\t\tmargin: 0px 20px;   \n" +
+                "\t\t\tbackground-color: lightgray;   \n" +
+                "\t\t\tborder-radius: 8px;   \n" +
+                "\t\t}   \n" +
+                "\t\t@media (max-width: 599px) {   \n" +
+                "\t\t\t.plateButton {   \n" +
+                "\t\t\t\tmargin: 0px 0px;   \n" +
+                "\t\t\t}   \n" +
+                "\t\t}   \n" +
+                "\t</style>   \n" +
+                "\n" +
+
                 "</head>   \n" +
                $"<body {backgroundColor}>   \n" +
                 "\n" +
