@@ -108,34 +108,34 @@ namespace PlateMaker
             double yViewBoxMax = 800 * dotScaler;
 
             // Creates our opening svg string to be tacked on to the beginning of the Stringbuilder
-            string svgOpenOuter = $"<svg id='svgImage' width='100vw' height='100vh' viewBox='{xViewBoxMin} {yViewBoxMin} {xViewBoxMax} {yViewBoxMax}' transform-origin='0 0'>";
+            string svgOpenOuter = $"<svg id='svgImage' width='100vw' height='100vh' viewBox='{xViewBoxMin} {yViewBoxMin} {xViewBoxMax} {yViewBoxMax}' transform-origin='0 0'>   \n";
 
             string svgSkyImageBox =
-                "<!-- The viewBox max values determine how the background image lines up with dots on the plate.  -->" +
-                "<svg id='skyImageBox' width='100%' height='100%' viewBox='0 0 120 100' preserveAspectRatio='xMidYMid meet' display='none'>" +
-                    "<image id='skyImageBoxBackgroundImage' preserveAspectRatio='xMidYMid slice' width='100%' height='100%' href='../assets/plateBackgroundImages/PlateID-11386.jpg'/>" +
-                    "<!-- This rectangle is just used for visualizing the edges of the parent svg when setting up the program -->" +
-                    "<!-- <rect width='100%' height='100%' viewBox='0 0 100 100' stroke='pink' stroke-width='2px' fill='url(#spaceBoxBackground)'/> -->" +
-                "</svg>";
+                "<!-- The viewBox max values determine how the background image lines up with dots on the plate.  -->   \n" +
+                "<svg id='skyImageBox' width='100%' height='100%' viewBox='0 0 120 100' preserveAspectRatio='xMidYMid meet' display='none'>   \n" +
+                    "<image id='skyImageBoxBackgroundImage' preserveAspectRatio='xMidYMid slice' width='100%' height='100%' href='../assets/plateBackgroundImages/PlateID-11386.jpg'/>   \n" +
+                    "<!-- This rectangle is just used for visualizing the edges of the parent svg when setting up the program -->   \n" +
+                    "<!-- <rect width='100%' height='100%' viewBox='0 0 100 100' stroke='pink' stroke-width='2px' fill='url(#spaceBoxBackground)'/> -->   \n" +
+                "</svg>   \n";
 
             // Creates our closing svg string to be tacked on to the end of the Stringbuilder
             string svgCloseOuter = "</svg>";
 
             // Creates the plate border, which will be added to the Stringbuilder.
-            string svgPlateBorder = 
-                "<svg viewBox='0 0 120 120' style='fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:2;'>" +
+            string svgPlateBorder =
+                "<svg viewBox='0 0 120 120' style='fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:2;'>   \n" +
                     "<path d='M58.526,10.597L58.526,9.266C58.526,9.172 58.601,9.095 58.696," +
                     "9.092C59.129,9.081 59.564,9.076 60,9.076C60.436,9.076 60.871,9.081 61.304,9.092C61.399,9.095 61.474,9.172 61.474," +
                     "9.266L61.474,10.597C88.071,11.377 109.424,33.215 109.424,60C109.424,87.278 87.278,109.424 60,109.424C32.722," +
                     "109.424 10.576,87.278 10.576,60C10.576,33.215 31.929,11.377 58.526,10.597ZM61.3,9.266L61.3,10.767C87.882," +
                     "11.457 109.25,33.253 109.25,60C109.25,87.182 87.182,109.25 60,109.25C32.818,109.25 10.75,87.182 10.75,60C10.75," +
-                    "33.253 32.118,11.457 58.7,10.767L58.7,9.266C59.132,9.255 59.565,9.25 60,9.25C60.435,9.25 60.868,9.255 61.3,9.266Z'" +
-                    $"{plateBorderStyle}/>" +
-                "</svg>";
+                    "33.253 32.118,11.457 58.7,10.767L58.7,9.266C59.132,9.255 59.565,9.25 60,9.25C60.435,9.25 60.868,9.255 61.3,9.266Z'   \n" +
+                    $"{plateBorderStyle}/>   \n" +
+                "</svg>   \n";
 
             // Creates the plate fill, which will be added to the Stringbuilder
             string svgPlateFill =
-                "<svg id='backgroundFill' class='fillOn' viewBox='0 0 120 120' style='fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:2;'>" +
+                "<svg id='backgroundFill' class='fillOn' viewBox='0 0 120 120' style='fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:2;'>   \n" +
                     "<path id='backgroundFillPath' d='M61.3,9.266L61.3,10.767C87.882,11.457 109.25,33.253 109.25,60C109.25,87.182 87.182,109.25 60,109.25C32.818," +
                     "109.25 10.75,87.182 10.75,60C10.75,33.253 32.118,11.457 58.7,10.767L58.7,9.266C59.132,9.255 59.565,9.25 60,9.25C60.435," +
                     "9.25 60.868,9.255 61.3,9.266ZM71.802,104.047C71.376,104.161 70.937,103.908 70.823,103.481C70.708,103.055 70.962," +
@@ -166,95 +166,95 @@ namespace PlateMaker
                     "17.359 47.632,16.933C47.518,16.506 47.771,16.067 48.198,15.953ZM71.802,15.953C72.229,16.067 72.482,16.506 72.368," +
                     "16.933C72.254,17.359 71.815,17.613 71.388,17.499C70.962,17.384 70.708,16.945 70.823,16.519C70.937,16.092 71.376," +
                     "15.839 71.802,15.953ZM60,14.799C60.221,14.799 60.4,14.979 60.4,15.199C60.4,15.42 60.221,15.599 60,15.599C59.779,15.599 59.6," +
-                    "15.42 59.6,15.199C59.6,14.979 59.779,14.799 60,14.799Z' " +
-                    $"{plateFillStyle}/>" +
-                "</svg >";
+                    "15.42 59.6,15.199C59.6,14.979 59.779,14.799 60,14.799Z'   \n" +
+                    $"{plateFillStyle}/>   \n" +
+                "</svg>   \n";
 
             // Creates a fill for the 1/8 inch hole in the center of the plate, which will be added to the Stringbuilder
             // The 'dominant-baseline='middle' text-anchor='middle' centers the tex.
             // There seems to be an issue that the this center dot is not acutally centered (see its cx and cy).
             // For some reason the text's x coordinate needs to be a 52% instead of 50% to get it centered.
             string svgPlateEighthInchCenterHole =
-                "<svg viewBox='0 0 120 120' style='fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:2;'>" +
-                    "" +
-                    "<g id='_1-8-inch-center-hole' serif:id='1/8 inch center hole' transform='matrix(0.0391862,0,0,0.0391862,57.5523,57.6538)'>" +
-                        $"<circle cx='62.463' cy='59.874' r='5.104' {plateEighthInchCenterHoleStyle}/>" +
-                        "<text font-size='1.5px' x='52%' y='50%' fill='black' dominant-baseline='middle' text-anchor='middle'>Plate Center</text>" +
-                    "</g>" +
-                "</svg>";
+                "<svg viewBox='0 0 120 120' style='fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:2;'>   \n" +
+                    "   \n" +
+                    "<g id='_1-8-inch-center-hole' serif:id='1/8 inch center hole' transform='matrix(0.0391862,0,0,0.0391862,57.5523,57.6538)'>   \n" +
+                        $"<circle cx='62.463' cy='59.874' r='5.104' {plateEighthInchCenterHoleStyle}/>   \n" +
+                        "<text font-size='1.5px' x='52%' y='50%' fill='black' dominant-baseline='middle' text-anchor='middle'>Plate Center</text>   \n" +
+                    "</g>   \n" +
+                "</svg>   \n";
 
 
             // Creates a fill for the three evenly space (120 Degrees apart) 1/4 inch holes in the plate, which will be added to the Stringbuilder
             string svgPlateQuarterInchHoles =
-                "<svg viewBox='0 0 120 120' style='fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:2;'>" +
-                    "<g id='_1-4-inch-holes'" +
-                        "<g transform='matrix(-0.430075,-0.744911,0.744911,-0.430075,36.5204,131.127)'>" +
-                            $"<circle cx='57.964' cy='12.901' r='0.465' {plateQuarterInchHoleStyle}/> " +
-                        "</g>" +
-                        "<g transform='matrix(-0.430075,0.744911,-0.744911,-0.430075,133.337,44.7706)'>" +
-                            $"<circle cx='57.964' cy='12.901' r='0.465' {plateQuarterInchHoleStyle}/>" +
-                        "</g>" +
-                        "<g transform='matrix(0.860149,0,0,0.860149,10.1423,4.10277)'>" +
-                            $"<circle cx='57.964' cy='12.901' r='0.465' {plateQuarterInchHoleStyle}/>" +
-                        "</g>" +
-                    "</g>" +
-                "</svg>";
+                "<svg viewBox='0 0 120 120' style='fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:2;'>   \n" +
+                    "<g id='_1-4-inch-holes'   \n" +
+                        "<g transform='matrix(-0.430075,-0.744911,0.744911,-0.430075,36.5204,131.127)'>   \n" +
+                            $"<circle cx='57.964' cy='12.901' r='0.465' {plateQuarterInchHoleStyle}/>    \n" +
+                        "</g>   \n" +
+                        "<g transform='matrix(-0.430075,0.744911,-0.744911,-0.430075,133.337,44.7706)'>   \n" +
+                            $"<circle cx='57.964' cy='12.901' r='0.465' {plateQuarterInchHoleStyle}/>   \n" +
+                        "</g>   \n" +
+                        "<g transform='matrix(0.860149,0,0,0.860149,10.1423,4.10277)'>   \n" +
+                            $"<circle cx='57.964' cy='12.901' r='0.465' {plateQuarterInchHoleStyle}/>   \n" +
+                        "</g>   \n" +
+                    "</g>   \n" +
+                "</svg>   \n";
 
             // Creates a fill for the two evently spaced (180 Degrees apart) 1/2 inch holes in the plate, which will be added to the Stringbuilder
             string svgPlateHalfInch180DegreeSpacedHoles =
-                "<svg viewBox='0 0 120 120' style='fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:2;'>" +
-                    "<g id='_1-2-inch-holes--180-degree-spacing-'>" +
-                        "<g transform='matrix(0.579984,0.270451,-0.270451,0.579984,48.2348,-5.80127)'>" +
-                            $"<circle cx='60.118' cy='15.413' r='1.25' {plateHalfInch180DegreeSpacedHoleStyle}/>" +
-                        "</g>" +
-                        "<g transform='matrix(-0.579984,-0.270451,0.270451,-0.579984,71.7652,125.801)'>" +
-                            $"<circle cx='60.118' cy='15.413' r='1.25' {plateHalfInch180DegreeSpacedHoleStyle}/>" +
-                        "</g>" +
-                    "</g>" +
-                "</svg>";
+                "<svg viewBox='0 0 120 120' style='fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:2;'>   \n" +
+                    "<g id='_1-2-inch-holes--180-degree-spacing-'>   \n" +
+                        "<g transform='matrix(0.579984,0.270451,-0.270451,0.579984,48.2348,-5.80127)'>   \n" +
+                            $"<circle cx='60.118' cy='15.413' r='1.25' {plateHalfInch180DegreeSpacedHoleStyle}/>   \n" +
+                        "</g>   \n" +
+                        "<g transform='matrix(-0.579984,-0.270451,0.270451,-0.579984,71.7652,125.801)'>   \n" +
+                            $"<circle cx='60.118' cy='15.413' r='1.25' {plateHalfInch180DegreeSpacedHoleStyle}/>   \n" +
+                        "</g>   \n" +
+                    "</g>   \n" +
+                "</svg>   \n";
 
             // Creates a fill for the twelve evently spaced (30 Degrees apart) 1/2 inch holes in the plate, which will be added to the Stringbuilder
             string svgPlateHalfInch30DegreeSpacedHoles =
-                "<svg viewBox='0 0 120 120' style='fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:2;'>" +
-                    "<g id='_1-2-inch-holes--30-degree-spacing--'>" +
-                        "<g transform='matrix(0.452507,-0.452507,0.452507,0.452507,-5.8569,48.5503)'>" +
-                            $"<circle cx='60.118' cy='15.413' r='1.25' {plateHalfInch30DegreeSpacedHoleStyle}/>" +
-                        "</g>" +
-                        "<g transform='matrix(0.165629,-0.618136,0.618136,0.165629,-2.75859,83.0127)'>" +
-                            $"<circle cx='60.118' cy='15.413' r='1.25' {plateHalfInch30DegreeSpacedHoleStyle}/>" +
-                        "</g>" +
-                        "<g transform='matrix(-0.165629,-0.618136,0.618136,-0.165629,17.1558,111.309)'>" +
-                            $"<circle cx='60.118' cy='15.413' r='1.25' {plateHalfInch30DegreeSpacedHoleStyle}/>" +
-                        "</g>" +
-                        "<g transform='matrix(-0.452507,-0.452507,0.452507,-0.452507,48.5503,125.857)'>" +
-                            $"<circle cx='60.118' cy='15.413' r='1.25' {plateHalfInch30DegreeSpacedHoleStyle}/>" +
-                        "</g>" +
-                        "<g transform='matrix(-0.618136,-0.165629,0.165629,-0.618136,83.0127,122.759)'>" +
-                            $"<circle cx='60.118' cy='15.413' r='1.25' {plateHalfInch30DegreeSpacedHoleStyle}/>" +
-                        "</g>" +
-                        "<g transform='matrix(-0.618136,0.165629,-0.165629,-0.618136,111.309,102.844)'>" +
-                            $"<circle cx='60.118' cy='15.413' r='1.25' {plateHalfInch30DegreeSpacedHoleStyle}/>" +
-                        "</g>" +
-                        "<g transform='matrix(-0.452507,0.452507,-0.452507,-0.452507,125.857,71.4497)'>" +
-                            $"<circle cx='60.118' cy='15.413' r='1.25' {plateHalfInch30DegreeSpacedHoleStyle}/>" +
-                        "</g>" +
-                        "<g transform='matrix(-0.165629,0.618136,-0.618136,-0.165629,122.759,36.9873)'>" +
-                            $"<circle cx='60.118' cy='15.413' r='1.25' {plateHalfInch30DegreeSpacedHoleStyle}/>" +
-                        "</g>" +
-                        "<g transform='matrix(0.165629,0.618136,-0.618136,0.165629,102.844,8.6911)'>" +
-                            $"<circle cx='60.118' cy='15.413' r='1.25' {plateHalfInch30DegreeSpacedHoleStyle}/>" +
-                        "</g>" +
-                        "<g transform='matrix(0.452507,0.452507,-0.452507,0.452507,71.4497,-5.8569)'>" +
-                            $"<circle cx='60.118' cy='15.413' r='1.25' {plateHalfInch30DegreeSpacedHoleStyle}/>" +
-                        "</g>" +
-                        "<g transform='matrix(0.618136,0.165629,-0.165629,0.618136,36.9873,-2.75859)'>" +
-                            $"<circle cx='60.118' cy='15.413' r='1.25' {plateHalfInch30DegreeSpacedHoleStyle}/>" +
-                        "</g>" +
-                        "<g transform='matrix(0.618136,-0.165629,0.165629,0.618136,8.6911,17.1558)'>" +
-                            $"<circle cx='60.118' cy='15.413' r='1.25' {plateHalfInch30DegreeSpacedHoleStyle}/>" +
-                        "</g>" +
-                    "</g>" +
-                "</svg>";
+                "<svg viewBox='0 0 120 120' style='fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:2;'>   \n" +
+                    "<g id='_1-2-inch-holes--30-degree-spacing--'>   \n" +
+                        "<g transform='matrix(0.452507,-0.452507,0.452507,0.452507,-5.8569,48.5503)'>   \n" +
+                            $"<circle cx='60.118' cy='15.413' r='1.25' {plateHalfInch30DegreeSpacedHoleStyle}/>   \n" +
+                        "</g>   \n" +
+                        "<g transform='matrix(0.165629,-0.618136,0.618136,0.165629,-2.75859,83.0127)'>   \n" +
+                            $"<circle cx='60.118' cy='15.413' r='1.25' {plateHalfInch30DegreeSpacedHoleStyle}/>   \n" +
+                        "</g>   \n" +
+                        "<g transform='matrix(-0.165629,-0.618136,0.618136,-0.165629,17.1558,111.309)'>   \n" +
+                            $"<circle cx='60.118' cy='15.413' r='1.25' {plateHalfInch30DegreeSpacedHoleStyle}/>   \n" +
+                        "</g>   \n" +
+                        "<g transform='matrix(-0.452507,-0.452507,0.452507,-0.452507,48.5503,125.857)'>   \n" +
+                            $"<circle cx='60.118' cy='15.413' r='1.25' {plateHalfInch30DegreeSpacedHoleStyle}/>   \n" +
+                        "</g>   \n" +
+                        "<g transform='matrix(-0.618136,-0.165629,0.165629,-0.618136,83.0127,122.759)'>   \n" +
+                            $"<circle cx='60.118' cy='15.413' r='1.25' {plateHalfInch30DegreeSpacedHoleStyle}/>   \n" +
+                        "</g>   \n" +
+                        "<g transform='matrix(-0.618136,0.165629,-0.165629,-0.618136,111.309,102.844)'>   \n" +
+                            $"<circle cx='60.118' cy='15.413' r='1.25' {plateHalfInch30DegreeSpacedHoleStyle}/>   \n" +
+                        "</g>   \n" +
+                        "<g transform='matrix(-0.452507,0.452507,-0.452507,-0.452507,125.857,71.4497)'>   \n" +
+                            $"<circle cx='60.118' cy='15.413' r='1.25' {plateHalfInch30DegreeSpacedHoleStyle}/>   \n" +
+                        "</g>   \n" +
+                        "<g transform='matrix(-0.165629,0.618136,-0.618136,-0.165629,122.759,36.9873)'>   \n" +
+                            $"<circle cx='60.118' cy='15.413' r='1.25' {plateHalfInch30DegreeSpacedHoleStyle}/>   \n" +
+                        "</g>   \n" +
+                        "<g transform='matrix(0.165629,0.618136,-0.618136,0.165629,102.844,8.6911)'>   \n" +
+                            $"<circle cx='60.118' cy='15.413' r='1.25' {plateHalfInch30DegreeSpacedHoleStyle}/>   \n" +
+                        "</g>   \n" +
+                        "<g transform='matrix(0.452507,0.452507,-0.452507,0.452507,71.4497,-5.8569)'>   \n" +
+                            $"<circle cx='60.118' cy='15.413' r='1.25' {plateHalfInch30DegreeSpacedHoleStyle}/>   \n" +
+                        "</g>   \n" +
+                        "<g transform='matrix(0.618136,0.165629,-0.165629,0.618136,36.9873,-2.75859)'>   \n" +
+                            $"<circle cx='60.118' cy='15.413' r='1.25' {plateHalfInch30DegreeSpacedHoleStyle}/>   \n" +
+                        "</g>   \n" +
+                        "<g transform='matrix(0.618136,-0.165629,0.165629,0.618136,8.6911,17.1558)'>   \n" +
+                            $"<circle cx='60.118' cy='15.413' r='1.25' {plateHalfInch30DegreeSpacedHoleStyle}/>   \n" +
+                        "</g>   \n" +
+                    "</g>   \n" +
+                "</svg>   \n";
 
             // Creates a new StringBuilder object
             var svgStringBuilder = new StringBuilder();
@@ -302,9 +302,9 @@ namespace PlateMaker
 
                 svgStringBuilder.Append(
                     // Ampersands "&" in the href query string have been replaced with "&amp;" since a regular Ampersand is a escapement character in XML (svg).
-                    $"<a href='https://skyserver.sdss.org/dr17/VisualTools/navi?ra={stellarObjectData[i][4]}&amp;dec={stellarObjectData[i][5]}&amp;scale={photoScaler}' target='_blank'> " +
-                    $"<circle class='plateDot' cx='{cxScaledAndTranslatedString}' cy='{cyScaledAndTranslatedString}' r='{dotAreaScaler}' stroke='{dotStrokeColor}' stroke-width='{strokeWidth}' fill='{dotFillColor}'/>" +
-                    $"{stellarObjectData[i][2]}, plate: {stellarObjectData[i][3]}</a>"
+                    $"<a href='https://skyserver.sdss.org/dr17/VisualTools/navi?ra={stellarObjectData[i][4]}&amp;dec={stellarObjectData[i][5]}&amp;scale={photoScaler}' target='_blank'>   \n" +
+                    $"<circle class='plateDot' cx='{cxScaledAndTranslatedString}' cy='{cyScaledAndTranslatedString}' r='{dotAreaScaler}' stroke='{dotStrokeColor}' stroke-width='{strokeWidth}' fill='{dotFillColor}'/>   \n" +
+                    $"{stellarObjectData[i][2]}, plate: {stellarObjectData[i][3]}</a>   \n"
                 );
             }
 
@@ -347,99 +347,164 @@ namespace PlateMaker
 
             // Creates our opening and closing html strings to be tacked on to the Stringbuilder
             string htmlOpen = "" +
-                "<!DOCTYPE html>" +
-                "<html lang='en'>" +
-                "<head>" +
-                    "<meta charset='UTF-8'>" +
-                    "<meta http-equiv='X-UA-Compatible' content='IE=edge'>" +
-                    "<meta name='viewport' content='width=device-width, initial-scale=1.0'>" +
-                    "<title>Document</title>" +
-                    "<link href='../css/bootstrap.css' rel='stylesheet' type='text/css'>" +
-                    "<link href='../css/plateStyles.css' rel='stylesheet' type='text/css'>" +
-                    "<script src='../js/jquery-3.6.0.js' type='module'></script>" +
-                    "<script src='https://www.unpkg.com/@panzoom/panzoom/dist/panzoom.js'></script>" +
-                    "<script src='../js/plateScripts.js' type='module'></script>" +
-                       "</head>" +
-                $"<body {backgroundColor}>" +
+                "<!DOCTYPE html>   \n" +
+                "<html lang='en'>   \n" +
+                "<head>   \n" +
+                    "<meta charset='UTF-8'>   \n" +
+                    "<meta http-equiv='X-UA-Compatible' content='IE=edge'>   \n" +
+                    "<meta name='viewport' content='width=device-width, initial-scale=1.0'>   \n" +
+                    "<title>Document</title>   \n" +
+                    "<link href='../css/bootstrap.css' rel='stylesheet' type='text/css'>   \n" +
+                    "<link href='../css/plateStyles.css' rel='stylesheet' type='text/css'>   \n" +
+                    "<script src='../js/jquery-3.6.0.js' type='module'></script>   \n" +
+                    "<script src='https://www.unpkg.com/@panzoom/panzoom/dist/panzoom.js'></script>   \n" +
+                    "<script src='../js/plateScripts.js' type='module'></script>   \n" +
+                       "</head>   \n" +
+                $"<body {backgroundColor}>   \n" +
 
-                    "<div class='container'>" +
-                        "<div id='headerWrapper'>" +
-                          "<div id='headerBackgroundBox'>" +
-                            "<div id='headerTextBox'>" +
-                              "<div class='headerText'>" +
-                                "Zoom, Pan, and Explore." +
-                              "</div>" +
-                              "<div class='headerText'>" +
-                                "Tap a Dot to Learn More." +
-                              "</div>" +
-                            "</div>" +
-                            "<div id='plateKey'>" +
-                                "<div id='plateHeader1' class='keyItem'>" +
-                                  "<svg class='keyDot' width='auto' height='100%' viewBox='0 0 50 50'>" +
-                                    "<circle cx='25' cy='25' r='20px' stroke='rgb(255,0,132)' stroke-width='10px' fill='rgb(255,255,255)'/>" +
-                                  "</svg>" +
-                                  "<div class='keyText'>" +
-                                    "Galaxy" +
-                                  "</div>" +
-                                "</div>" +
-                                "<div id='plateHeader2' class='keyItem'>" +
-                                  "<svg class='keyDot' width='auto' height='100%' viewBox='0 0 50 50'>" +
-                                    "<circle cx='25' cy='25' r='20px' stroke='rgb(0,181,255)' stroke-width='10px' fill='rgb(255,255,255)'/>" +
-                                  "</svg>" +
-                                  "<div class='keyText'>" +
-                                    "Star" +
-                                  "</div>" +
-                                "</div>" +
-                                "<div id='plateHeader3' class='keyItem'>" +
-                                  "<svg class='keyDot' width='auto' height='100%' viewBox='0 0 50 50'>" +
-                                    "<circle cx='25' cy='25' r='20px' stroke='rgb(102,255,0)' stroke-width='10px' fill='rgb(255,255,255)'/>" +
-                                  "</svg>" +
-                                  "<div class='keyText'>" +
-                                    "Quasar" +
-                                  "</div>" +
-                                "</div>" +
-                              "</div>" +
-                              "<div id='plateButtonBox'>" +
-                                "<button id='plateResetPanZoomButton' class='plateButton'>Reset: Pan & Zoom</button>" +
-                                "<button id='plateFlipButton' class='plateButton'>Flip Plate</button>" +
-                                "<button id='backgroundImageButton' class='plateButton'>Background</button>" +
-                              "</div>" +
-                            "</div>" +
-                          "</div>" +
-                        "</div>" +
-                      "</div>" +
+                    "//This is the Plate Header   \n" + 
+                    "<div class='container'>   \n" +
+                        "<div id='headerWrapper'>   \n" +
+                          "<div id='headerBackgroundBox'>   \n" +
+                            "<div id='headerTextBox'>   \n" +
+                              "<div class='headerText'>   \n" +
+                                "Zoom, Pan, and Explore.   \n" +
+                              "</div>   \n" +
+                              "<div class='headerText'>   \n" +
+                                "Tap a Dot to Learn More.   \n" +
+                              "</div>   \n" +
+                            "</div>   \n" +
+                            "<div id='plateKey'>   \n" +
+                                "<div id='plateHeader1' class='keyItem'>   \n" +
+                                  "<svg class='keyDot' width='auto' height='100%' viewBox='0 0 50 50'>   \n" +
+                                    "<circle cx='25' cy='25' r='20px' stroke='rgb(255,0,132)' stroke-width='10px' fill='rgb(255,255,255)'/>   \n" +
+                                  "</svg>   \n" +
+                                  "<div class='keyText'>   \n" +
+                                    "Galaxy   \n" +
+                                  "</div>   \n" +
+                                "</div>   \n" +
+                                "<div id='plateHeader2' class='keyItem'>   \n" +
+                                  "<svg class='keyDot' width='auto' height='100%' viewBox='0 0 50 50'>   \n" +
+                                    "<circle cx='25' cy='25' r='20px' stroke='rgb(0,181,255)' stroke-width='10px' fill='rgb(255,255,255)'/>   \n" +
+                                  "</svg>   \n" +
+                                  "<div class='keyText'>   \n" +
+                                    "Star   \n" +
+                                  "</div>   \n" +
+                                "</div>   \n" +
+                                "<div id='plateHeader3' class='keyItem'>   \n" +
+                                  "<svg class='keyDot' width='auto' height='100%' viewBox='0 0 50 50'>   \n" +
+                                    "<circle cx='25' cy='25' r='20px' stroke='rgb(102,255,0)' stroke-width='10px' fill='rgb(255,255,255)'/>   \n" +
+                                  "</svg>   \n" +
+                                  "<div class='keyText'>   \n" +
+                                    "Quasar   \n" +
+                                  "</div>   \n" +
+                                "</div>   \n" +
+                              "</div>   \n" +
+                              "<div id='plateButtonBox'>   \n" +
+                                "<button id='plateResetPanZoomButton' class='plateButton'>Reset: Pan & Zoom</button>   \n" +
+                                "<button id='plateFlipButton' class='plateButton'>Flip Plate</button>   \n" +
+                                "<button id='backgroundImageButton' class='plateButton'>Background</button>   \n" +
+                              "</div>   \n" +
+                            "</div>   \n" +
+                          "</div>   \n" +
+                        "</div>   \n" +
+                      "</div>   \n" +
 
-                    "<div id='svgWrapper' style='display: flex; justify-content: center; align-items: center'>" +
+                    "<div id='svgWrapper' style='display: flex; justify-content: center; align-items: center'>   \n" +
                  "";
 
             string htmlClose = "" +
-                    "</div>" +
-                    "<script> " +
-                        "const element = document.getElementById('svgWrapper')," +
-                        // the below reads like it has a "const" at the beginning because of the comma from the above line.
-                        "panzoom = Panzoom(element, {" +
-                            // options here
-                            $"{maxScale}," +
-                            $"{minScale}," +
-                            //determines how the transorms function.
-                            "setTransform: (_, { scale, x, y }) => {" +
-                              //You need a different setStyle property depending on if you flip the plate or not.
-                              "if($('#svgWrapper').hasClass('plateflipped')){" +
-                                // If you put `-${x}` into the translate property below, you can not pan the svg into negative x values.  Instead you must calculate the negative value of x before pluggin it in.
-                                "let negativeX = -x;" +
-                                "panzoom.setStyle('transform', `scale(-${scale},${scale}) translate(${negativeX}px, ${y}px)`)" +
-                              "}" +
-                              "else {" +
-                                "panzoom.setStyle('transform', `scale(${scale},${scale}) translate(${x}px, ${y}px)`)" +
-                              "}" +
-                            "}" +
-                        "});" +
-                        // enable mouse wheel
-                        "const parent = element.parentElement;" +
-                        "parent.addEventListener('wheel', panzoom.zoomWithWheel);" +
-                    "</script>" +
-                "</body>" +
-                "</html>" +
+                    "</div>   \n" +
+                    "<script>   \n" +
+                        "// window.onload is used to ensure that the jQuery library has loaded before the scripts can be run.  For some reason $(function() {}) doesn't work here.   \n" +
+                        "//If you want to run scripts from the plateScripts.js file, you will need to comment out the window.onload.   \n" +
+                        "//You will also probably need to move all your scripts from here to the plateScript.js file.   \n" +
+                        "//Trying to use scripts both in the html and the plateScripts.js file cuases jquery reference errors because things won't load in the correct order.   \n" +
+
+                        "window.onload = function() {   \n" +
+
+                            "// panzoom reset logic   \n" +
+                            "$('#plateResetPanZoomButton').click(function() {   \n" +
+                              "panzoom.reset();   \n" +
+                            "});   \n" +
+
+                            "// Plate flipping logic   \n" +
+                            "$('#plateFlipButton').click(function() {   \n" +
+
+                              "// Triggers a plate reset so that the flip animates   \n" +
+                              "panzoom.reset();   \n" +
+
+                              "// Does the flipping and highlights button   \n" +
+                              "if($('#svgWrapper').hasClass('plateflipped')) {   \n" +
+                                "$('#svgWrapper').removeClass('plateflipped');   \n" +
+                                "$('#plateFlipButton').css('background-color', 'lightgray');   \n" +
+                              "}   \n" +
+                              "else {   \n" +
+                                "$('#svgWrapper').addClass('plateflipped');   \n" +
+                                "$('#plateFlipButton').css('background-color', 'rgb(134, 134, 134)');   \n" +
+                              "}   \n" +
+
+                            "});   \n" +
+
+                            "// Plate background image logic   \n" +
+                            "$('#backgroundImageButton').click(function() {   \n" +
+
+                              "// Turns on the skyImage background and hilights button   \n" +
+                              "if($('#skyImageBox').hasClass('skyImageOn')) {   \n" +
+                                "$('#skyImageBox').removeClass('skyImageOn');   \n" +
+                                "$('#skyImageBox').hide();   \n" +
+                                "$('#backgroundImageButton').css('background-color', 'lightgray');   \n" +
+                              "}   \n" +
+                              "// Turns off the skyImage background and un-hilights button   \n" +
+                              "else {   \n" +
+                                "$('#skyImageBox').addClass('skyImageOn');   \n" +
+                                "$('#skyImageBox').show();   \n" +
+                                "$('#backgroundImageButton').css('background-color', 'rgb(134, 134, 134)');   \n" +
+                              "}   \n" +
+
+                              "// turns off the plate fill (so that it doesn't cover the skyImage background)   \n" +
+                              "if ($('#backgroundFill').hasClass('fillOn')) {   \n" +
+                                "$('#backgroundFill').removeClass('fillOn')   \n" +
+                                "$('#backgroundFill').hide();   \n" +
+                              "}   \n" +
+                              "// turns on the plate fill   \n" +
+                              "else {   \n" +
+                                "$('#backgroundFill').addClass('fillOn')   \n" +
+                                "$('#backgroundFill').show();   \n" +
+                              "}   \n" +
+
+                            "});   \n" +
+
+                            "// panzoom library settings   \n" +
+                            "const element = document.getElementById('svgWrapper'),   \n" +
+                            "// the below reads like it has a 'const' at the beginning because of the comma from the above line.   \n" +
+                            "panzoom = Panzoom(element, {   \n" +
+                                "// options here   \n" +
+                                $"{maxScale},   \n" +
+                                $"{minScale},   \n" +
+                                "//determines how the transorms function.   \n" +
+                                "setTransform: (_, { scale, x, y }) => {   \n" +
+                                  "//You need a different setStyle property depending on if you flip the plate or not.   \n" +
+                                  "if($('#svgWrapper').hasClass('plateflipped')){   \n" +
+                                    "// If you put `-${x}` into the translate property below, you can not pan the svg into negative x values.   \n" +
+                                    "//Instead you must calculate the negative value of x before pluggin it in.   \n" +
+                                    "let negativeX = -x;   \n" +
+                                    "panzoom.setStyle('transform', `scale(-${scale},${scale}) translate(${negativeX}px, ${y}px)`)   \n" +
+                                  "}   \n" +
+                                  "else {   \n" +
+                                    "panzoom.setStyle('transform', `scale(${scale},${scale}) translate(${x}px, ${y}px)`)   \n" +
+                                  "}   \n" +
+                                "}   \n" +
+                            "});   \n" +
+
+                            "// enable mouse wheel   \n" +
+                            "const parent = element.parentElement;   \n" +
+                            "parent.addEventListener('wheel', panzoom.zoomWithWheel);   \n" +
+
+                        "}   \n" +
+                    "</script>   \n" +
+                "</body>   \n" +
+                "</html>   \n" +
                 "";
 
             // Adds the opening html string, then the svgString, and finally the closing html string to the Stringbuilder
