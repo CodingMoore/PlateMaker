@@ -109,6 +109,15 @@ namespace PlateMaker
 
             // Creates our opening svg string to be tacked on to the beginning of the Stringbuilder
             string svgOpenOuter = $"<svg id='svgImage' width='100vw' height='100vh' viewBox='{xViewBoxMin} {yViewBoxMin} {xViewBoxMax} {yViewBoxMax}' transform-origin='0 0'>";
+
+            string svgSkyImageBox =
+                "<!-- The viewBox max values determine how the background image lines up with dots on the plate.  -->" +
+                "<svg id='skyImageBox' width='100%' height='100%' viewBox='0 0 120 100' preserveAspectRatio='xMidYMid meet' display='none'>" +
+                    "<image id='skyImageBoxBackgroundImage' preserveAspectRatio='xMidYMid slice' width='100%' height='100%' href='../assets/plateBackgroundImages/PlateID-11386.jpg'/>" +
+                    "<!-- This rectangle is just used for visualizing the edges of the parent svg when setting up the program -->" +
+                    "<!-- <rect width='100%' height='100%' viewBox='0 0 100 100' stroke='pink' stroke-width='2px' fill='url(#spaceBoxBackground)'/> -->" +
+                "</svg>";
+
             // Creates our closing svg string to be tacked on to the end of the Stringbuilder
             string svgCloseOuter = "</svg>";
 
@@ -126,8 +135,8 @@ namespace PlateMaker
 
             // Creates the plate fill, which will be added to the Stringbuilder
             string svgPlateFill =
-                "<svg viewBox='0 0 120 120' style='fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:2;'>" +
-                    "<path d='M61.3,9.266L61.3,10.767C87.882,11.457 109.25,33.253 109.25,60C109.25,87.182 87.182,109.25 60,109.25C32.818," +
+                "<svg id='backgroundFill' class='fillOn' viewBox='0 0 120 120' style='fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:2;'>" +
+                    "<path id='backgroundFillPath' d='M61.3,9.266L61.3,10.767C87.882,11.457 109.25,33.253 109.25,60C109.25,87.182 87.182,109.25 60,109.25C32.818," +
                     "109.25 10.75,87.182 10.75,60C10.75,33.253 32.118,11.457 58.7,10.767L58.7,9.266C59.132,9.255 59.565,9.25 60,9.25C60.435," +
                     "9.25 60.868,9.255 61.3,9.266ZM71.802,104.047C71.376,104.161 70.937,103.908 70.823,103.481C70.708,103.055 70.962," +
                     "102.616 71.388,102.501C71.815,102.387 72.254,102.641 72.368,103.067C72.482,103.494 72.229,103.933 71.802,104.047ZM48.198," +
@@ -252,6 +261,7 @@ namespace PlateMaker
 
             // Adds the some of the SVG strings to the Stringbuilder
             svgStringBuilder.Append(svgOpenOuter);
+            svgStringBuilder.Append(svgSkyImageBox);
             svgStringBuilder.Append(svgPlateBorder);
             svgStringBuilder.Append(svgPlateFill);
             svgStringBuilder.Append(svgPlateEighthInchCenterHole);
@@ -293,7 +303,7 @@ namespace PlateMaker
                 svgStringBuilder.Append(
                     // Ampersands "&" in the href query string have been replaced with "&amp;" since a regular Ampersand is a escapement character in XML (svg).
                     $"<a href='https://skyserver.sdss.org/dr17/VisualTools/navi?ra={stellarObjectData[i][4]}&amp;dec={stellarObjectData[i][5]}&amp;scale={photoScaler}' target='_blank'> " +
-                    $"<circle cx='{cxScaledAndTranslatedString}' cy='{cyScaledAndTranslatedString}' r='{dotAreaScaler}' stroke='{dotStrokeColor}' stroke-width='{strokeWidth}' fill='{dotFillColor}'/>" +
+                    $"<circle class='plateDot' cx='{cxScaledAndTranslatedString}' cy='{cyScaledAndTranslatedString}' r='{dotAreaScaler}' stroke='{dotStrokeColor}' stroke-width='{strokeWidth}' fill='{dotFillColor}'/>" +
                     $"{stellarObjectData[i][2]}, plate: {stellarObjectData[i][3]}</a>"
                 );
             }
@@ -344,9 +354,61 @@ namespace PlateMaker
                     "<meta http-equiv='X-UA-Compatible' content='IE=edge'>" +
                     "<meta name='viewport' content='width=device-width, initial-scale=1.0'>" +
                     "<title>Document</title>" +
+                    "<link href='../css/bootstrap.css' rel='stylesheet' type='text/css'>" +
+                    "<link href='../css/plateStyles.css' rel='stylesheet' type='text/css'>" +
+                    "<script src='../js/jquery-3.6.0.js' type='module'></script>" +
                     "<script src='https://www.unpkg.com/@panzoom/panzoom/dist/panzoom.js'></script>" +
-                "</head>" +
+                    "<script src='../js/plateScripts.js' type='module'></script>" +
+                       "</head>" +
                 $"<body {backgroundColor}>" +
+
+                    "<div class='container'>" +
+                        "<div id='headerWrapper'>" +
+                          "<div id='headerBackgroundBox'>" +
+                            "<div id='headerTextBox'>" +
+                              "<div class='headerText'>" +
+                                "Zoom, Pan, and Explore." +
+                              "</div>" +
+                              "<div class='headerText'>" +
+                                "Tap a Dot to Learn More." +
+                              "</div>" +
+                            "</div>" +
+                            "<div id='plateKey'>" +
+                                "<div id='plateHeader1' class='keyItem'>" +
+                                  "<svg class='keyDot' width='auto' height='100%' viewBox='0 0 50 50'>" +
+                                    "<circle cx='25' cy='25' r='20px' stroke='rgb(255,0,132)' stroke-width='10px' fill='rgb(255,255,255)'/>" +
+                                  "</svg>" +
+                                  "<div class='keyText'>" +
+                                    "Galaxy" +
+                                  "</div>" +
+                                "</div>" +
+                                "<div id='plateHeader2' class='keyItem'>" +
+                                  "<svg class='keyDot' width='auto' height='100%' viewBox='0 0 50 50'>" +
+                                    "<circle cx='25' cy='25' r='20px' stroke='rgb(0,181,255)' stroke-width='10px' fill='rgb(255,255,255)'/>" +
+                                  "</svg>" +
+                                  "<div class='keyText'>" +
+                                    "Star" +
+                                  "</div>" +
+                                "</div>" +
+                                "<div id='plateHeader3' class='keyItem'>" +
+                                  "<svg class='keyDot' width='auto' height='100%' viewBox='0 0 50 50'>" +
+                                    "<circle cx='25' cy='25' r='20px' stroke='rgb(102,255,0)' stroke-width='10px' fill='rgb(255,255,255)'/>" +
+                                  "</svg>" +
+                                  "<div class='keyText'>" +
+                                    "Quasar" +
+                                  "</div>" +
+                                "</div>" +
+                              "</div>" +
+                              "<div id='plateButtonBox'>" +
+                                "<button id='plateResetPanZoomButton' class='plateButton'>Reset: Pan & Zoom</button>" +
+                                "<button id='plateFlipButton' class='plateButton'>Flip Plate</button>" +
+                                "<button id='backgroundImageButton' class='plateButton'>Background</button>" +
+                              "</div>" +
+                            "</div>" +
+                          "</div>" +
+                        "</div>" +
+                      "</div>" +
+
                     "<div id='svgWrapper' style='display: flex; justify-content: center; align-items: center'>" +
                  "";
 
@@ -356,9 +418,21 @@ namespace PlateMaker
                         "const element = document.getElementById('svgWrapper')," +
                         // the below reads like it has a "const" at the beginning because of the comma from the above line.
                         "panzoom = Panzoom(element, {" +
-                        // options here
-                        $"{maxScale}," +
-                        $"{minScale}" +
+                            // options here
+                            $"{maxScale}," +
+                            $"{minScale}," +
+                            //determines how the transorms function.
+                            "setTransform: (_, { scale, x, y }) => {" +
+                              //You need a different setStyle property depending on if you flip the plate or not.
+                              "if($('#svgWrapper').hasClass('plateflipped')){" +
+                                // If you put `-${x}` into the translate property below, you can not pan the svg into negative x values.  Instead you must calculate the negative value of x before pluggin it in.
+                                "let negativeX = -x;" +
+                                "panzoom.setStyle('transform', `scale(-${scale},${scale}) translate(${negativeX}px, ${y}px)`)" +
+                              "}" +
+                              "else {" +
+                                "panzoom.setStyle('transform', `scale(${scale},${scale}) translate(${x}px, ${y}px)`)" +
+                              "}" +
+                            "}" +
                         "});" +
                         // enable mouse wheel
                         "const parent = element.parentElement;" +
