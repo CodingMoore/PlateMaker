@@ -136,7 +136,8 @@ namespace PlateMaker
             // Creates the plate fill, which will be added to the Stringbuilder
             string svgPlateFill =
                 "\t\t\t<svg id='backgroundFill' class='fillOn' viewBox='0 0 120 120' style='fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:2;'>   \n" +
-                "\t\t\t\t<path id='backgroundFillPath' d='M61.3,9.266L61.3,10.767C87.882,11.457 109.25,33.253 109.25,60C109.25,87.182 87.182,109.25 60,109.25C32.818," +
+                "\t\t\t\t<g id='Plate-Edge-with-Subtracted-Holes' transform = 'matrix(-1,0,0,1,120,0)'>" +
+                "\t\t\t\t\t<path id='backgroundFillPath' d='M61.3,9.266L61.3,10.767C87.882,11.457 109.25,33.253 109.25,60C109.25,87.182 87.182,109.25 60,109.25C32.818," +
                     "109.25 10.75,87.182 10.75,60C10.75,33.253 32.118,11.457 58.7,10.767L58.7,9.266C59.132,9.255 59.565,9.25 60,9.25C60.435," +
                     "9.25 60.868,9.255 61.3,9.266ZM71.802,104.047C71.376,104.161 70.937,103.908 70.823,103.481C70.708,103.055 70.962," +
                     "102.616 71.388,102.501C71.815,102.387 72.254,102.641 72.368,103.067C72.482,103.494 72.229,103.933 71.802,104.047ZM48.198," +
@@ -167,7 +168,8 @@ namespace PlateMaker
                     "16.933C72.254,17.359 71.815,17.613 71.388,17.499C70.962,17.384 70.708,16.945 70.823,16.519C70.937,16.092 71.376," +
                     "15.839 71.802,15.953ZM60,14.799C60.221,14.799 60.4,14.979 60.4,15.199C60.4,15.42 60.221,15.599 60,15.599C59.779,15.599 59.6," +
                     "15.42 59.6,15.199C59.6,14.979 59.779,14.799 60,14.799Z'   \n" +
-               $"\t\t\t\t{plateFillStyle}/>   \n" +
+               $"\t\t\t\t\t{plateFillStyle}/>   \n" +
+                "\t\t\t\t</g>   \n" +
                 "\t\t\t</svg>   \n";
 
             // Creates a fill for the 1/8 inch hole in the center of the plate, which will be added to the Stringbuilder
@@ -203,14 +205,16 @@ namespace PlateMaker
             string svgPlateHalfInch180DegreeSpacedHoles =
                 "\t\t\t<svg viewBox='0 0 120 120' style='fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:2;'>   \n" +
                 "\t\t\t\t<g id='_1-2-inch-holes--180-degree-spacing-'>   \n" +
-                "\t\t\t\t\t<g transform='matrix(0.579984,0.270451,-0.270451,0.579984,48.2348,-5.80127)'>   \n" +
+                "\t\t\t\t\t<g transform='matrix(0.579984,-0.270451,0.270451,0.579984,2.03078,26.7164)'>   \n" +
                $"\t\t\t\t\t\t<circle cx='60.118' cy='15.413' r='1.25' {plateHalfInch180DegreeSpacedHoleStyle}/>   \n" +
                 "\t\t\t\t\t</g>   \n" +
-                "\t\t\t\t\t<g transform='matrix(-0.579984,-0.270451,0.270451,-0.579984,71.7652,125.801)'>   \n" +
+                "\t\t\t\t\t<g transform='matrix(-0.579984,0.270451,-0.270451,-0.579984,117.969,93.2836)'>   \n" +
                $"\t\t\t\t\t\t<circle cx='60.118' cy='15.413' r='1.25' {plateHalfInch180DegreeSpacedHoleStyle}/>   \n" +
                 "\t\t\t\t\t</g>   \n" +
                 "\t\t\t\t</g>   \n" +
                 "\t\t\t</svg>   \n";
+
+                
 
             // Creates a fill for the twelve evently spaced (30 Degrees apart) 1/2 inch holes in the plate, which will be added to the Stringbuilder
             string svgPlateHalfInch30DegreeSpacedHoles =
@@ -272,11 +276,20 @@ namespace PlateMaker
             // for every center and radius in our list, create a sub string to be use the the svg file
             for (int i = 0; i < stellarObjectData.Count; i++)
             {
-                // When the stellarObjectData is multiplied by the relativeSizeScaler, we change the size of the overall area of the dots.
+                // Converts coordinates from strings to numbers (double)
+                double xCoordinate = double.Parse(stellarObjectData[i][0]);
+                double yCoordinate = double.Parse(stellarObjectData[i][1]);
+
+                // The dot/hole coordinates returned by the api are presumably in respect the side of the plate that faces the sky when mounted in the telescope.
+                // This means that when you try to plot the plate dot/hole coordinates against the sky background, the x-axis values are reversed.
+                // To resovle this we will need to 'flip' the plate over by reversing the x coordinates.
+                xCoordinate = -xCoordinate;
+
+                // When the stellarObjectData (xCoordinate and yCoordinate) is multiplied by the relativeSizeScaler, we change the size of the overall area of the dots.
                 // When we add teh xViewBoxMax/2 and yViewBoxMax/2 value, we are translating each dot's x,y coordinates so that they are all
                 // in the positive x and positive y coordinate quadrant, which places them in the viewbox.
-                double cxScaledAndTranslatedInt = double.Parse(stellarObjectData[i][0]) * relativeSizeScaler + xViewBoxMax / 2;
-                double cyScaledAndTranslatedInt = double.Parse(stellarObjectData[i][1]) * relativeSizeScaler + yViewBoxMax / 2;
+                double cxScaledAndTranslatedInt = xCoordinate * relativeSizeScaler + xViewBoxMax / 2;
+                double cyScaledAndTranslatedInt = yCoordinate * relativeSizeScaler + yViewBoxMax / 2;
 
                 string cxScaledAndTranslatedString = cxScaledAndTranslatedInt.ToString();
                 string cyScaledAndTranslatedString = cyScaledAndTranslatedInt.ToString();
