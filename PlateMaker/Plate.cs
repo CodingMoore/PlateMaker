@@ -316,8 +316,12 @@ namespace PlateMaker
                 }
 
                 svgStringBuilder.Append(
-                    // Ampersands "&" in the href query string have been replaced with "&amp;" since a regular Ampersand is a escapement character in XML (svg).
-                   $"\t\t\t<a href='https://skyserver.sdss.org/dr17/VisualTools/navi?ra={stellarObjectData[i][4]}&amp;dec={stellarObjectData[i][5]}&amp;scale={photoScaler}' target='_blank'>   \n" +
+
+                   // This link can be used to see a photo of the object in the night sky, but the image website is not very mobile friendly
+                   // Ampersands "&" in the href query string have been replaced with "&amp;" since a regular Ampersand is a escapement character in XML (svg).
+                   //$"\t\t\t<a href='https://skyserver.sdss.org/dr17/VisualTools/navi?ra={stellarObjectData[i][4]}&amp;dec={stellarObjectData[i][5]}&amp;scale={photoScaler}' target='_blank'>   \n" +
+
+                   $"\t\t\t<a href='https://skyserver.sdss.org/dr17/VisualTools/quickobj?objId={stellarObjectData[i][2]}' target='_blank'>   \n" +
                    $"\t\t\t\t<circle class='plateDot' cx='{cxScaledAndTranslatedString}' cy='{cyScaledAndTranslatedString}' r='{dotAreaScaler}' stroke='{dotStrokeColor}' stroke-width='{strokeWidth}' fill='{dotFillColor}'/>   \n" +
                    $"\t\t\t\t{stellarObjectData[i][2]}, plate: {stellarObjectData[i][3]}   \n" +
                     "\t\t\t</a>   \n"
@@ -354,6 +358,11 @@ namespace PlateMaker
 
             // Creates a limit on how far panzoom will zoom out of the plate svg
             string minScale = "minScale: .75";
+
+            // Creates a constat to adjust the Mouse wheel and Pinch zoom sensitiviety. The default is '.3'
+            // I do not yet see a way to separte mouse vs. pinch zoom sensitivity
+
+            string zoomStep = "step: 2";
 
             ////////////////////////////////
             ////////////////////////////////
@@ -635,6 +644,7 @@ namespace PlateMaker
                 "\t\t\t// options here   \n" +
                $"\t\t\t{maxScale},   \n" +
                $"\t\t\t{minScale},   \n" +
+               $"\t\t\t{zoomStep},   \n" +
                 "\t\t\t//determines how the transorms function.   \n" +
                 "\t\t\tsetTransform: (_, { scale, x, y }) => {   \n" +
                 "\t\t\t\t//You need a different setStyle property depending on if you flip the plate or not.   \n" +
