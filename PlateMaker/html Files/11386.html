@@ -17,7 +17,7 @@
 
 	<style>   
 		#headerWrapper {   
-			height: 75px;   
+			height: fit-content;   
 			position: -webkit-sticky;   
 			position: sticky;   
 			top: 0;   
@@ -3554,90 +3554,90 @@
 		</svg>    
 	</div>   
 	<script>   
-		// window.onload is used to ensure that the jQuery library has loaded before the scripts can be run.  For some reason $(function() {}) doesn't work here.   
-		//If you want to run scripts from the plateScripts.js file, you will need to comment out the window.onload.   
-		//You will also probably need to move all your scripts from here to the plateScript.js file.   
-		//Trying to use scripts both in the html and the plateScripts.js file cuases jquery reference errors because things won't load in the correct order.   
-		window.onload = function() {   
+	//If you want to run scripts from the plateScripts.js file, you will also probably need to move all your scripts from here to the plateScript.js file.   
+	//Trying to use scripts both in the html and the plateScripts.js file causes jquery reference errors because things won't load in the correct order.   
 
-			// panzoom reset logic   
-			$('#plateResetPanZoomButton').click(function() {   
-				panzoom.reset();   
-			});   
+		// Changes height of #svgImage on screen resize (and page load) so that the svg doesn't overflow   
+		$(window).resize(function() {   
+			$('#svgImage').height((visualViewport.height - $('#headerWrapper').height()));   
+		}).resize();   
 
-			// Plate flipping logic   
-			$('#plateFlipButton').click(function() {   
+		// panzoom reset logic   
+		$('#plateResetPanZoomButton').click(function() {   
+			panzoom.reset();   
+		});   
 
-				// Triggers a plate reset so that the flip animates   
-				panzoom.reset();   
+		// Plate flipping logic   
+		$('#plateFlipButton').click(function() {   
 
-				// Does the flipping and highlights button   
-				if($('#svgWrapper').hasClass('plateflipped')) {   
-					$('#svgWrapper').removeClass('plateflipped');   
-					$('#plateFlipButton').css('background-color', 'lightgray');   
+			// Triggers a plate reset so that the flip animates   
+			panzoom.reset();   
+
+			// Does the flipping and highlights button   
+			if($('#svgWrapper').hasClass('plateflipped')) {   
+				$('#svgWrapper').removeClass('plateflipped');   
+				$('#plateFlipButton').css('background-color', 'lightgray');   
+			}   
+			else {   
+				$('#svgWrapper').addClass('plateflipped');   
+				$('#plateFlipButton').css('background-color', 'rgb(134, 134, 134)');   
+			}   
+
+		});   
+
+		// Plate background image logic   
+		$('#backgroundImageButton').click(function() {   
+
+			// Turns on the skyImage background and hilights button   
+			if($('#skyImageBox').hasClass('skyImageOn')) {   
+				$('#skyImageBox').removeClass('skyImageOn');   
+				$('#skyImageBox').hide();   
+				$('#backgroundImageButton').css('background-color', 'lightgray');   
+			}   
+			// Turns off the skyImage background and un-hilights button   
+			else {   
+				$('#skyImageBox').addClass('skyImageOn');   
+				$('#skyImageBox').show();   
+				$('#backgroundImageButton').css('background-color', 'rgb(134, 134, 134)');   
+			}   
+
+			// turns off the plate fill (so that it doesn't cover the skyImage background)   
+			if ($('#backgroundFill').hasClass('fillOn')) {   
+				$('#backgroundFill').removeClass('fillOn')   
+				$('#backgroundFill').hide();   
+			}   
+			// turns on the plate fill   
+			else {   
+				$('#backgroundFill').addClass('fillOn')   
+				$('#backgroundFill').show();   
+			}   
+
+		});   
+
+		// panzoom library settings   
+		const element = document.getElementById('svgWrapper');   
+		const panzoom = Panzoom(element, {   
+			// options here   
+			maxScale: 50,   
+			minScale: .75,   
+			//determines how the transorms function.   
+			setTransform: (_, { scale, x, y }) => {   
+				//You need a different setStyle property depending on if you flip the plate or not.   
+				if($('#svgWrapper').hasClass('plateflipped')){   
+					// If you put `-${x}` into the translate property below, you can not pan the svg into negative x values.   
+					//Instead you must calculate the negative value of x before pluggin it in.   
+					let negativeX = -x;   
+					panzoom.setStyle('transform', `scale(-${scale},${scale}) translate(${negativeX}px, ${y}px)`)   
 				}   
 				else {   
-					$('#svgWrapper').addClass('plateflipped');   
-					$('#plateFlipButton').css('background-color', 'rgb(134, 134, 134)');   
+					panzoom.setStyle('transform', `scale(${scale},${scale}) translate(${x}px, ${y}px)`)   
 				}   
+			}   
+		});   
 
-			});   
-
-			// Plate background image logic   
-			$('#backgroundImageButton').click(function() {   
-
-				// Turns on the skyImage background and hilights button   
-				if($('#skyImageBox').hasClass('skyImageOn')) {   
-					$('#skyImageBox').removeClass('skyImageOn');   
-					$('#skyImageBox').hide();   
-					$('#backgroundImageButton').css('background-color', 'lightgray');   
-				}   
-				// Turns off the skyImage background and un-hilights button   
-				else {   
-					$('#skyImageBox').addClass('skyImageOn');   
-					$('#skyImageBox').show();   
-					$('#backgroundImageButton').css('background-color', 'rgb(134, 134, 134)');   
-				}   
-
-				// turns off the plate fill (so that it doesn't cover the skyImage background)   
-				if ($('#backgroundFill').hasClass('fillOn')) {   
-					$('#backgroundFill').removeClass('fillOn')   
-					$('#backgroundFill').hide();   
-				}   
-				// turns on the plate fill   
-				else {   
-					$('#backgroundFill').addClass('fillOn')   
-					$('#backgroundFill').show();   
-				}   
-
-			});   
-
-			// panzoom library settings   
-			const element = document.getElementById('svgWrapper');   
-			const panzoom = Panzoom(element, {   
-				// options here   
-				maxScale: 50,   
-				minScale: .75,   
-				//determines how the transorms function.   
-				setTransform: (_, { scale, x, y }) => {   
-					//You need a different setStyle property depending on if you flip the plate or not.   
-					if($('#svgWrapper').hasClass('plateflipped')){   
-						// If you put `-${x}` into the translate property below, you can not pan the svg into negative x values.   
-						//Instead you must calculate the negative value of x before pluggin it in.   
-						let negativeX = -x;   
-						panzoom.setStyle('transform', `scale(-${scale},${scale}) translate(${negativeX}px, ${y}px)`)   
-					}   
-					else {   
-						panzoom.setStyle('transform', `scale(${scale},${scale}) translate(${x}px, ${y}px)`)   
-					}   
-				}   
-			});   
-
-			// enable mouse wheel   
-			const parent = element.parentElement;   
-			parent.addEventListener('wheel', panzoom.zoomWithWheel);   
-
-		}   
+		// enable mouse wheel   
+		const parent = element.parentElement;   
+		parent.addEventListener('wheel', panzoom.zoomWithWheel);   
 
 	</script>   
 </body>   

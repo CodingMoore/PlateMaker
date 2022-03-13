@@ -383,7 +383,7 @@ namespace PlateMaker
 
                 "\t<style>   \n" +
                 "\t\t#headerWrapper {   \n" +
-                "\t\t\theight: 75px;   \n" +
+                "\t\t\theight: fit-content;   \n" +
                 "\t\t\tposition: -webkit-sticky;   \n" +
                 "\t\t\tposition: sticky;   \n" +
                 "\t\t\ttop: 0;   \n" +
@@ -551,91 +551,90 @@ namespace PlateMaker
             string htmlClose = "" +
                 "\t</div>   \n" +
                 "\t<script>   \n" +
-                "\t\t// window.onload is used to ensure that the jQuery library has loaded before the scripts can be run.  For some reason $(function() {}) doesn't work here.   \n" +
-                "\t\t//If you want to run scripts from the plateScripts.js file, you will need to comment out the window.onload.   \n" +
-                "\t\t//You will also probably need to move all your scripts from here to the plateScript.js file.   \n" +
-                "\t\t//Trying to use scripts both in the html and the plateScripts.js file cuases jquery reference errors because things won't load in the correct order.   \n" +
-
-                "\t\twindow.onload = function() {   \n" +
+                "\t//If you want to run scripts from the plateScripts.js file, you will also probably need to move all your scripts from here to the plateScript.js file.   \n" +
+                "\t//Trying to use scripts both in the html and the plateScripts.js file causes jquery reference errors because things won't load in the correct order.   \n" +
                 "\n" +
-                "\t\t\t// panzoom reset logic   \n" +
-                "\t\t\t$('#plateResetPanZoomButton').click(function() {   \n" +
-                "\t\t\t\tpanzoom.reset();   \n" +
-                "\t\t\t});   \n" +
+                "\t\t// Changes height of #svgImage on screen resize (and page load) so that the svg doesn't overflow   \n" +
+                "\t\t$(window).resize(function() {   \n" +
+                "\t\t\t$('#svgImage').height((visualViewport.height - $('#headerWrapper').height()));   \n" +
+                "\t\t}).resize();   \n" +
                 "\n" +
-                "\t\t\t// Plate flipping logic   \n" +
-                "\t\t\t$('#plateFlipButton').click(function() {   \n" +
+                "\t\t// panzoom reset logic   \n" +
+                "\t\t$('#plateResetPanZoomButton').click(function() {   \n" +
+                "\t\t\tpanzoom.reset();   \n" +
+                "\t\t});   \n" +
                 "\n" +
-                "\t\t\t\t// Triggers a plate reset so that the flip animates   \n" +
-                "\t\t\t\tpanzoom.reset();   \n" +
+                "\t\t// Plate flipping logic   \n" +
+                "\t\t$('#plateFlipButton').click(function() {   \n" +
                 "\n" +
-                "\t\t\t\t// Does the flipping and highlights button   \n" +
-                "\t\t\t\tif($('#svgWrapper').hasClass('plateflipped')) {   \n" +
-                "\t\t\t\t\t$('#svgWrapper').removeClass('plateflipped');   \n" +
-                "\t\t\t\t\t$('#plateFlipButton').css('background-color', 'lightgray');   \n" +
+                "\t\t\t// Triggers a plate reset so that the flip animates   \n" +
+                "\t\t\tpanzoom.reset();   \n" +
+                "\n" +
+                "\t\t\t// Does the flipping and highlights button   \n" +
+                "\t\t\tif($('#svgWrapper').hasClass('plateflipped')) {   \n" +
+                "\t\t\t\t$('#svgWrapper').removeClass('plateflipped');   \n" +
+                "\t\t\t\t$('#plateFlipButton').css('background-color', 'lightgray');   \n" +
+                "\t\t\t}   \n" +
+                "\t\t\telse {   \n" +
+                "\t\t\t\t$('#svgWrapper').addClass('plateflipped');   \n" +
+                "\t\t\t\t$('#plateFlipButton').css('background-color', 'rgb(134, 134, 134)');   \n" +
+                "\t\t\t}   \n" +
+                "\n" +
+                "\t\t});   \n" +
+                "\n" +
+                "\t\t// Plate background image logic   \n" +
+                "\t\t$('#backgroundImageButton').click(function() {   \n" +
+                "\n" +
+                "\t\t\t// Turns on the skyImage background and hilights button   \n" +
+                "\t\t\tif($('#skyImageBox').hasClass('skyImageOn')) {   \n" +
+                "\t\t\t\t$('#skyImageBox').removeClass('skyImageOn');   \n" +
+                "\t\t\t\t$('#skyImageBox').hide();   \n" +
+                "\t\t\t\t$('#backgroundImageButton').css('background-color', 'lightgray');   \n" +
+                "\t\t\t}   \n" +
+                "\t\t\t// Turns off the skyImage background and un-hilights button   \n" +
+                "\t\t\telse {   \n" +
+                "\t\t\t\t$('#skyImageBox').addClass('skyImageOn');   \n" +
+                "\t\t\t\t$('#skyImageBox').show();   \n" +
+                "\t\t\t\t$('#backgroundImageButton').css('background-color', 'rgb(134, 134, 134)');   \n" +
+                "\t\t\t}   \n" +
+                "\n" +
+                "\t\t\t// turns off the plate fill (so that it doesn't cover the skyImage background)   \n" +
+                "\t\t\tif ($('#backgroundFill').hasClass('fillOn')) {   \n" +
+                "\t\t\t\t$('#backgroundFill').removeClass('fillOn')   \n" +
+                "\t\t\t\t$('#backgroundFill').hide();   \n" +
+                "\t\t\t}   \n" +
+                "\t\t\t// turns on the plate fill   \n" +
+                "\t\t\telse {   \n" +
+                "\t\t\t\t$('#backgroundFill').addClass('fillOn')   \n" +
+                "\t\t\t\t$('#backgroundFill').show();   \n" +
+                "\t\t\t}   \n" +
+                "\n" +
+                "\t\t});   \n" +
+                "\n" +
+                "\t\t// panzoom library settings   \n" +
+                "\t\tconst element = document.getElementById('svgWrapper');   \n" +
+                "\t\tconst panzoom = Panzoom(element, {   \n" +
+                "\t\t\t// options here   \n" +
+               $"\t\t\t{maxScale},   \n" +
+               $"\t\t\t{minScale},   \n" +
+                "\t\t\t//determines how the transorms function.   \n" +
+                "\t\t\tsetTransform: (_, { scale, x, y }) => {   \n" +
+                "\t\t\t\t//You need a different setStyle property depending on if you flip the plate or not.   \n" +
+                "\t\t\t\tif($('#svgWrapper').hasClass('plateflipped')){   \n" +
+                "\t\t\t\t\t// If you put `-${x}` into the translate property below, you can not pan the svg into negative x values.   \n" +
+                "\t\t\t\t\t//Instead you must calculate the negative value of x before pluggin it in.   \n" +
+                "\t\t\t\t\tlet negativeX = -x;   \n" +
+                "\t\t\t\t\tpanzoom.setStyle('transform', `scale(-${scale},${scale}) translate(${negativeX}px, ${y}px)`)   \n" +
                 "\t\t\t\t}   \n" +
                 "\t\t\t\telse {   \n" +
-                "\t\t\t\t\t$('#svgWrapper').addClass('plateflipped');   \n" +
-                "\t\t\t\t\t$('#plateFlipButton').css('background-color', 'rgb(134, 134, 134)');   \n" +
+                "\t\t\t\t\tpanzoom.setStyle('transform', `scale(${scale},${scale}) translate(${x}px, ${y}px)`)   \n" +
                 "\t\t\t\t}   \n" +
+                "\t\t\t}   \n" +
+                "\t\t});   \n" +
                 "\n" +
-                "\t\t\t});   \n" +
-                "\n" +
-                "\t\t\t// Plate background image logic   \n" +
-                "\t\t\t$('#backgroundImageButton').click(function() {   \n" +
-                "\n" +
-                "\t\t\t\t// Turns on the skyImage background and hilights button   \n" +
-                "\t\t\t\tif($('#skyImageBox').hasClass('skyImageOn')) {   \n" +
-                "\t\t\t\t\t$('#skyImageBox').removeClass('skyImageOn');   \n" +
-                "\t\t\t\t\t$('#skyImageBox').hide();   \n" +
-                "\t\t\t\t\t$('#backgroundImageButton').css('background-color', 'lightgray');   \n" +
-                "\t\t\t\t}   \n" +
-                "\t\t\t\t// Turns off the skyImage background and un-hilights button   \n" +
-                "\t\t\t\telse {   \n" +
-                "\t\t\t\t\t$('#skyImageBox').addClass('skyImageOn');   \n" +
-                "\t\t\t\t\t$('#skyImageBox').show();   \n" +
-                "\t\t\t\t\t$('#backgroundImageButton').css('background-color', 'rgb(134, 134, 134)');   \n" +
-                "\t\t\t\t}   \n" +
-                "\n" +
-                "\t\t\t\t// turns off the plate fill (so that it doesn't cover the skyImage background)   \n" +
-                "\t\t\t\tif ($('#backgroundFill').hasClass('fillOn')) {   \n" +
-                "\t\t\t\t\t$('#backgroundFill').removeClass('fillOn')   \n" +
-                "\t\t\t\t\t$('#backgroundFill').hide();   \n" +
-                "\t\t\t\t}   \n" +
-                "\t\t\t\t// turns on the plate fill   \n" +
-                "\t\t\t\telse {   \n" +
-                "\t\t\t\t\t$('#backgroundFill').addClass('fillOn')   \n" +
-                "\t\t\t\t\t$('#backgroundFill').show();   \n" +
-                "\t\t\t\t}   \n" +
-                "\n" +
-                "\t\t\t});   \n" +
-                "\n" +
-                "\t\t\t// panzoom library settings   \n" +
-                "\t\t\tconst element = document.getElementById('svgWrapper');   \n" +
-                "\t\t\tconst panzoom = Panzoom(element, {   \n" +
-                "\t\t\t\t// options here   \n" +
-               $"\t\t\t\t{maxScale},   \n" +
-               $"\t\t\t\t{minScale},   \n" +
-                "\t\t\t\t//determines how the transorms function.   \n" +
-                "\t\t\t\tsetTransform: (_, { scale, x, y }) => {   \n" +
-                "\t\t\t\t\t//You need a different setStyle property depending on if you flip the plate or not.   \n" +
-                "\t\t\t\t\tif($('#svgWrapper').hasClass('plateflipped')){   \n" +
-                "\t\t\t\t\t\t// If you put `-${x}` into the translate property below, you can not pan the svg into negative x values.   \n" +
-                "\t\t\t\t\t\t//Instead you must calculate the negative value of x before pluggin it in.   \n" +
-                "\t\t\t\t\t\tlet negativeX = -x;   \n" +
-                "\t\t\t\t\t\tpanzoom.setStyle('transform', `scale(-${scale},${scale}) translate(${negativeX}px, ${y}px)`)   \n" +
-                "\t\t\t\t\t}   \n" +
-                "\t\t\t\t\telse {   \n" +
-                "\t\t\t\t\t\tpanzoom.setStyle('transform', `scale(${scale},${scale}) translate(${x}px, ${y}px)`)   \n" +
-                "\t\t\t\t\t}   \n" +
-                "\t\t\t\t}   \n" +
-                "\t\t\t});   \n" +
-                "\n" +
-                "\t\t\t// enable mouse wheel   \n" +
-                "\t\t\tconst parent = element.parentElement;   \n" +
-                "\t\t\tparent.addEventListener('wheel', panzoom.zoomWithWheel);   \n" +
-                "\n" +
-                "\t\t}   \n" +
+                "\t\t// enable mouse wheel   \n" +
+                "\t\tconst parent = element.parentElement;   \n" +
+                "\t\tparent.addEventListener('wheel', panzoom.zoomWithWheel);   \n" +
                 "\n" +
                 "\t</script>   \n" +
                 "</body>   \n" +
