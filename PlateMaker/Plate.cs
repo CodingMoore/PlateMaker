@@ -490,6 +490,19 @@ namespace PlateMaker
                 "\t\t\t\tmargin: 0px 0px;   \n" +
                 "\t\t\t}   \n" +
                 "\t\t}   \n" +
+
+                "\t\t#plateNumberDisplayWrapper {   \n" +
+                "\t\t\theight: 0;   \n" +
+                "\t\t}   \n" +
+                "\n" +
+
+                "\t\t#plateNumberDisplay {   \n" +
+                "\t\t\tposition: relative;   \n" +
+                "\t\t\ttop: 20px;   \n" +
+                "\t\t\tcolor: rgb(215,215,215);   \n" +
+                "\t\t}   \n" +
+                "\n" +
+
                 "\t</style>   \n" +
                 "\n" +
 
@@ -540,6 +553,11 @@ namespace PlateMaker
                 "\t\t\t\t\t<button id='plateResetPanZoomButton' class='plateButton'>Reset: Pan & Zoom</button>   \n" +
                 "\t\t\t\t\t<button id='plateFlipButton' class='plateButton'>Flip Plate</button>   \n" +
                 "\t\t\t\t\t<button id='backgroundImageButton' class='plateButton'>Background</button>   \n" +
+                "\t\t\t\t</div>   \n" +
+                "\t\t\t\t<div id='plateNumberDisplayWrapper'>   \n" +
+                "\t\t\t\t\t<div id='plateNumberDisplay'>   \n" +
+               $"\t\t\t\t\t\tPlate {this.FileName}   \n" +
+                "\t\t\t\t\t</div>   \n" +
                 "\t\t\t\t</div>   \n" +
                 "\t\t\t</div>   \n" +
                 "\t\t</div>   \n" +
