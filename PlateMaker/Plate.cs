@@ -61,7 +61,7 @@ namespace PlateMaker
 
 
             // Styling constants
-            string plateBorderStyle = "style='stroke:rgb(46,46,46); stroke-width:1%;'";
+            string plateBorderStyle = "style='stroke:rgb(92,92,92); stroke-width:.25;'";
 
             string plateFillStyle = "style='fill:rgb(92,92,92);'";
 
