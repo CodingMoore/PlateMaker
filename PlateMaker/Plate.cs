@@ -113,7 +113,7 @@ namespace PlateMaker
             string svgSkyImageBox =
                 "\t\t\t<!-- The viewBox max values determine how the background image lines up with dots on the plate.  -->   \n" +
                 "\t\t\t<svg id='skyImageBox' width='100%' height='100%' viewBox='0 0 120 100' preserveAspectRatio='xMidYMid meet' display='none'>   \n" +
-                "\t\t\t\t<image id='skyImageBoxBackgroundImage' preserveAspectRatio='xMidYMid slice' width='100%' height='100%' href='../assets/plateBackgroundImages/PlateID-11386.jpg'/>   \n" +
+               $"\t\t\t\t<image id='skyImageBoxBackgroundImage' preserveAspectRatio='xMidYMid slice' width='100%' height='100%' href='../assets/plateBackgroundImages/PlateID-{this.FileName}.jpg'/>   \n" +
                 "\t\t\t\t<!-- This rectangle is just used for visualizing the edges of the parent svg when setting up the program -->   \n" +
                 "\t\t\t\t<!-- <rect width='100%' height='100%' viewBox='0 0 100 100' stroke='pink' stroke-width='2px' fill='url(#spaceBoxBackground)'/> -->   \n" +
                 "\t\t\t</svg>   \n";
