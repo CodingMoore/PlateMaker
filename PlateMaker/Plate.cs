@@ -20,6 +20,7 @@ namespace PlateMaker
         public string FileName { get; set; }
         public FileInfo SvgFilePath { get; set; }
         public FileInfo HtmlFilePath { get; set; }
+        public double OpenSeaDragonMaxZoomPixelRatio { get; set; }
 
         public Plate(string file, string fileSavingDirectoryStart)
         {
@@ -32,6 +33,10 @@ namespace PlateMaker
 
             // Defines the full directory path for saving the file
             HtmlFilePath = new FileInfo($"{fileSavingDirectoryStart}html Files\\");
+
+            // Defines how far you can zoom in on an image using OpenSeaDragon.
+            // Since this value is needed in multiple methods, it is housed here.
+            OpenSeaDragonMaxZoomPixelRatio = 4;
 
         }
 
@@ -59,6 +64,8 @@ namespace PlateMaker
             // If you change the strokeWidthScaler, then you change the stroke width relative to the dot size.
             double strokeWidthScaler = .5;
 
+            // Creates a constant to keep the ratio of the OSD tile source width to the svgImage size constant
+            double OpenSeaDragonOuterTileSourceWidthSvg = 1000 * this.OpenSeaDragonMaxZoomPixelRatio;
 
             // Styling constants
             string plateBorderStyle = "style='stroke:rgb(92,92,92); stroke-width:.25;'";
@@ -108,7 +115,12 @@ namespace PlateMaker
             double yViewBoxMax = 800 * dotScaler;
 
             // Creates our opening svg string to be tacked on to the beginning of the Stringbuilder
-            string svgOpenOuter = $"\t\t<svg id='svgImage' width='100vw' height='100vh' viewBox='{xViewBoxMin} {yViewBoxMin} {xViewBoxMax} {yViewBoxMax}' transform-origin='0 0'>   \n";
+            
+            // panzoom version
+            //string svgOpenOuter = $"\t\t<svg id='svgImage' width='100vw' height='100vh' viewBox='{xViewBoxMin} {yViewBoxMin} {xViewBoxMax} {yViewBoxMax}' transform-origin='0 0'>   \n";
+            
+            //OpenSeaDragon Version
+            string svgOpenOuter = $"\t\t<svg id='svgImage' width='{OpenSeaDragonOuterTileSourceWidthSvg}px' height='{OpenSeaDragonOuterTileSourceWidthSvg}px' viewBox='{xViewBoxMin} {yViewBoxMin} {xViewBoxMax} {yViewBoxMax}' transform-origin='0 0'>   \n";
 
             string svgSkyImageBox =
                 "\t\t\t<!-- The viewBox max values determine how the background image lines up with dots on the plate.  -->   \n" +
@@ -353,16 +365,25 @@ namespace PlateMaker
             // Creates the Background Color of the website behind the plate svg
             string backgroundColor = "style='background-color:rgb(0,0,0);'";
 
-            // Creates a limit on how far panzoom will zoom into the plate svg
+            // (panzoom) Creates a limit on how far panzoom will zoom into the plate svg
             string maxScale = "maxScale: 50";
 
-            // Creates a limit on how far panzoom will zoom out of the plate svg
+            // (panzoom) Creates a limit on how far panzoom will zoom out of the plate svg
             string minScale = "minScale: .75";
 
-            // Creates a constat to adjust the Mouse wheel and Pinch zoom sensitiviety. The default is '.3'
+            // (panzoom) Creates a constat to adjust the Mouse wheel and Pinch zoom sensitiviety. The default is '.3'
             // I do not yet see a way to separte mouse vs. pinch zoom sensitivity
-
             string zoomStep = "step: 2";
+
+            // (OpenSeaDragon) Creates a constant to adjust the Mouse wheel sensitivity while zooming. The default is 1
+            double OpenSeaDragonZoomPerScroll = 2;
+
+            ////////////////////////////////////
+            ///// Non-Adjustable Constants /////
+            ////////////////////////////////////
+
+            // Creates a constant to keep the ratio of the OSD tile source width to the svgImage size constant
+            double OpenSeaDragonOuterTileSourceWidthHtml = 1000 * this.OpenSeaDragonMaxZoomPixelRatio;
 
             ////////////////////////////////
             ////////////////////////////////
@@ -386,9 +407,27 @@ namespace PlateMaker
                 "\t<!-- jQuery from local file should only be used if you are not using the CDN reference -->   \n" +
                 "\t<!-- <script src='../js/jquery-3.6.0.js' type='module'></script> -->   \n" +
                 "\t<script src='https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js'></script>   \n" +
-                "\t<script src='https://www.unpkg.com/@panzoom/panzoom/dist/panzoom.js'></script>   \n" +
+                "\n" +
+
+                "\t<!-- Commented out because the OpenSeaDragon library is being used instead. -->   \n" +
+                "\t<!-- <script src='https://www.unpkg.com/@panzoom/panzoom/dist/panzoom.js'></script> -->   \n" +
+                "\n" +
+
                 "\t<!-- The custom scripts file should only be used if you move the contents of the scipts tag (from the bottom of the page) to it. -->   \n" +
                 "\t<!-- <script src='../js/plateScripts.js' type='module'></script> -->   \n" +
+                "\n" +
+
+                "\t<!-- ToDo - Replace with CDN -->   \n" +
+                "\t<script src='.. /openseadragon/openseadragon.min.js'></script>   \n" +
+                "\t<!-- ToDo - Replace with CDN once 'svg flip' has been added to the library -->   \n" +
+                "\t<script src='.. /svg-overlay-master/openseadragon-svg-overlay.js'></script>   \n" +
+                "\t<!-- <script src='.. /js/jquery-ui-1.13.1.custom/jquery-ui.js'></script> -->   \n" +
+                "\t<link rel='stylesheet' href='//code.jquery.com/ui/1.13.1/themes/ui-darkness/jquery-ui.css'>   \n" +
+                "\t<script src='https://code.jquery.com/ui/1.13.1/jquery-ui.js'></script>   \n" +
+                "\n" +
+
+                "\t<!-- Questionable CDN link - Check with Devs to get the official one -->   \n" +
+                "\t<!-- <script src='https://cdnjs.cloudflare.com/ajax/libs/openseadragon/3.0.0/openseadragon.min.js' integrity='sha512-Dq5iZeGNxm7Ql/Ix10sugr98niMRyuObKlIzKN1SzUysEXBxti479CTsCiTV00gFlDeDO3zhBsyCOO+v6QVwJw==' crossorigin='anonymous' referrerpolicy='no-referrer'></script> -->   \n" +
                 "\n" +
 
                 "\t<style>   \n" +
@@ -506,10 +545,51 @@ namespace PlateMaker
                 "\t\t}   \n" +
                 "\n" +
 
-                "\t\t#plateNumberDisplay {   \n" +
+                "\t\t/* Original panzoom version */   \n" +
+                "\t\t/*#plateNumberDisplay {   \n" +
                 "\t\t\tposition: relative;   \n" +
                 "\t\t\ttop: 20px;   \n" +
                 "\t\t\tcolor: rgb(215,215,215);   \n" +
+                "\t\t}*/   \n" +
+                "\n" +
+
+                "\t\t/* OpenSeaDragon version */   \n" +
+                "\t\t#plateNumberDisplay {   \n" +
+                "\t\t\tposition: relative;   \n" +
+                "\t\t\ttop: 20px;   \n" +
+                "\t\t\tmargin-left: 20px;   \n" +
+                "\t\t\tfont-size: 20px;   \n" +
+                "\t\t\tcolor: rgb(215,215,215);   \n" +
+                "\t\t\tz-index: 1;   \n" +
+                "\t\t}   \n" +
+                "\n" +
+
+                "\t\t/* Probably not useful */   \n" +
+                "\t\t#skyImageBoxBackgroundImage {   \n" +
+                "\t\t\timage -rendering: smooth;   \n" +
+                "\t\t}   \n" +
+                "\n" +
+
+                "\t\t#openSeaDragonWrapper {   \n" +
+                "\t\t\twidth: 100%;   \n" +
+                "\t\t\tborder-style: solid;   \n" +
+                "\t\t\tborder-width: 2px;   \n" +
+                "\t\t\tborder-color: crimson;   \n" +
+                "\t\t}   \n" +
+                "\n" +
+
+                "\t\t#slider {   \n" +
+                "\t\t\tdisplay: relative;   \n" +
+                "\t\t\ttop: 10px;   \n" +
+                "\t\t\tmargin: 0 20%;   \n" +
+                "\t\t\theight: 30px;   \n" +
+                "\t\t\tz-index: 1;   \n" +
+                "\t\t}   \n" +
+                "\n" +
+
+                "\t\t.ui-slider-handle {   \n" +
+                "\t\t\tdisplay: flex;   \n" +
+                "\t\t\tjustify-content: center;   \n" +
                 "\t\t}   \n" +
                 "\n" +
 
@@ -564,15 +644,28 @@ namespace PlateMaker
                 "\t\t\t\t\t<button id='plateFlipButton' class='plateButton'>Flip Plate</button>   \n" +
                 "\t\t\t\t\t<button id='backgroundImageButton' class='plateButton'>Background</button>   \n" +
                 "\t\t\t\t</div>   \n" +
-                "\t\t\t\t<div id='plateNumberDisplayWrapper'>   \n" +
+                "\t\t\t\t<!-- Original panzoom version -->   \n" +
+                "\t\t\t\t<!-- <div id='plateNumberDisplayWrapper'>   \n" +
                 "\t\t\t\t\t<div id='plateNumberDisplay'>   \n" +
                $"\t\t\t\t\t\tPlate {this.FileName}   \n" +
                 "\t\t\t\t\t</div>   \n" +
-                "\t\t\t\t</div>   \n" +
+                "\t\t\t\t</div> -->   \n" +
                 "\t\t\t</div>   \n" +
                 "\t\t</div>   \n" +
                 "\t</div>   \n" +
                 "\n" +
+
+                "\t<div class='container'>   \n" +
+                "\t\t<div id='slider'></div>   \n" +
+                "\t\t<div id='plateNumberDisplayWrapper'>   \n" +
+                "\t\t\t<div id='plateNumberDisplay' >   \n" +
+               $"\t\t\t\tPlate {this.FileName}   \n" +
+                "\t\t\t</div>   \n" +
+                "\t\t</div>   \n" +
+                "\t\t<div id='openSeaDragonWrapper'></div>   \n" +
+                "\t</div>   \n" +
+                "\n" +
+
                 "\t<div id='svgWrapper' style='display: flex; justify-content: center; align-items: center'>   \n" +
                 "";
 
@@ -582,22 +675,35 @@ namespace PlateMaker
                 "\t//If you want to run scripts from the plateScripts.js file, you will also probably need to move all your scripts from here to the plateScript.js file.   \n" +
                 "\t//Trying to use scripts both in the html and the plateScripts.js file causes jquery reference errors because things won't load in the correct order.   \n" +
                 "\n" +
+
                 "\t\t// Changes height of #svgImage on screen resize (and page load) so that the svg doesn't overflow   \n" +
                 "\t\t$(window).resize(function() {   \n" +
                 "\t\t\t$('#svgImage').height((visualViewport.height - $('#headerWrapper').height()));   \n" +
                 "\t\t}).resize();   \n" +
                 "\n" +
-                "\t\t// panzoom reset logic   \n" +
-                "\t\t$('#plateResetPanZoomButton').click(function() {   \n" +
-                "\t\t\tpanzoom.reset();   \n" +
-                "\t\t});   \n" +
+
+                "\t\t// Changes height of #OpenSeaDragonWrapper on screen resize (and page load) so that the image doesn't overflow   \n" +
+                "\t\t$(window).resize(function() {   \n" +
+                "\t\t\t$('#openSeaDragonWrapper').height((visualViewport.height - $('#headerWrapper').height()) -20);   \n" +
+                "\t\t}).resize();   \n" +
                 "\n" +
+
+                "\t\t// panzoom reset logic   \n" +
+                "\t\t// Commented out because the OpenSeaDragon library is being used instead.   \n" +
+                "\t\t//$('#plateResetPanZoomButton').click(function() {   \n" +
+                "\t\t\t//panzoom.reset();   \n" +
+                "\t\t//});   \n" +
+                "\n" +
+
                 "\t\t// Plate flipping logic   \n" +
                 "\t\t$('#plateFlipButton').click(function() {   \n" +
                 "\n" +
+
                 "\t\t\t// Triggers a plate reset so that the flip animates   \n" +
-                "\t\t\tpanzoom.reset();   \n" +
+                "\t\t\t// Commented out because the OpenSeaDragon library is being used instead.   \n" +
+                "\t\t\t//panzoom.reset();   \n" +
                 "\n" +
+
                 "\t\t\t// Does the flipping and highlights button   \n" +
                 "\t\t\tif($('#svgWrapper').hasClass('plateflipped')) {   \n" +
                 "\t\t\t\t$('#svgWrapper').removeClass('plateflipped');   \n" +
@@ -608,11 +714,14 @@ namespace PlateMaker
                 "\t\t\t\t$('#plateFlipButton').css('background-color', 'rgb(134, 134, 134)');   \n" +
                 "\t\t\t}   \n" +
                 "\n" +
+
                 "\t\t});   \n" +
                 "\n" +
+
                 "\t\t// Plate background image logic   \n" +
                 "\t\t$('#backgroundImageButton').click(function() {   \n" +
                 "\n" +
+
                 "\t\t\t// Turns on the skyImage background and hilights button   \n" +
                 "\t\t\tif($('#skyImageBox').hasClass('skyImageOn')) {   \n" +
                 "\t\t\t\t$('#skyImageBox').removeClass('skyImageOn');   \n" +
@@ -626,6 +735,7 @@ namespace PlateMaker
                 "\t\t\t\t$('#backgroundImageButton').css('background-color', 'rgb(134, 134, 134)');   \n" +
                 "\t\t\t}   \n" +
                 "\n" +
+
                 "\t\t\t// turns off the plate fill (so that it doesn't cover the skyImage background)   \n" +
                 "\t\t\tif ($('#backgroundFill').hasClass('fillOn')) {   \n" +
                 "\t\t\t\t$('#backgroundFill').removeClass('fillOn')   \n" +
@@ -637,34 +747,122 @@ namespace PlateMaker
                 "\t\t\t\t$('#backgroundFill').show();   \n" +
                 "\t\t\t}   \n" +
                 "\n" +
+
                 "\t\t});   \n" +
                 "\n" +
+
+                "\t\t// Commented out because the OpenSeaDragon library is being used instead.   \n" +
                 "\t\t// panzoom library settings   \n" +
-                "\t\tconst element = document.getElementById('svgWrapper');   \n" +
-                "\t\tconst panzoom = Panzoom(element, {   \n" +
-                "\t\t\t// options here   \n" +
-               $"\t\t\t{maxScale},   \n" +
-               $"\t\t\t{minScale},   \n" +
-               $"\t\t\t{zoomStep},   \n" +
-                "\t\t\t//determines how the transorms function.   \n" +
-                "\t\t\tsetTransform: (_, { scale, x, y }) => {   \n" +
-                "\t\t\t\t//You need a different setStyle property depending on if you flip the plate or not.   \n" +
-                "\t\t\t\tif($('#svgWrapper').hasClass('plateflipped')){   \n" +
-                "\t\t\t\t\t// If you put `-${x}` into the translate property below, you can not pan the svg into negative x values.   \n" +
-                "\t\t\t\t\t//Instead you must calculate the negative value of x before pluggin it in.   \n" +
-                "\t\t\t\t\tlet negativeX = -x;   \n" +
-                "\t\t\t\t\tpanzoom.setStyle('transform', `scale(-${scale},${scale}) translate(${negativeX}px, ${y}px)`)   \n" +
-                "\t\t\t\t}   \n" +
-                "\t\t\t\telse {   \n" +
-                "\t\t\t\t\tpanzoom.setStyle('transform', `scale(${scale},${scale}) translate(${x}px, ${y}px)`)   \n" +
-                "\t\t\t\t}   \n" +
-                "\t\t\t}   \n" +
+                "\t\t//const element = document.getElementById('svgWrapper');   \n" +
+                "\t\t//const panzoom = Panzoom(element, {   \n" +
+                "\t\t\t//// options here   \n" +
+               $"\t\t\t//{maxScale},   \n" +
+               $"\t\t\t//{minScale},   \n" +
+               $"\t\t\t//{zoomStep},   \n" +
+                "\t\t\t////determines how the transorms function.   \n" +
+                "\t\t\t//setTransform: (_, { scale, x, y }) => {   \n" +
+                "\t\t\t\t////You need a different setStyle property depending on if you flip the plate or not.   \n" +
+                "\t\t\t\t//if($('#svgWrapper').hasClass('plateflipped')){   \n" +
+                "\t\t\t\t\t//// If you put `-${x}` into the translate property below, you can not pan the svg into negative x values.   \n" +
+                "\t\t\t\t\t////Instead you must calculate the negative value of x before pluggin it in.   \n" +
+                "\t\t\t\t\t//let negativeX = -x;   \n" +
+                "\t\t\t\t\t//panzoom.setStyle('transform', `scale(-${scale},${scale}) translate(${negativeX}px, ${y}px)`)   \n" +
+                "\t\t\t\t//}   \n" +
+                "\t\t\t\t//else {   \n" +
+                "\t\t\t\t\t//panzoom.setStyle('transform', `scale(${scale},${scale}) translate(${x}px, ${y}px)`)   \n" +
+                "\t\t\t\t//}   \n" +
+                "\t\t\t//}   \n" +
+                "\t\t//});   \n" +
+                "\n" +
+
+                "\t\t// Commented out because the OpenSeaDragon library is being used instead.   \n" +
+                "\t\t//// enable mouse wheel   \n" +
+                "\t\t//const parent = element.parentElement;   \n" +
+                "\t\t//parent.addEventListener('wheel', panzoom.zoomWithWheel);   \n" +
+                "\n" +
+
+                "\t\tvar viewer = OpenSeadragon({   \n" +
+                "\t\t\tid: 'openSeaDragonWrapper',   \n" +
+                "\t\t\tprefixUrl: '../openseadragon/images/',   \n" +
+                "\t\t\tdefaultZoomLevel: 0,   \n" +
+                "\t\t\tpreload: true,   \n" +
+                "\t\t\timmediateRender: true,   \n" +
+                "\t\t\thomeButton: 'plateResetPanZoomButton',   \n" +
+                "\t\t\tflipButton: 'plateFlipButton',   \n" +
+                "\t\t\tshowFlipControl: true,   \n" +
+                "\t\t\tshowRotationControl: true,   \n" +
+                "\t\t\tshowNavigator: true,   \n" +
+                "\t\t\t// Degrees set to != 0 to prevent bug -- Where while the tiled image is flipped,   \n" +
+                "\t\t\t// if you zoom in beyond the max pixel ratio (maxZoomPixelRation) of 1.1,   \n" +
+                "\t\t\t// the tiled image flips back to its original orientation.   \n" +
+                "\t\t\tdegrees: .000001,   \n" +
+               $"\t\t\tmaxZoomPixelRatio: {this.OpenSeaDragonMaxZoomPixelRatio},   \n" +
+               $"\t\t\tzoomPerScroll: {OpenSeaDragonZoomPerScroll},   \n" +
+                "\t\t\ttileSources: [   \n" +
+                "\t\t\t\t{   \n" +
+               $"\t\t\t\t\twidth: {OpenSeaDragonOuterTileSourceWidthHtml},   \n" +
+                "\t\t\t\t\ttileSource: {   \n" +
+                "\t\t\t\t\t\t//required   \n" +
+                "\t\t\t\t\\tttype: 'zoomifytileservice',   \n" +
+                "\t\t\t\t\t\twidth: 2048,   \n" +
+                "\t\t\t\t\t\theight: 2048,   \n" +
+                "\t\t\t\t\t\ttilesUrl:   \n" +
+               $"\t\t\t\t\t\t\t'../assets/8.05-2048-{this.FileName}/',   \n" +
+                "\t\t\t\t\t\t//optional   \n" +
+                "\t\t\t\t\t\ttileSize: 256,   \n" +
+                "\t\t\t\t\t\tfileFormat: 'jpg'   \n" +
+                "\t\t\t\t\t},   \n" +
+                "\t\t\t\t},   \n" +
+                "\t\t\t],   \n" +
                 "\t\t});   \n" +
                 "\n" +
-                "\t\t// enable mouse wheel   \n" +
-                "\t\tconst parent = element.parentElement;   \n" +
-                "\t\tparent.addEventListener('wheel', panzoom.zoomWithWheel);   \n" +
+
+                "\t\tvar overlay = viewer.svgOverlay();   \n" +
+                "\t\toverlay.node().append(svgImage)   \n" +
                 "\n" +
+
+                "\t\tnew OpenSeadragon.MouseTracker({   \n" +
+                "\t\t\telement: overlay._node,   \n" +
+                "\t\t\tclickHandler: function(event) {   \n" +
+                "\t\t\t\tvar target = event.originalTarget.parentNode;   \n" +
+                "\t\t\t\tif (target.matches('a')) {   \n" +
+                "\t\t\t\t\tif (target.getAttribute('target') === '_blank') {   \n" +
+                "\t\t\t\t\t\twindow.open(target.getAttribute('href'));   \n" +
+                "\t\t\t\t\t} else {   \n" +
+                "\t\t\t\t\t\tlocation.href = target.getAttribute('href');   \n" +
+                "\t\t\t\t\t}   \n " +
+                "\t\t\t\t}   \n " +
+                "\t\t\t}   \n " +
+                "\t\t});   \n " +
+                "\n" +
+
+                "\t\t// jQuery UI slider scripts   \n" +
+                "\t\t$('#slider').slider({   \n" +
+                "\t\t\t// min and max values can not be 0 or 360 or an OpenSeadragon bug is triggered where the tile image flips when zooming in past a maxZoomPixelRation of 1.1   \n" +
+                "\t\t\tmin: 0.000001,   \n" +
+                "\t\t\tmax: 359.999999,   \n" +
+                "\t\t\tstep: .000001   \n" +
+                "\t\t});   \n " +
+                "\n" +
+
+                "\t\t//This edits the size and placement of the slider handle.  Doing it in the styles doesn't seem to work.   \n" +
+                "\t\t$('.ui-slider-handle')   \n" +
+                "\t\t\t.height(30)   \n" +
+                "\t\t\t.width(70)   \n" +
+                "\t\t\t.css('margin-left', '-35px')   \n" +
+                "\t\t\t.css('margin-top', '3px')   \n" +
+                "\t\t\t.text('Rotate')   \n" +
+                "\t\t\t.css('color', 'lightgray');   \n " +
+                "\n" +
+
+                "\t\t// Sets the rotation angle of the SVG to that of the value of the slider   \n" +
+                "\t\t$('#slider').slider({slide: function(event, ui) {   \n" +
+                "\t\t\t\tviewer.viewport.setRotation(ui.value);   \n" +
+                "\t\t\t\tconsole.log('jQuery Script', ui.value)   \n" +
+                "\t\t\t}   \n" +
+                "\t\t});   \n " +
+                "\n" +
+
                 "\t</script>   \n" +
                 "</body>   \n" +
                 "</html>   \n" +
