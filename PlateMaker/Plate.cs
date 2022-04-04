@@ -125,7 +125,9 @@ namespace PlateMaker
             string svgSkyImageBox =
                 "\t\t\t<!-- The viewBox max values determine how the background image lines up with dots on the plate.  -->   \n" +
                 "\t\t\t<svg id='skyImageBox' width='100%' height='100%' viewBox='0 0 120 100' preserveAspectRatio='xMidYMid meet' display='none'>   \n" +
-               $"\t\t\t\t<image id='skyImageBoxBackgroundImage' preserveAspectRatio='xMidYMid slice' width='100%' height='100%' href='../assets/plateBackgroundImages/PlateID-{this.FileName}.jpg'/>   \n" +
+                "\t\t\t\t<!-- Original panzoom version -->   \n" +
+               $"\t\t\t\t<!-- <image id='skyImageBoxBackgroundImage' preserveAspectRatio='xMidYMid slice' width='100%' height='100%' href='../assets/plateBackgroundImages/PlateID-{this.FileName}.jpg'/> -->   \n" +
+                "\t\t\t\t<image id='skyImageBoxBackgroundImage' preserveAspectRatio='xMidYMid slice' width='100%' height='100%'/>   \n" +
                 "\t\t\t\t<!-- This rectangle is just used for visualizing the edges of the parent svg when setting up the program -->   \n" +
                 "\t\t\t\t<!-- <rect width='100%' height='100%' viewBox='0 0 100 100' stroke='pink' stroke-width='2px' fill='url(#spaceBoxBackground)'/> -->   \n" +
                 "\t\t\t</svg>   \n";
@@ -418,10 +420,10 @@ namespace PlateMaker
                 "\n" +
 
                 "\t<!-- ToDo - Replace with CDN -->   \n" +
-                "\t<script src='.. /openseadragon/openseadragon.min.js'></script>   \n" +
+                "\t<script src='../openseadragon/openseadragon.min.js'></script>   \n" +
                 "\t<!-- ToDo - Replace with CDN once 'svg flip' has been added to the library -->   \n" +
-                "\t<script src='.. /svg-overlay-master/openseadragon-svg-overlay.js'></script>   \n" +
-                "\t<!-- <script src='.. /js/jquery-ui-1.13.1.custom/jquery-ui.js'></script> -->   \n" +
+                "\t<script src='../svg-overlay-master/openseadragon-svg-overlay.js'></script>   \n" +
+                "\t<!-- <script src='../js/jquery-ui-1.13.1.custom/jquery-ui.js'></script> -->   \n" +
                 "\t<link rel='stylesheet' href='//code.jquery.com/ui/1.13.1/themes/ui-darkness/jquery-ui.css'>   \n" +
                 "\t<script src='https://code.jquery.com/ui/1.13.1/jquery-ui.js'></script>   \n" +
                 "\n" +
@@ -566,7 +568,7 @@ namespace PlateMaker
 
                 "\t\t/* Probably not useful */   \n" +
                 "\t\t#skyImageBoxBackgroundImage {   \n" +
-                "\t\t\timage -rendering: smooth;   \n" +
+                "\t\t\timage-rendering: smooth;   \n" +
                 "\t\t}   \n" +
                 "\n" +
 
@@ -803,7 +805,7 @@ namespace PlateMaker
                $"\t\t\t\t\twidth: {OpenSeaDragonOuterTileSourceWidthHtml},   \n" +
                 "\t\t\t\t\ttileSource: {   \n" +
                 "\t\t\t\t\t\t//required   \n" +
-                "\t\t\t\t\\tttype: 'zoomifytileservice',   \n" +
+                "\t\t\t\t\t\ttype: 'zoomifytileservice',   \n" +
                 "\t\t\t\t\t\twidth: 2048,   \n" +
                 "\t\t\t\t\t\theight: 2048,   \n" +
                 "\t\t\t\t\t\ttilesUrl:   \n" +
