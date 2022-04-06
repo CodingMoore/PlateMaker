@@ -158,9 +158,9 @@
 
 		#openSeaDragonWrapper {   
 			width: 100%;   
-			border-style: solid;   
-			border-width: 2px;   
-			border-color: crimson;   
+			/*border-style: solid;*/   
+			/*border-width: 2px;*/   
+			/*border-color: crimson;*/   
 		}   
 
 		#slider {   
@@ -234,14 +234,15 @@
 		</div>   
 	</div>   
 
-	<div class='container'>   
+	<div id='openSeaDragonWrapper'>   
 		<div id='slider'></div>   
-		<div id='plateNumberDisplayWrapper'>   
-			<div id='plateNumberDisplay' >   
-				Plate 8219   
+		<div class='container'>   
+			<div id='plateNumberDisplayWrapper'>   
+				<div id='plateNumberDisplay' >   
+					Plate 8219   
+				</div>   
 			</div>   
 		</div>   
-		<div id='openSeaDragonWrapper'></div>   
 	</div>   
 
 	<div id='svgWrapper' style='display: flex; justify-content: center; align-items: center'>   
@@ -4018,7 +4019,7 @@
 			flipButton: 'plateFlipButton',   
 			showFlipControl: true,   
 			showRotationControl: true,   
-			showNavigator: true,   
+			//showNavigator: true,   
 			// Degrees set to != 0 to prevent bug -- Where while the tiled image is flipped,   
 			// if you zoom in beyond the max pixel ratio (maxZoomPixelRation) of 1.1,   
 			// the tiled image flips back to its original orientation.   
@@ -4034,7 +4035,7 @@
 						width: 2048,   
 						height: 2048,   
 						tilesUrl:   
-							'../assets/8.05-2048-8219/',   
+							'../assets/Zoomify_Images-8.05-2048/8219/',   
 						//optional   
 						tileSize: 256,   
 						fileFormat: 'jpg'   

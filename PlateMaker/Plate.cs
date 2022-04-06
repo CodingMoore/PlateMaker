@@ -574,9 +574,9 @@ namespace PlateMaker
 
                 "\t\t#openSeaDragonWrapper {   \n" +
                 "\t\t\twidth: 100%;   \n" +
-                "\t\t\tborder-style: solid;   \n" +
-                "\t\t\tborder-width: 2px;   \n" +
-                "\t\t\tborder-color: crimson;   \n" +
+                "\t\t\t/*border-style: solid;*/   \n" +
+                "\t\t\t/*border-width: 2px;*/   \n" +
+                "\t\t\t/*border-color: crimson;*/   \n" +
                 "\t\t}   \n" +
                 "\n" +
 
@@ -657,15 +657,17 @@ namespace PlateMaker
                 "\t</div>   \n" +
                 "\n" +
 
-                "\t<div class='container'>   \n" +
+                "\t<div id='openSeaDragonWrapper'>   \n" +
                 "\t\t<div id='slider'></div>   \n" +
-                "\t\t<div id='plateNumberDisplayWrapper'>   \n" +
-                "\t\t\t<div id='plateNumberDisplay' >   \n" +
-               $"\t\t\t\tPlate {this.FileName}   \n" +
+                "\t\t<div class='container'>   \n" +
+                "\t\t\t<div id='plateNumberDisplayWrapper'>   \n" +
+                "\t\t\t\t<div id='plateNumberDisplay' >   \n" +
+               $"\t\t\t\t\tPlate {this.FileName}   \n" +
+                "\t\t\t\t</div>   \n" +
                 "\t\t\t</div>   \n" +
                 "\t\t</div>   \n" +
-                "\t\t<div id='openSeaDragonWrapper'></div>   \n" +
                 "\t</div>   \n" +
+
                 "\n" +
 
                 "\t<div id='svgWrapper' style='display: flex; justify-content: center; align-items: center'>   \n" +
@@ -793,7 +795,7 @@ namespace PlateMaker
                 "\t\t\tflipButton: 'plateFlipButton',   \n" +
                 "\t\t\tshowFlipControl: true,   \n" +
                 "\t\t\tshowRotationControl: true,   \n" +
-                "\t\t\tshowNavigator: true,   \n" +
+                "\t\t\t//showNavigator: true,   \n" +
                 "\t\t\t// Degrees set to != 0 to prevent bug -- Where while the tiled image is flipped,   \n" +
                 "\t\t\t// if you zoom in beyond the max pixel ratio (maxZoomPixelRation) of 1.1,   \n" +
                 "\t\t\t// the tiled image flips back to its original orientation.   \n" +
@@ -809,7 +811,7 @@ namespace PlateMaker
                 "\t\t\t\t\t\twidth: 2048,   \n" +
                 "\t\t\t\t\t\theight: 2048,   \n" +
                 "\t\t\t\t\t\ttilesUrl:   \n" +
-               $"\t\t\t\t\t\t\t'../assets/8.05-2048-{this.FileName}/',   \n" +
+               $"\t\t\t\t\t\t\t'../assets/Zoomify_Images-8.05-2048/{this.FileName}/',   \n" +
                 "\t\t\t\t\t\t//optional   \n" +
                 "\t\t\t\t\t\ttileSize: 256,   \n" +
                 "\t\t\t\t\t\tfileFormat: 'jpg'   \n" +
