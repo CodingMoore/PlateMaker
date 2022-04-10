@@ -426,6 +426,8 @@ namespace PlateMaker
                 "\t<!-- <script src='../js/jquery-ui-1.13.1.custom/jquery-ui.js'></script> -->   \n" +
                 "\t<link rel='stylesheet' href='//code.jquery.com/ui/1.13.1/themes/ui-darkness/jquery-ui.css'>   \n" +
                 "\t<script src='https://code.jquery.com/ui/1.13.1/jquery-ui.js'></script>   \n" +
+                "\t<!-- Allows jQuery UI slider to work properly with touch -->   \n" +
+                "\t<script type='text /javascript' src='//cdnjs.cloudflare.com/ajax/libs/jqueryui-touch-punch/0.2.3/jquery.ui.touch-punch.min.js'></script>   \n" +
                 "\n" +
 
                 "\t<!-- Questionable CDN link - Check with Devs to get the official one -->   \n" +
