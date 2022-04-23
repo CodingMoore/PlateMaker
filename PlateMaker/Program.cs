@@ -8,6 +8,8 @@ using Emgu.CV.Features2D;
 using Emgu.CV.CvEnum;
 using Emgu.CV.Util;
 using System.Text.RegularExpressions;
+using CsvHelper;
+using System.Globalization;
 
 namespace PlateMaker
 {
@@ -18,15 +20,19 @@ namespace PlateMaker
         {
             Console.WriteLine("Program Started");
 
+
             // Defines the directory in which to look for the plate image files
-            string imageImportDirectory = "C:\\Users\\Randel\\source\\repos\\PlateMaker\\PlateMaker\\Images\\";
+            string csvImportDirectory = "C:\\Users\\Randel\\source\\repos\\PlateMaker\\PlateMaker\\Images\\";
+
+            var reader = new StreamReader(csvImportDirectory);
+            var csv = new CsvReader(reader, CultureInfo.InvariantCulture);
 
             // Creates an array of all files found in the specified directory that contain the specified value.
             string[] files = { };
-            files = Directory.GetFiles($"{imageImportDirectory}", "*.jpg", SearchOption.AllDirectories);
+            files = Directory.GetFiles($"{csvImportDirectory}", "*.jpg", SearchOption.AllDirectories);
 
             // removes the last directory from the image Import file path.  This will be use later to save files in a sibling directory
-            string fileSavingDirectoryStart = Regex.Replace(imageImportDirectory, @"[^\\]+\\?$", "");
+            string fileSavingDirectoryStart = Regex.Replace(csvImportDirectory, @"[^\\]+\\?$", "");
 
             // For each file in the array....
             foreach (string file in files)
