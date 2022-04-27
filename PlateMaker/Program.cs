@@ -66,20 +66,22 @@ namespace PlateMaker
                     // Loops through each plate number. We skip index 0 as that is the .csv file column header
                     for (int i = 1; i < plates.Length; i++)
                     {
-                        Console.WriteLine($"Current plate: {plates[i]}");
+                        string plateNumber = plates[i];
+
+                        Console.WriteLine($"Current plate: {plateNumber}");
 
                         // Checks to see if the this "plate number" entry in the .csv file is an integer or not.  The "ignoreMe" value is not used as we only need the returned bool.
-                        if (!int.TryParse(plates[i], out int ignoreMe) )
+                        if (!int.TryParse(plateNumber, out int ignoreMe) )
                         {
                             Console.WriteLine("Plate Number was not an intiger - Skipping");
                         }
                         else
                         {
                             // Creates a new plate object for this plate number in the .csv file.
-                            Plate plate = new Plate(plates[i], fileSavingDirectory);
+                            Plate plate = new Plate(plateNumber, fileSavingDirectory);
 
                             // creates an apiCallObject instance using this plate number.
-                            ApiCallObject apiCall = new ApiCallObject(plates[i]);
+                            ApiCallObject apiCall = new ApiCallObject(plateNumber);
 
                             // Makes the API call to the SDSS "Sky Server" database
                             Dictionary<int, string[]> stellarObjectData = apiCall.MakeTheApiCall();
@@ -90,7 +92,7 @@ namespace PlateMaker
                             // Creates an HTML file using the SVG "svgStringFromApi"
                             plate.CreateHtmlFromSvgFromApi(svgStringFromApi);
 
-                            Console.WriteLine($"Plate {plates[i]} has been completed");
+                            Console.WriteLine($"Plate {plateNumber} has been completed");
 
                         }
                         // Adds blank line to console output for readability.
