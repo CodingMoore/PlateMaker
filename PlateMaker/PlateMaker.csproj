@@ -9,9 +9,6 @@
 
 
 <ItemGroup>
-    <PackageReference Include="Emgu.CV" Version="4.5.4.4788" />
-    <PackageReference Include="Emgu.CV.runtime.windows" Version="4.5.4.4788" />
-    <PackageReference Include="Emgu.CV.UI" Version="4.5.4.4788" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
     <PackageReference Include="RestSharp" Version="106.15.0" />
 	<FrameworkReference Include="Microsoft.WindowsDesktop.App" />
