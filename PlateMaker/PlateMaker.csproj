@@ -9,7 +9,6 @@
 
 
 <ItemGroup>
-    <PackageReference Include="CsvHelper" Version="27.2.1" />
     <PackageReference Include="Emgu.CV" Version="4.5.4.4788" />
     <PackageReference Include="Emgu.CV.runtime.windows" Version="4.5.4.4788" />
     <PackageReference Include="Emgu.CV.UI" Version="4.5.4.4788" />

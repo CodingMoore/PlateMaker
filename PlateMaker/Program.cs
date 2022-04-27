@@ -8,8 +8,6 @@ using Emgu.CV.Features2D;
 using Emgu.CV.CvEnum;
 using Emgu.CV.Util;
 using System.Text.RegularExpressions;
-using CsvHelper;
-using System.Globalization;
 
 namespace PlateMaker
 {
@@ -18,45 +16,99 @@ namespace PlateMaker
 
         static void Main(string[] args)
         {
-            Console.WriteLine("Program Started");
+            Console.WriteLine("Program Started \n");
 
+            // Defines the name of the .csv file that will hold all of the plate numbers. 
+            string PlateFileName = "PlateList.csv";
+            string? fileSavingDirectory = null;
 
-            // Defines the directory in which to look for the plate image files
-            string csvImportDirectory = "C:\\Users\\Randel\\source\\repos\\PlateMaker\\PlateMaker\\Images\\";
-
-            var reader = new StreamReader(csvImportDirectory);
-            var csv = new CsvReader(reader, CultureInfo.InvariantCulture);
-
-            // Creates an array of all files found in the specified directory that contain the specified value.
-            string[] files = { };
-            files = Directory.GetFiles($"{csvImportDirectory}", "*.jpg", SearchOption.AllDirectories);
-
-            // removes the last directory from the image Import file path.  This will be use later to save files in a sibling directory
-            string fileSavingDirectoryStart = Regex.Replace(csvImportDirectory, @"[^\\]+\\?$", "");
-
-            // For each file in the array....
-            foreach (string file in files)
+            try
             {
-                Console.WriteLine(file);
+                // Defines a file path inside this application that we will use later
+                fileSavingDirectory = Directory.GetParent(Directory.GetCurrentDirectory()).Parent.Parent.FullName;
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                Environment.Exit(0);
+            }
 
-                // Creates a new plate object for the individual image file
-                Plate plate = new Plate(file, fileSavingDirectoryStart);
+            if (fileSavingDirectory == null)
+            {
+                // I'm not sure if this can even be hit, but its here just in case.
+                Console.WriteLine("The application directory is null... somehow");
+                Environment.Exit(0);
+            } 
+            else
+            {
+                // Defines the path (including file name) that we will look in to find the "PlateList.csv" file.
+                string csvImportPath = $"{fileSavingDirectory}\\{PlateFileName}";
+                
+                string[]? plates = null;
 
-                // pulls the plate number from the file name, since every file should be named by its number.
-                string plateNumber = plate.FileName;
+                try
+                {
+                    // Reads the .csv file found at the path "csvImportDirectory", and makes each line an index of a string array.
+                    plates = File.ReadAllLines(csvImportPath);
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine(e);
+                    Environment.Exit(0);
+                }
 
-                // creates an apiCallObject instance.
-                ApiCallObject apiCall = new ApiCallObject(plateNumber);
+                if (plates == null)
+                {
+                    // I'm not sure if this can even be hit, but its here just in case.
+                    Console.WriteLine("The PlateList.csv was null... somehow");
+                    Environment.Exit(0);
+                }
+                // The length must be greater than 1 since the first entry is the .csv file column header
+                else if (plates.Length <= 1)
+                {
+                    Console.WriteLine("No plate numbers were detected in the PlateList.csv file.");
+                    Console.WriteLine("Please add one or more valid plate numbers to the Plate Number(s) column of this file, and try again.");
+                    Console.WriteLine("Put the plate numbers below the column header in the first column, one plate number per row, starting on row 2.");
+                    Environment.Exit(0);
+                }
+                else
+                {
+                    // Loops through each plate number. We skip index 0 as that is the .csv file column header
+                    for (int i = 1; i < plates.Length; i++)
+                    {
+                        Console.WriteLine($"Current plate: {plates[i]}");
 
-                // Makes the API call
-                Dictionary<int, string[]> stellarObjectData = apiCall.MakeTheApiCall();
+                        // Checks to see if the this "plate number" entry in the .csv file is an integer or not.  The "ignoreMe" value is not used as we only need the returned bool.
+                        if (!int.TryParse(plates[i], out int ignoreMe) )
+                        {
+                            Console.WriteLine("Plate Number was not an intiger - Skipping");
+                        }
+                        else
+                        {
+                            // Creates a new plate object for this plate number in the .csv file.
+                            Plate plate = new Plate(plates[i], fileSavingDirectory);
 
-                string svgStringFromApi = plate.CreateSvgFromApiCoordinates(stellarObjectData);
+                            // creates an apiCallObject instance using this plate number.
+                            ApiCallObject apiCall = new ApiCallObject(plates[i]);
 
-                plate.CreateHtmlFromSvgFromApi(svgStringFromApi);
+                            // Makes the API call to the SDSS "Sky Server" database
+                            Dictionary<int, string[]> stellarObjectData = apiCall.MakeTheApiCall();
 
+                            // Creates an SVG from the data returned by the API call.
+                            string svgStringFromApi = plate.CreateSvgFromApiCoordinates(stellarObjectData);
 
-                Console.WriteLine("Plate " + plateNumber + " " + "has been completed");
+                            // Creates an HTML file using the SVG "svgStringFromApi"
+                            plate.CreateHtmlFromSvgFromApi(svgStringFromApi);
+
+                            Console.WriteLine($"Plate {plates[i]} has been completed");
+
+                        }
+                        // Adds blank line to console output for readability.
+                        Console.WriteLine("");
+
+                    }
+
+                }
             }
 
             Console.WriteLine("Program Finished");

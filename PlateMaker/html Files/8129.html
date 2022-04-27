@@ -1,3 +1,253 @@
+<!DOCTYPE html>   
+<html lang='en'>   
+<head>   
+	<title>Plate 8129</title>   
+	<meta charset='UTF-8'>   
+	<meta http-equiv='X-UA-Compatible' content='IE=edge'>   
+	<meta name='viewport' content='width=device-width, initial-scale=1.0'>   
+	<title>Document</title>   
+	<link href='../css/bootstrap.css' rel='stylesheet' type='text/css'>   
+	<!-- The custom style sheet should only be used if you move the contents of the styling tag to it -->   
+	<!-- <link href='../css/plateStyles.css' rel='stylesheet' type='text/css'> -->   
+	<!-- jQuery from local file should only be used if you are not using the CDN reference -->   
+	<!-- <script src='../js/jquery-3.6.0.js' type='module'></script> -->   
+	<script src='https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js'></script>   
+
+	<!-- Commented out because the OpenSeaDragon library is being used instead. -->   
+	<!-- <script src='https://www.unpkg.com/@panzoom/panzoom/dist/panzoom.js'></script> -->   
+
+	<!-- The custom scripts file should only be used if you move the contents of the scipts tag (from the bottom of the page) to it. -->   
+	<!-- <script src='../js/plateScripts.js' type='module'></script> -->   
+
+	<!-- ToDo - Replace with CDN -->   
+	<script src='../openseadragon/openseadragon.min.js'></script>   
+	<!-- ToDo - Replace with CDN once 'svg flip' has been added to the library -->   
+	<script src='../svg-overlay-master/openseadragon-svg-overlay.js'></script>   
+	<!-- <script src='../js/jquery-ui-1.13.1.custom/jquery-ui.js'></script> -->   
+	<link rel='stylesheet' href='//code.jquery.com/ui/1.13.1/themes/ui-darkness/jquery-ui.css'>   
+	<script src='https://code.jquery.com/ui/1.13.1/jquery-ui.js'></script>   
+	<!-- Allows jQuery UI slider to work properly with touch -->   
+	<script type='text/javascript' src='//cdnjs.cloudflare.com/ajax/libs/jqueryui-touch-punch/0.2.3/jquery.ui.touch-punch.min.js'></script>   
+
+	<!-- Questionable CDN link - Check with Devs to get the official one -->   
+	<!-- <script src='https://cdnjs.cloudflare.com/ajax/libs/openseadragon/3.0.0/openseadragon.min.js' integrity='sha512-Dq5iZeGNxm7Ql/Ix10sugr98niMRyuObKlIzKN1SzUysEXBxti479CTsCiTV00gFlDeDO3zhBsyCOO+v6QVwJw==' crossorigin='anonymous' referrerpolicy='no-referrer'></script> -->   
+
+	<style>   
+		#headerWrapper {   
+			height: fit-content;   
+			position: -webkit-sticky;   
+			position: sticky;   
+			top: 0;   
+			display: grid;   
+			/* To keep the header on top of the plate */   
+			z-index: 1;   
+		}   
+
+		#headerBackgroundBox {   
+			background-color: rgb(46, 46, 46);   
+			margin: auto;   
+			padding: 10px 20px;   
+		}   
+		@media (max-width: 400px) {   
+			#headerBackgroundBox {   
+				padding: 10px 10px;   
+			}   
+		}   
+
+		#headerTextBox {   
+			display: flex;   
+			justify-content: center;   
+			align-items: center;   
+		}   
+		@media (max-width: 520px) {   
+			#headerTextBox {   
+				display: block;   
+			}   
+		}    
+
+		.headerText {   
+			display: flex;   
+			justify-content: center;   
+			align-items: center;   
+			white-space: nowrap;   
+			font-size: 20px;   
+			color: rgb(220, 220, 220);   
+			padding: 0px 5px;   
+		}   
+
+		#plateKey {   
+			display: flex;   
+			justify-content: center;   
+			max-width: 480px;   
+			height: 30px;   
+			margin: 5px 0px;   
+		}   
+		@media (max-width: 599px) {   
+			#plateKey {   
+				justify-content: space-around;   
+			}   
+		}   
+
+		.keyItem {   
+			display: flex;   
+			justify-content: center;   
+			align-items: center;   
+			margin: 0px 20px;   
+		}   
+		@media (max-width: 599px) {   
+			.keyItem {   
+				margin: 0px 0px;   
+			}   
+		}   
+
+		.keyDot {   
+			min-width: 20px;   
+			min-height: 30px;   
+		}   
+
+		.keyText {   
+			padding-left: 10px;   
+			padding-right: 10px;   
+			color: rgb(220, 220, 220);   
+		}   
+
+		#plateButtonBox {   
+			display: flex;   
+			justify-content: center;   
+			padding-top: 5px;   
+		}   
+		@media (max-width: 599px) {   
+			#plateButtonBox {   
+				justify-content: space-around;   
+			}   
+		}   
+
+		.plateButton {   
+			margin: 0px 20px;   
+			background-color: lightgray;   
+			border-radius: 8px;   
+		}   
+		@media (max-width: 599px) {   
+			.plateButton {   
+				margin: 0px 0px;   
+			}   
+		}   
+		#plateNumberDisplayWrapper {   
+			height: 0;   
+		}   
+
+		/* Original panzoom version */   
+		/*#plateNumberDisplay {   
+			position: relative;   
+			top: 20px;   
+			color: rgb(215,215,215);   
+		}*/   
+
+		/* OpenSeaDragon version */   
+		#plateNumberDisplay {   
+			position: relative;   
+			top: 20px;   
+			margin-left: 20px;   
+			font-size: 20px;   
+			color: rgb(215,215,215);   
+			z-index: 1;   
+		}   
+
+		/* Probably not useful */   
+		#skyImageBoxBackgroundImage {   
+			image-rendering: smooth;   
+		}   
+
+		#openSeaDragonWrapper {   
+			width: 100%;   
+			/*border-style: solid;*/   
+			/*border-width: 2px;*/   
+			/*border-color: crimson;*/   
+		}   
+
+		#slider {   
+			display: relative;   
+			top: 10px;   
+			margin: 0 20%;   
+			height: 30px;   
+			z-index: 1;   
+		}   
+
+		.ui-slider-handle {   
+			display: flex;   
+			justify-content: center;   
+		}   
+
+	</style>   
+
+</head>   
+<body style='background-color:rgb(0,0,0);'>   
+
+	<!--This is the Plate Header-->   
+	<div class='container'>   
+		<div id='headerWrapper'>   
+			<div id='headerBackgroundBox'>   
+				<div id='headerTextBox'>   
+					<div class='headerText'>   
+						Zoom, Pan, and Explore.   
+					</div>   
+					<div class='headerText'>   
+						Tap a Dot to Learn More.   
+					</div>   
+				</div>   
+				<div id='plateKey'>   
+					<div id='plateHeader1' class='keyItem'>   
+						<svg class='keyDot' width='auto' height='100%' viewBox='0 0 50 50'>   
+							<circle cx='25' cy='25' r='20px' stroke='rgb(255,0,132)' stroke-width='10px' fill='rgb(255,255,255)'/>   
+						</svg>   
+						<div class='keyText'>   
+							Galaxy   
+						</div>   
+					</div>   
+					<div id='plateHeader2' class='keyItem'>   
+						<svg class='keyDot' width='auto' height='100%' viewBox='0 0 50 50'>   
+							<circle cx='25' cy='25' r='20px' stroke='rgb(0,181,255)' stroke-width='10px' fill='rgb(255,255,255)'/>   
+						</svg>   
+						<div class='keyText'>   
+							Star   
+						</div>   
+					</div>   
+					<div id='plateHeader3' class='keyItem'>   
+						<svg class='keyDot' width='auto' height='100%' viewBox='0 0 50 50'>   
+							<circle cx='25' cy='25' r='20px' stroke='rgb(102,255,0)' stroke-width='10px' fill='rgb(255,255,255)'/>   
+						</svg>   
+						<div class='keyText'>   
+							Quasar   
+						</div>   
+					</div>   
+				</div>   
+				<div id='plateButtonBox'>   
+					<button id='plateResetPanZoomButton' class='plateButton'>Reset: Pan & Zoom</button>   
+					<button id='plateFlipButton' class='plateButton'>Flip Plate</button>   
+					<button id='backgroundImageButton' class='plateButton'>Background</button>   
+				</div>   
+				<!-- Original panzoom version -->   
+				<!-- <div id='plateNumberDisplayWrapper'>   
+					<div id='plateNumberDisplay'>   
+						Plate 8129   
+					</div>   
+				</div> -->   
+			</div>   
+		</div>   
+	</div>   
+
+	<div id='openSeaDragonWrapper'>   
+		<div id='slider'></div>   
+		<div class='container'>   
+			<div id='plateNumberDisplayWrapper'>   
+				<div id='plateNumberDisplay' >   
+					Plate 8129   
+				</div>   
+			</div>   
+		</div>   
+	</div>   
+
+	<div id='svgWrapper' style='display: flex; justify-content: center; align-items: center'>   
 		<svg id='svgImage' width='4000px' height='4000px' viewBox='0 0 800 800' transform-origin='0 0'>   
 			<!-- The viewBox max values determine how the background image lines up with dots on the plate.  -->   
 			<svg id='skyImageBox' width='100%' height='100%' viewBox='0 0 120 100' preserveAspectRatio='xMidYMid meet' display='none'>   
@@ -2900,3 +3150,179 @@
 				1237679253062615157, plate: 8129   
 			</a>   
 		</svg>    
+	</div>   
+	<script>   
+	//If you want to run scripts from the plateScripts.js file, you will also probably need to move all your scripts from here to the plateScript.js file.   
+	//Trying to use scripts both in the html and the plateScripts.js file causes jquery reference errors because things won't load in the correct order.   
+
+		// Changes height of #svgImage on screen resize (and page load) so that the svg doesn't overflow   
+		$(window).resize(function() {   
+			$('#svgImage').height((visualViewport.height - $('#headerWrapper').height()));   
+		}).resize();   
+
+		// Changes height of #OpenSeaDragonWrapper on screen resize (and page load) so that the image doesn't overflow   
+		$(window).resize(function() {   
+			$('#openSeaDragonWrapper').height((visualViewport.height - $('#headerWrapper').height()) -20);   
+		}).resize();   
+
+		// panzoom reset logic   
+		// Commented out because the OpenSeaDragon library is being used instead.   
+		//$('#plateResetPanZoomButton').click(function() {   
+			//panzoom.reset();   
+		//});   
+
+		// Plate flipping logic   
+		$('#plateFlipButton').click(function() {   
+
+			// Triggers a plate reset so that the flip animates   
+			// Commented out because the OpenSeaDragon library is being used instead.   
+			//panzoom.reset();   
+
+			// Does the flipping and highlights button   
+			if($('#svgWrapper').hasClass('plateflipped')) {   
+				$('#svgWrapper').removeClass('plateflipped');   
+				$('#plateFlipButton').css('background-color', 'lightgray');   
+			}   
+			else {   
+				$('#svgWrapper').addClass('plateflipped');   
+				$('#plateFlipButton').css('background-color', 'rgb(134, 134, 134)');   
+			}   
+
+		});   
+
+		// Plate background image logic   
+		$('#backgroundImageButton').click(function() {   
+
+			// Turns on the skyImage background and hilights button   
+			if($('#skyImageBox').hasClass('skyImageOn')) {   
+				$('#skyImageBox').removeClass('skyImageOn');   
+				$('#skyImageBox').hide();   
+				$('#backgroundImageButton').css('background-color', 'lightgray');   
+			}   
+			// Turns off the skyImage background and un-hilights button   
+			else {   
+				$('#skyImageBox').addClass('skyImageOn');   
+				$('#skyImageBox').show();   
+				$('#backgroundImageButton').css('background-color', 'rgb(134, 134, 134)');   
+			}   
+
+			// turns off the plate fill (so that it doesn't cover the skyImage background)   
+			if ($('#backgroundFill').hasClass('fillOn')) {   
+				$('#backgroundFill').removeClass('fillOn')   
+				$('#backgroundFill').hide();   
+			}   
+			// turns on the plate fill   
+			else {   
+				$('#backgroundFill').addClass('fillOn')   
+				$('#backgroundFill').show();   
+			}   
+
+		});   
+
+		// Commented out because the OpenSeaDragon library is being used instead.   
+		// panzoom library settings   
+		//const element = document.getElementById('svgWrapper');   
+		//const panzoom = Panzoom(element, {   
+			//// options here   
+			//maxScale: 50,   
+			//minScale: .75,   
+			//step: 2,   
+			////determines how the transorms function.   
+			//setTransform: (_, { scale, x, y }) => {   
+				////You need a different setStyle property depending on if you flip the plate or not.   
+				//if($('#svgWrapper').hasClass('plateflipped')){   
+					//// If you put `-${x}` into the translate property below, you can not pan the svg into negative x values.   
+					////Instead you must calculate the negative value of x before pluggin it in.   
+					//let negativeX = -x;   
+					//panzoom.setStyle('transform', `scale(-${scale},${scale}) translate(${negativeX}px, ${y}px)`)   
+				//}   
+				//else {   
+					//panzoom.setStyle('transform', `scale(${scale},${scale}) translate(${x}px, ${y}px)`)   
+				//}   
+			//}   
+		//});   
+
+		// Commented out because the OpenSeaDragon library is being used instead.   
+		//// enable mouse wheel   
+		//const parent = element.parentElement;   
+		//parent.addEventListener('wheel', panzoom.zoomWithWheel);   
+
+		var viewer = OpenSeadragon({   
+			id: 'openSeaDragonWrapper',   
+			prefixUrl: '../openseadragon/images/',   
+			defaultZoomLevel: 0,   
+			preload: true,   
+			immediateRender: true,   
+			homeButton: 'plateResetPanZoomButton',   
+			flipButton: 'plateFlipButton',   
+			showFlipControl: true,   
+			showRotationControl: true,   
+			//showNavigator: true,   
+			// Degrees set to != 0 to prevent bug -- Where while the tiled image is flipped,   
+			// if you zoom in beyond the max pixel ratio (maxZoomPixelRation) of 1.1,   
+			// the tiled image flips back to its original orientation.   
+			degrees: .000001,   
+			maxZoomPixelRatio: 4,   
+			zoomPerScroll: 2,   
+			tileSources: [   
+				{   
+					width: 4000,   
+					tileSource: {   
+						//required   
+						type: 'zoomifytileservice',   
+						width: 2048,   
+						height: 2048,   
+						tilesUrl:   
+							'../assets/Zoomify_Images-8.05-2048/8129/',   
+						//optional   
+						tileSize: 256,   
+						fileFormat: 'jpg'   
+					},   
+				},   
+			],   
+		});   
+
+		var overlay = viewer.svgOverlay();   
+		overlay.node().append(svgImage)   
+
+		new OpenSeadragon.MouseTracker({   
+			element: overlay._node,   
+			clickHandler: function(event) {   
+				var target = event.originalTarget.parentNode;   
+				if (target.matches('a')) {   
+					if (target.getAttribute('target') === '_blank') {   
+						window.open(target.getAttribute('href'));   
+					} else {   
+						location.href = target.getAttribute('href');   
+					}   
+ 				}   
+ 			}   
+ 		});   
+ 
+		// jQuery UI slider scripts   
+		$('#slider').slider({   
+			// min and max values can not be 0 or 360 or an OpenSeadragon bug is triggered where the tile image flips when zooming in past a maxZoomPixelRation of 1.1   
+			min: 0.000001,   
+			max: 359.999999,   
+			step: .000001   
+		});   
+ 
+		//This edits the size and placement of the slider handle.  Doing it in the styles doesn't seem to work.   
+		$('.ui-slider-handle')   
+			.height(30)   
+			.width(70)   
+			.css('margin-left', '-35px')   
+			.css('margin-top', '3px')   
+			.text('Rotate')   
+			.css('color', 'lightgray');   
+ 
+		// Sets the rotation angle of the SVG to that of the value of the slider   
+		$('#slider').slider({slide: function(event, ui) {   
+				viewer.viewport.setRotation(ui.value);   
+				console.log('jQuery Script', ui.value)   
+			}   
+		});   
+ 
+	</script>   
+</body>   
+</html>   

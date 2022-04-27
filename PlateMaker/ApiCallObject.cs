@@ -58,7 +58,7 @@ namespace PlateMaker
             }
             else
             {
-                Console.WriteLine("Response status code: " + response.StatusCode);
+                Console.WriteLine("SDSS API response status code: " + response.StatusCode);
 
                 //Console.WriteLine(response.Content);
                 // deserializes json response

@@ -17,22 +17,22 @@ namespace PlateMaker
 {
     class Plate
     {
-        public string FileName { get; set; }
+        public string PlateNumber { get; set; }
         public FileInfo SvgFilePath { get; set; }
         public FileInfo HtmlFilePath { get; set; }
         public double OpenSeaDragonMaxZoomPixelRatio { get; set; }
 
-        public Plate(string file, string fileSavingDirectoryStart)
+        public Plate(string file, string fileSavingDirectory)
         {
             // Extracts the original Image file name from the full file path, and removes the file extension.
             // This will be used later when we save each image's svg and html files as they will use the same file name.
-            FileName = Path.GetFileNameWithoutExtension(file);
+            PlateNumber = Path.GetFileNameWithoutExtension(file);
 
             // Defines the full directory path for saving the file
-            SvgFilePath = new FileInfo($"{fileSavingDirectoryStart}svg Files\\");
+            SvgFilePath = new FileInfo($"{fileSavingDirectory}svg Files\\");
 
             // Defines the full directory path for saving the file
-            HtmlFilePath = new FileInfo($"{fileSavingDirectoryStart}html Files\\");
+            HtmlFilePath = new FileInfo($"{fileSavingDirectory}html Files\\");
 
             // Defines how far you can zoom in on an image using OpenSeaDragon.
             // Since this value is needed in multiple methods, it is housed here.
@@ -126,7 +126,7 @@ namespace PlateMaker
                 "\t\t\t<!-- The viewBox max values determine how the background image lines up with dots on the plate.  -->   \n" +
                 "\t\t\t<svg id='skyImageBox' width='100%' height='100%' viewBox='0 0 120 100' preserveAspectRatio='xMidYMid meet' display='none'>   \n" +
                 "\t\t\t\t<!-- Original panzoom version -->   \n" +
-               $"\t\t\t\t<!-- <image id='skyImageBoxBackgroundImage' preserveAspectRatio='xMidYMid slice' width='100%' height='100%' href='../assets/plateBackgroundImages/PlateID-{this.FileName}.jpg'/> -->   \n" +
+               $"\t\t\t\t<!-- <image id='skyImageBoxBackgroundImage' preserveAspectRatio='xMidYMid slice' width='100%' height='100%' href='../assets/plateBackgroundImages/PlateID-{this.PlateNumber}.jpg'/> -->   \n" +
                 "\t\t\t\t<image id='skyImageBoxBackgroundImage' preserveAspectRatio='xMidYMid slice' width='100%' height='100%'/>   \n" +
                 "\t\t\t\t<!-- This rectangle is just used for visualizing the edges of the parent svg when setting up the program -->   \n" +
                 "\t\t\t\t<!-- <rect width='100%' height='100%' viewBox='0 0 100 100' stroke='pink' stroke-width='2px' fill='url(#spaceBoxBackground)'/> -->   \n" +
@@ -352,7 +352,7 @@ namespace PlateMaker
             SvgFilePath.Directory.Create();
 
             // Writes the svg file to disk based on the svgString
-            File.WriteAllText($"{SvgFilePath}{FileName}.svg", svgString);
+            File.WriteAllText($"{SvgFilePath}{PlateNumber}.svg", svgString);
 
             return svgString;
         }
@@ -398,7 +398,7 @@ namespace PlateMaker
                 "<!DOCTYPE html>   \n" +
                 "<html lang='en'>   \n" +
                 "<head>   \n" +
-               $"\t<title>Plate {this.FileName}</title>   \n" +
+               $"\t<title>Plate {this.PlateNumber}</title>   \n" +
                 "\t<meta charset='UTF-8'>   \n" +
                 "\t<meta http-equiv='X-UA-Compatible' content='IE=edge'>   \n" +
                 "\t<meta name='viewport' content='width=device-width, initial-scale=1.0'>   \n" +
@@ -651,7 +651,7 @@ namespace PlateMaker
                 "\t\t\t\t<!-- Original panzoom version -->   \n" +
                 "\t\t\t\t<!-- <div id='plateNumberDisplayWrapper'>   \n" +
                 "\t\t\t\t\t<div id='plateNumberDisplay'>   \n" +
-               $"\t\t\t\t\t\tPlate {this.FileName}   \n" +
+               $"\t\t\t\t\t\tPlate {this.PlateNumber}   \n" +
                 "\t\t\t\t\t</div>   \n" +
                 "\t\t\t\t</div> -->   \n" +
                 "\t\t\t</div>   \n" +
@@ -664,7 +664,7 @@ namespace PlateMaker
                 "\t\t<div class='container'>   \n" +
                 "\t\t\t<div id='plateNumberDisplayWrapper'>   \n" +
                 "\t\t\t\t<div id='plateNumberDisplay' >   \n" +
-               $"\t\t\t\t\tPlate {this.FileName}   \n" +
+               $"\t\t\t\t\tPlate {this.PlateNumber}   \n" +
                 "\t\t\t\t</div>   \n" +
                 "\t\t\t</div>   \n" +
                 "\t\t</div>   \n" +
@@ -813,7 +813,7 @@ namespace PlateMaker
                 "\t\t\t\t\t\twidth: 2048,   \n" +
                 "\t\t\t\t\t\theight: 2048,   \n" +
                 "\t\t\t\t\t\ttilesUrl:   \n" +
-               $"\t\t\t\t\t\t\t'../assets/Zoomify_Images-8.05-2048/{this.FileName}/',   \n" +
+               $"\t\t\t\t\t\t\t'../assets/Zoomify_Images-8.05-2048/{this.PlateNumber}/',   \n" +
                 "\t\t\t\t\t\t//optional   \n" +
                 "\t\t\t\t\t\ttileSize: 256,   \n" +
                 "\t\t\t\t\t\tfileFormat: 'jpg'   \n" +
@@ -886,7 +886,7 @@ namespace PlateMaker
             HtmlFilePath.Directory.Create();
 
             // Writes the html file to disk based on the htmlString, which in turn is based partially on the svgString
-            File.WriteAllText($"{HtmlFilePath}{FileName}.html", htmlString);
+            File.WriteAllText($"{HtmlFilePath}{PlateNumber}.html", htmlString);
 
         }
 
