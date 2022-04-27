@@ -1,14 +1,4 @@
 ﻿
-using Emgu.CV;
-using Emgu.CV.UI;
-using Emgu.CV.Structure;
-using System.Drawing;
-using System.Windows.Forms;
-using Emgu.CV.Features2D;
-using Emgu.CV.CvEnum;
-using Emgu.CV.Util;
-using System.Text.RegularExpressions;
-
 namespace PlateMaker
 {
     class Program
