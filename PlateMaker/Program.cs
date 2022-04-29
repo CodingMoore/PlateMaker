@@ -14,8 +14,14 @@ namespace PlateMaker
 
             try
             {
+                // Suppresses "CS8602: Dereference of possibly null reference" warning for fileSavingDirectory.
+                // Directory.GetParent() can return null if there is no parent directory.
+                // As this application controls the directory structure, we can know that fileSavingDirectory will not be null.
+                #pragma warning disable 8602
                 // Defines a file path inside this application that we will use later
                 fileSavingDirectory = Directory.GetParent(Directory.GetCurrentDirectory()).Parent.Parent.FullName;
+                // Un-suppresses 8602 warnings
+                #pragma warning restore 8602
             }
             catch (Exception e)
             {
@@ -86,20 +92,25 @@ namespace PlateMaker
                             // Makes the API call to the SDSS "Sky Server" database
                             Dictionary<int, string[]> stellarObjectData = apiCall.MakeTheApiCall();
 
-                            // Creates an SVG from the data returned by the API call.
-                            string svgStringFromApi = plate.CreateSvgFromApiCoordinates(stellarObjectData);
+                            if (stellarObjectData != null && stellarObjectData.Count > 0)
+                            {
+                                // Creates an SVG from the data returned by the API call.
+                                string svgStringFromApi = plate.CreateSvgFromApiCoordinates(stellarObjectData);
 
-                            // Creates an HTML file using the SVG "svgStringFromApi"
-                            plate.CreateHtmlFromSvgFromApi(svgStringFromApi);
+                                // Creates an HTML file using the SVG "svgStringFromApi"
+                                plate.CreateHtmlFromSvgFromApi(svgStringFromApi);
 
-                            Console.WriteLine($"Plate {plateNumber} has been completed");
-
+                                Console.WriteLine($"Plate {plateNumber} has been completed");
+                            }
+                            else
+                            {
+                                Console.WriteLine("Skipping Plate");
+                            }
                         }
                         // Adds blank line to console output for readability.
                         Console.WriteLine("");
 
                     }
-
                 }
             }
 

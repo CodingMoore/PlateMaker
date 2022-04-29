@@ -10,12 +10,14 @@ namespace PlateMaker
         public string QueryString { get; set; }
         public string EncodedQueryString { get; set; }
         public string ContentFormat { get; set; }
-        public string EncodedUrl { get; set; }
-        public dynamic ApiResponse { get; set; }
+        public string? EncodedUrl { get; set; }
+        public dynamic? ApiResponse { get; set; }
 
         public ApiCallObject(string plateNumber)
         {
+            // The base URL to which API variables will inserted
             BaseUrl = "http://skyserver.sdss.org/dr17/en/tools/search/x_results.aspx?searchtool=SQL&TaskName=Skyserver.Search.SQL&syntax=NoSyntax&ReturnHtml=true&cmd=";
+            // The SQL query that will be added onto the Base URL as query strings.  Note that the space after each line are required.
             QueryString = "" +
                 "SELECT" + " " +
                 "plate, ObjId, xFocal, yFocal, s.ra, s.dec, class" + " " +
@@ -26,80 +28,70 @@ namespace PlateMaker
                 "WHERE" + " " +
                $"s.plate = {plateNumber}" + " " +
                 "Order by xFocal asc";
+            // Converts the Query String (SQL query) into a URL encoded format.
             EncodedQueryString = HttpUtility.UrlEncode(QueryString);
+            // Sets the return type of the API call
             ContentFormat = "&format=jsonx";
             ApiResponse = null;
         }
 
         public Dictionary<int, string[]> MakeTheApiCall()
         {
-
+            // Creates Api request client
             var client = new RestClient();
-            var request = new RestRequest(BaseUrl + EncodedQueryString + ContentFormat);
-
+            // Creates the API request
+            var request = new RestRequest(BaseUrl + ContentFormat);
+            // Makes the API request and saves the response
             var response = client.ExecuteAsync(request, Method.GET).GetAwaiter().GetResult();
 
-            if (!response.IsSuccessful)
+            // The If statement to check if the EncodedQueryString is null is here because EncodedQueryString was made to be a nullable value. This should never be hit, but it is here just in case.
+            if (EncodedQueryString == null)
             {
-                string message = "Error retrieving API response: " + response.ErrorMessage;
-                Console.WriteLine(message);
-                var exception = new Exception(message, response.ErrorException);
-                //throw exception;
+                Console.WriteLine("The Encoded query string is null.");
+                Console.WriteLine("Aborting API call.");
             }
-            else
+            else if (!response.IsSuccessful)
             {
                 Console.WriteLine("SDSS API response status code: " + response.StatusCode);
-
-                //Console.WriteLine(response.Content);
-                // deserializes json response
+                string message = "Error retrieving API response: " + response.ErrorMessage;
+                var exception = new Exception(message, response.ErrorException);
+                Console.WriteLine(exception);
+            }
+            else if (response == null || string.IsNullOrEmpty(response.Content))
+            {
+                Console.WriteLine("The Api response was null or empty");
+            }
+            else
+            { 
+                Console.WriteLine("SDSS API response status code: " + response.StatusCode);
+                // Deserializes json response from api call.
                 ApiResponse = JsonConvert.DeserializeObject(response.Content);
             }
 
-            //Console.WriteLine("EncodedQueryString" + this.EncodedQueryString);
-            //Console.WriteLine(this.BaseUrl + this.EncodedQueryString + this.ContentFormat);
-            //Console.WriteLine(this.ApiResponse);
-
             Dictionary<int, string[]> stellarObjectData = new Dictionary<int, string[]> { };
 
-            //foreach (var stellarObject in this.ApiResponse[0]["TableName"] == "Table1") 
-            //{
-            //    stellarObjectData.Add(stellarObject[0] Key["ObjId"], [stellarObject["xFocal"], sellarObject["yFocal"]]);
-            //}
-
-
-
-            for (int i = 0; i < ApiResponse[0]["Rows"].Count; i++)
+            if (ApiResponse != null)
             {
+                for (int i = 0; i < ApiResponse[0]["Rows"].Count; i++)
+                {
+                    string[] objectDataString = new string[] {
+                        ApiResponse[0]["Rows"][i]["xFocal"].ToString(),
+                        ApiResponse[0]["Rows"][i]["yFocal"].ToString(),
+                        ApiResponse[0]["Rows"][i]["ObjId"].ToString(),
+                        ApiResponse[0]["Rows"][i]["plate"].ToString(),
+                        ApiResponse[0]["Rows"][i]["ra"].ToString(),
+                        ApiResponse[0]["Rows"][i]["dec"].ToString(),
+                        ApiResponse[0]["Rows"][i]["class"].ToString(),
+                        // Might experiment with retrieving an image with the API at a later time.  Reminder to add the image to the SQL Select Statement.
+                        //ApiResponse[0]["Rows"][i]["img"].ToString(),
+                    };
 
-                string[] objectDataString = new string[] {
-                    ApiResponse[0]["Rows"][i]["xFocal"].ToString(),
-                    ApiResponse[0]["Rows"][i]["yFocal"].ToString(),
-                    ApiResponse[0]["Rows"][i]["ObjId"].ToString(),
-                    ApiResponse[0]["Rows"][i]["plate"].ToString(),
-                    ApiResponse[0]["Rows"][i]["ra"].ToString(),
-                    ApiResponse[0]["Rows"][i]["dec"].ToString(),
-                    ApiResponse[0]["Rows"][i]["class"].ToString(),
-                    //might try the image thing later
-                    //ApiResponse[0]["Rows"][i]["img"].ToString(),
-                };
-
-                stellarObjectData.Add(i, objectDataString);
+                    stellarObjectData.Add(i, objectDataString);
+                }
             }
 
-            //foreach(var item in this.ApiResponse[0]["Rows"])
-            //{
-            //    string objectIdAsString = item["ObjId"].ToString();
-            //    string[] xYArray = new string[] { item["xFocal"].ToString(), item["yFocal"].ToString() };
-
-            //    stellarObjectData.Add(objectIdAsString, xYArray);
-            //}
-
             return stellarObjectData;
-
-
         }
-
-
     }
 }
 
