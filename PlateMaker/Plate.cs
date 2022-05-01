@@ -405,7 +405,9 @@ namespace PlateMaker
                 "\t<meta charset='UTF-8'>   \n" +
                 "\t<meta http-equiv='X-UA-Compatible' content='IE=edge'>   \n" +
                 "\t<meta name='viewport' content='width=device-width, initial-scale=1.0'>   \n" +
-                "\t<link href='../css/bootstrap.css' rel='stylesheet' type='text/css'>   \n" +
+                "\t<!-- <link href='../css/bootstrap.css' rel='stylesheet' type='text/css'> -->   \n" +
+                "\t<link href='https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css' rel='stylesheet' integrity='sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3' crossorigin='anonymous'>   \n" +
+
                 "\t<!-- The custom style sheet should only be used if you move the contents of the styling tag to it -->   \n" +
                 //      The custom style sheet should only be used if you move the contents of the styling tag to it
                 "\t<!-- <link href='../css/plateStyles.css' rel='stylesheet' type='text/css'> -->   \n" +
@@ -420,23 +422,25 @@ namespace PlateMaker
                 "\t<!-- <script src='https://www.unpkg.com/@panzoom/panzoom/dist/panzoom.js'></script> -->   \n" +
                 "\n" +
 
-                "\t<!-- The custom scripts file should only be used if you move the contents of the scipts tag (from the bottom of the page) to it. -->   \n" +
-                //      The custom scripts file should only be used if you move the contents of the scipts tag (from the bottom of the page) to it.
+                "\t<!-- The custom scripts file should only be used if you move the contents of the scripts tag (from the bottom of the page) to it. -->   \n" +
+                //      The custom scripts file should only be used if you move the contents of the scripts tag (from the bottom of the page) to it.
                 "\t<!-- <script src='../js/plateScripts.js' type='module'></script> -->   \n" +
                 "\n" +
 
                 "\t<!-- ToDo - Replace with CDN -->   \n" +
                 //      ToDo - Replace with CDN
-                "\t<script src='../openseadragon/openseadragon.min.js'></script>   \n" +
+                "\t<!-- <script src='../openseadragon/openseadragon.min.js'></script> -->   \n" +
+                "\t<script src='https://cdnjs.cloudflare.com/ajax/libs/openseadragon/3.0.0/openseadragon.min.js' integrity='sha512-Dq5iZeGNxm7Ql/Ix10sugr98niMRyuObKlIzKN1SzUysEXBxti479CTsCiTV00gFlDeDO3zhBsyCOO+v6QVwJw==' crossorigin='anonymous' referrerpolicy='no-referrer'></script>   \n" +
                 "\t<!-- ToDo - Replace with CDN once 'svg flip' has been added to the library -->   \n" +
                 //      ToDo - Replace with CDN once 'svg flip' has been added to the library
-                "\t<script src='../svg-overlay-master/openseadragon-svg-overlay.js'></script>   \n" +
+                "\t<!-- <script src='../svg-overlay-master/openseadragon-svg-overlay.js'></script> -->   \n" +
+                "\t<script src='https://openseadragon.github.io/svg-overlay/openseadragon-svg-overlay.js'></script>   \n" +
                 "\t<!-- <script src='../js/jquery-ui-1.13.1.custom/jquery-ui.js'></script> -->   \n" +
-                "\t<link rel='stylesheet' href='//code.jquery.com/ui/1.13.1/themes/ui-darkness/jquery-ui.css'>   \n" +
+                "\t<link rel='stylesheet' href='https://code.jquery.com/ui/1.13.1/themes/ui-darkness/jquery-ui.css'>   \n" +
                 "\t<script src='https://code.jquery.com/ui/1.13.1/jquery-ui.js'></script>   \n" +
                 "\t<!-- Allows jQuery UI slider to work properly with touch -->   \n" +
                 //      Allows jQuery UI slider to work properly with touch
-                "\t<script type='text/javascript' src='//cdnjs.cloudflare.com/ajax/libs/jqueryui-touch-punch/0.2.3/jquery.ui.touch-punch.min.js'></script>   \n" +
+                "\t<script type='text/javascript' src='https://cdnjs.cloudflare.com/ajax/libs/jqueryui-touch-punch/0.2.3/jquery.ui.touch-punch.min.js'></script>   \n" +
                 "\n" +
 
                 "\t<!-- Questionable CDN link - Check with Devs to get the official one -->   \n" +
