@@ -17,11 +17,13 @@ namespace PlateMaker
                 // Suppresses "CS8602: Dereference of possibly null reference" warning for fileSavingDirectory.
                 // Directory.GetParent() can return null if there is no parent directory.
                 // As this application controls the directory structure, we can know that fileSavingDirectory will not be null.
-                #pragma warning disable 8602
+                #pragma warning disable CS8602 // Dereference of a possibly null reference.
+
                 // Defines a file path inside this application that we will use later
                 fileSavingDirectory = Directory.GetParent(Directory.GetCurrentDirectory()).Parent.Parent.FullName;
+
                 // Un-suppresses 8602 warnings
-                #pragma warning restore 8602
+                #pragma warning restore CS8602 // Dereference of a possibly null reference.
             }
             catch (Exception e)
             {

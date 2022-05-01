@@ -5,7 +5,6 @@
 	<meta charset='UTF-8'>   
 	<meta http-equiv='X-UA-Compatible' content='IE=edge'>   
 	<meta name='viewport' content='width=device-width, initial-scale=1.0'>   
-	<title>Document</title>   
 	<link href='../css/bootstrap.css' rel='stylesheet' type='text/css'>   
 	<!-- The custom style sheet should only be used if you move the contents of the styling tag to it -->   
 	<!-- <link href='../css/plateStyles.css' rel='stylesheet' type='text/css'> -->   
@@ -271,6 +270,9 @@
 			<svg viewBox='0 0 120 120' style='fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:2;'>   
 				<g id='_1-8-inch-center-hole' serif:id='1/8 inch center hole' transform='matrix(0.0391862,0,0,0.0391862,57.5523,57.6538)'>   
 					<circle cx='62.463' cy='59.874' r='5.104' style='fill:rgb(76,0,255);'/>   
+					<!-- The 'dominant-baseline='middle' text-anchor='middle' centers the text. -->   
+					<!-- There seems to be an issue that the this center dot is not acutally centered (see its cx and cy). -->   
+					<!-- For some reason the text's x coordinate needs to be a 52% instead of 50% to get it centered. -->   
 					<text font-size='1.5px' x='52%' y='50%' fill='black' dominant-baseline='middle' text-anchor='middle'>Plate Center</text>   
 				</g>   
 			</svg>   
@@ -3690,12 +3692,12 @@
 				$('#backgroundImageButton').css('background-color', 'rgb(134, 134, 134)');   
 			}   
 
-			// turns off the plate fill (so that it doesn't cover the skyImage background)   
+			// Turns off the plate fill (so that it doesn't cover the skyImage background)   
 			if ($('#backgroundFill').hasClass('fillOn')) {   
 				$('#backgroundFill').removeClass('fillOn')   
 				$('#backgroundFill').hide();   
 			}   
-			// turns on the plate fill   
+			// Turns on the plate fill   
 			else {   
 				$('#backgroundFill').addClass('fillOn')   
 				$('#backgroundFill').show();   
@@ -3731,6 +3733,7 @@
 		//const parent = element.parentElement;   
 		//parent.addEventListener('wheel', panzoom.zoomWithWheel);   
 
+		// OpenSeadragon settings   
 		var viewer = OpenSeadragon({   
 			id: 'openSeaDragonWrapper',   
 			prefixUrl: '../openseadragon/images/',   
@@ -3752,13 +3755,13 @@
 				{   
 					width: 4000,   
 					tileSource: {   
-						//required   
+						//Required   
 						type: 'zoomifytileservice',   
 						width: 2048,   
 						height: 2048,   
 						tilesUrl:   
 							'../assets/Zoomify_Images-8.05-2048/11386/',   
-						//optional   
+						//Optional   
 						tileSize: 256,   
 						fileFormat: 'jpg'   
 					},   

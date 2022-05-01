@@ -9,37 +9,37 @@ namespace PlateMaker
         public FileInfo HtmlFilePath { get; set; }
         public double OpenSeaDragonMaxZoomPixelRatio { get; set; }
 
-        public Plate(string file, string fileSavingDirectory)
+        public Plate(string plateNumber, string fileSavingDirectory)
         {
             // Extracts the original Image file name from the full file path, and removes the file extension.
             // This will be used later when we save each image's svg and html files as they will use the same file name.
-            PlateNumber = Path.GetFileNameWithoutExtension(file);
+            PlateNumber = Path.GetFileNameWithoutExtension(plateNumber);
 
-            // Defines the full directory path for saving the file
-            SvgFilePath = new FileInfo($"{fileSavingDirectory}svg Files\\");
+            // Defines the full directory path for saving the svg files.
+            SvgFilePath = new FileInfo($"{fileSavingDirectory}\\svg Files\\");
 
-            // Defines the full directory path for saving the file
-            HtmlFilePath = new FileInfo($"{fileSavingDirectory}html Files\\");
+            // Defines the full directory path for saving the html files.
+            HtmlFilePath = new FileInfo($"{fileSavingDirectory}\\html Files\\");
 
             // Defines how far you can zoom in on an image using OpenSeaDragon.
+            // The default value for OSD is 1, which represents a 1:1 pixel ratio of the image to the screen.
             // Since this value is needed in multiple methods, it is housed here.
             OpenSeaDragonMaxZoomPixelRatio = 4;
-
         }
 
         public string CreateSvgFromApiCoordinates(Dictionary<int, string[]> stellarObjectData)
         {
-
             ////////////////////////////////
             ///// Adjustable Constants /////
             ////////////////////////////////
     
             // Creates the a scaling multiplier to adjust the zoom of the object image on the sdss website
-            string photoScaler = ".5"; 
+            // This is used when the plateDot use links that go to the SDSS "Visual Tools" webpage.
+            //string photoScaler = ".5"; 
 
             // The dotScaler affects distance between the dots since it is multiplied by each dot's x and y coordinates.
             // Since the area of the dots is automatically scaled to fit its container, this has the effect of changing the perceived dot size.
-            // The HIGHER the number, the SMALLER the dots (.5 is larger than 3)
+            // The HIGHER the number, the SMALLER the dots (.5 is larger than 3).
             double dotScaler = 1;
 
             // Creates a Relative size multiplier for the plate dot area in relation to the plate border.
@@ -51,10 +51,11 @@ namespace PlateMaker
             // If you change the strokeWidthScaler, then you change the stroke width relative to the dot size.
             double strokeWidthScaler = .5;
 
-            // Creates a constant to keep the ratio of the OSD tile source width to the svgImage size constant
+            // Creates a constant to keep the ratio of the OSD tile source width to the svgImage size constant.
             double OpenSeaDragonOuterTileSourceWidthSvg = 1000 * this.OpenSeaDragonMaxZoomPixelRatio;
 
-            // Styling constants
+
+            // Styling constants (These are not in the HTML Style section because someone may want to use the SVGs by themselves, without the HTML functionality).
             string plateBorderStyle = "style='stroke:rgb(92,92,92); stroke-width:.25;'";
 
             string plateFillStyle = "style='fill:rgb(92,92,92);'";
@@ -87,11 +88,14 @@ namespace PlateMaker
             ////////////////////////////////
 
 
+            ////////////////////////////////////
+            ///// Non-Adjustable Constants /////
+            ////////////////////////////////////
 
-            // The stroke width of the dots, as calculated from the constants above.
+            // The stroke width of the dots, as calculated from the adjustable constants above.
             double strokeWidth = strokeWidthScaler * dotAreaScaler;
 
-            // Creates a compound scaler used to calculate how the dots are laid out on the screen. Calculated from the constants above.
+            // Creates a compound scaler used to calculate how the dots are laid out on the screen. Calculated from the adjustable constants above.
             double relativeSizeScaler = dotAreaScaler * dotScaler;
 
             // Creates Viewbox Size constants. You should probably leave these alone.
@@ -101,21 +105,29 @@ namespace PlateMaker
             double xViewBoxMax = 800 * dotScaler;
             double yViewBoxMax = 800 * dotScaler;
 
+            ////////////////////////////////////
+            ////////////////////////////////////
+
             // Creates our opening svg string to be tacked on to the beginning of the Stringbuilder
-            
-            // panzoom version
+
+            // panzoom version (IF the panzoom library is to be used instead of OpenSeadragon (OSD).
             //string svgOpenOuter = $"\t\t<svg id='svgImage' width='100vw' height='100vh' viewBox='{xViewBoxMin} {yViewBoxMin} {xViewBoxMax} {yViewBoxMax}' transform-origin='0 0'>   \n";
-            
+
             //OpenSeaDragon Version
             string svgOpenOuter = $"\t\t<svg id='svgImage' width='{OpenSeaDragonOuterTileSourceWidthSvg}px' height='{OpenSeaDragonOuterTileSourceWidthSvg}px' viewBox='{xViewBoxMin} {yViewBoxMin} {xViewBoxMax} {yViewBoxMax}' transform-origin='0 0'>   \n";
 
+
+            // Creates container for the plate's night sky background image.
             string svgSkyImageBox =
                 "\t\t\t<!-- The viewBox max values determine how the background image lines up with dots on the plate.  -->   \n" +
+                //          The viewBox max values determine how the background image lines up with dots on the plate.
                 "\t\t\t<svg id='skyImageBox' width='100%' height='100%' viewBox='0 0 120 100' preserveAspectRatio='xMidYMid meet' display='none'>   \n" +
                 "\t\t\t\t<!-- Original panzoom version -->   \n" +
+                //            Original panzoom version
                $"\t\t\t\t<!-- <image id='skyImageBoxBackgroundImage' preserveAspectRatio='xMidYMid slice' width='100%' height='100%' href='../assets/plateBackgroundImages/PlateID-{this.PlateNumber}.jpg'/> -->   \n" +
                 "\t\t\t\t<image id='skyImageBoxBackgroundImage' preserveAspectRatio='xMidYMid slice' width='100%' height='100%'/>   \n" +
                 "\t\t\t\t<!-- This rectangle is just used for visualizing the edges of the parent svg when setting up the program -->   \n" +
+                //            This rectangle is just used for visualizing the edges of the parent svg when setting up the program
                 "\t\t\t\t<!-- <rect width='100%' height='100%' viewBox='0 0 100 100' stroke='pink' stroke-width='2px' fill='url(#spaceBoxBackground)'/> -->   \n" +
                 "\t\t\t</svg>   \n";
 
@@ -176,13 +188,16 @@ namespace PlateMaker
                 "\t\t\t</svg>   \n";
 
             // Creates a fill for the 1/8 inch hole in the center of the plate, which will be added to the Stringbuilder
-            // The 'dominant-baseline='middle' text-anchor='middle' centers the tex.
-            // There seems to be an issue that the this center dot is not acutally centered (see its cx and cy).
-            // For some reason the text's x coordinate needs to be a 52% instead of 50% to get it centered.
             string svgPlateEighthInchCenterHole =
                 "\t\t\t<svg viewBox='0 0 120 120' style='fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:2;'>   \n" +
                 "\t\t\t\t<g id='_1-8-inch-center-hole' serif:id='1/8 inch center hole' transform='matrix(0.0391862,0,0,0.0391862,57.5523,57.6538)'>   \n" +
                $"\t\t\t\t\t<circle cx='62.463' cy='59.874' r='5.104' {plateEighthInchCenterHoleStyle}/>   \n" +
+                "\t\t\t\t\t<!-- The 'dominant-baseline='middle' text-anchor='middle' centers the text. -->   \n" +
+                "\t\t\t\t\t<!-- There seems to be an issue that the this center dot is not acutally centered (see its cx and cy). -->   \n" +
+                "\t\t\t\t\t<!-- For some reason the text's x coordinate needs to be a 52% instead of 50% to get it centered. -->   \n" +
+                //              The 'dominant-baseline='middle' text-anchor='middle' centers the text.
+                //              There seems to be an issue that the this center dot is not acutally centered (see its cx and cy).
+                //              For some reason the text's x coordinate needs to be a 52% instead of 50% to get it centered.
                 "\t\t\t\t\t<text font-size='1.5px' x='52%' y='50%' fill='black' dominant-baseline='middle' text-anchor='middle'>Plate Center</text>   \n" +
                 "\t\t\t\t</g>   \n" +
                 "\t\t\t</svg>   \n";
@@ -259,10 +274,10 @@ namespace PlateMaker
                 "\t\t\t\t</g>   \n" +
                 "\t\t\t</svg>   \n";
 
-            // Creates a new StringBuilder object
+            // Creates a new StringBuilder object, to which we can add all our SVG elements.
             var svgStringBuilder = new StringBuilder();
 
-            // Adds the some of the SVG strings to the Stringbuilder
+            // Adds the initial SVG elements to the Stringbuilder
             svgStringBuilder.Append(svgOpenOuter);
             svgStringBuilder.Append(svgSkyImageBox);
             svgStringBuilder.Append(svgPlateBorder);
@@ -272,32 +287,26 @@ namespace PlateMaker
             svgStringBuilder.Append(svgPlateHalfInch180DegreeSpacedHoles);
             svgStringBuilder.Append(svgPlateHalfInch30DegreeSpacedHoles);
 
-
-            // for every center and radius in our list, create a sub string to be use the the svg file
+            // For every center and radius in our list list of stellar objects (stellarObjectData), creates variables to be use the the svg file
             for (int i = 0; i < stellarObjectData.Count; i++)
             {
                 // Converts coordinates from strings to numbers (double)
-                double xCoordinate = double.Parse(stellarObjectData[i][0]);
-                double yCoordinate = double.Parse(stellarObjectData[i][1]);
-
-
-                    //The reasoning here is wrong :(
-                        // The dot/hole coordinates returned by the api are presumably in respect the side of the plate that faces the sky when mounted in the telescope.
-                        // This means that when you try to plot the plate dot/hole coordinates against the sky background, the x-axis values are reversed.
-                        // To resovle this we will need to 'flip' the plate over by reversing the x coordinates.
-
-                xCoordinate = -xCoordinate;
-                yCoordinate = -yCoordinate; 
+                // To orient the plate SVGs correctly against the night sky (and the night sky background images), we need to invert the coordinates retrieved by the API call (hence the '-' operator).
+                // While the reason WHY this needs to be done isn't strictly relevant to this application, it MAY have something to do with how the plates are mounted in the telescopes. 
+                double xCoordinate = -double.Parse(stellarObjectData[i][0]);
+                double yCoordinate = -double.Parse(stellarObjectData[i][1]);
 
                 // When the stellarObjectData (xCoordinate and yCoordinate) is multiplied by the relativeSizeScaler, we change the size of the overall area of the dots.
-                // When we add teh xViewBoxMax/2 and yViewBoxMax/2 value, we are translating each dot's x,y coordinates so that they are all
+                // When we add the xViewBoxMax/2 and yViewBoxMax/2 value, we are translating each dot's x,y coordinates so that they are all
                 // in the positive x and positive y coordinate quadrant, which places them in the viewbox.
                 double cxScaledAndTranslatedInt = xCoordinate * relativeSizeScaler + xViewBoxMax / 2;
                 double cyScaledAndTranslatedInt = yCoordinate * relativeSizeScaler + yViewBoxMax / 2;
 
+                // This may not be necessary (ToDo: test if the string conversion can be dropped)
                 string cxScaledAndTranslatedString = cxScaledAndTranslatedInt.ToString();
                 string cyScaledAndTranslatedString = cyScaledAndTranslatedInt.ToString();
 
+                // Applies the correct styling to the stellar object based on its type.
                 switch (stellarObjectData[i][6])
                 {
                     case "GALAXY":
@@ -318,7 +327,7 @@ namespace PlateMaker
 
                 svgStringBuilder.Append(
 
-                   // This link can be used to see a photo of the object in the night sky, but the image website is not very mobile friendly
+                   // This link can be used instead, to see a photo of the object in the night sky, but the image website is not very mobile friendly.
                    // Ampersands "&" in the href query string have been replaced with "&amp;" since a regular Ampersand is a escapement character in XML (svg).
                    //$"\t\t\t<a href='https://skyserver.sdss.org/dr17/VisualTools/navi?ra={stellarObjectData[i][4]}&amp;dec={stellarObjectData[i][5]}&amp;scale={photoScaler}' target='_blank'>   \n" +
 
@@ -329,16 +338,23 @@ namespace PlateMaker
                 );
             }
 
-            // Adds the closing SVG strign to the String Builder
+            // Adds the closing SVG string to the String Builder.
             svgStringBuilder.Append(svgCloseOuter);
 
-            // Converts the Stringbuilder to a string
+            // Converts the Stringbuilder to a string.
             string svgString = svgStringBuilder.ToString();
+
+            // Suppresses "CS8602: Dereference of possibly null reference" warning for fileSavingDirectory.
+            // As this application controls the directory structure, and we have already done a null check in Program.cs, we can know that svgFilePath will not be null.
+            #pragma warning disable CS8602 // Dereference of a possibly null reference.
 
             // Creates the file directory if the directory does not already exist.  If the directory does already exist, this method does nothing.
             SvgFilePath.Directory.Create();
 
-            // Writes the svg file to disk based on the svgString
+            // Un-suppresses 8602 warnings
+            #pragma warning restore CS8602 // Dereference of a possibly null reference.
+
+            // Writes the svg file to disk, based on the svgString.
             File.WriteAllText($"{SvgFilePath}{PlateNumber}.svg", svgString);
 
             return svgString;
@@ -374,8 +390,8 @@ namespace PlateMaker
             // Creates a constant to keep the ratio of the OSD tile source width to the svgImage size constant
             double OpenSeaDragonOuterTileSourceWidthHtml = 1000 * this.OpenSeaDragonMaxZoomPixelRatio;
 
-            ////////////////////////////////
-            ////////////////////////////////
+            ////////////////////////////////////
+            ////////////////////////////////////
 
             // Creates a new StringBuilder object
             StringBuilder htmlStringBuilder = new StringBuilder();
@@ -389,35 +405,42 @@ namespace PlateMaker
                 "\t<meta charset='UTF-8'>   \n" +
                 "\t<meta http-equiv='X-UA-Compatible' content='IE=edge'>   \n" +
                 "\t<meta name='viewport' content='width=device-width, initial-scale=1.0'>   \n" +
-                "\t<title>Document</title>   \n" +
                 "\t<link href='../css/bootstrap.css' rel='stylesheet' type='text/css'>   \n" +
                 "\t<!-- The custom style sheet should only be used if you move the contents of the styling tag to it -->   \n" +
+                //      The custom style sheet should only be used if you move the contents of the styling tag to it
                 "\t<!-- <link href='../css/plateStyles.css' rel='stylesheet' type='text/css'> -->   \n" +
                 "\t<!-- jQuery from local file should only be used if you are not using the CDN reference -->   \n" +
+                //      jQuery from local file should only be used if you are not using the CDN reference
                 "\t<!-- <script src='../js/jquery-3.6.0.js' type='module'></script> -->   \n" +
                 "\t<script src='https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js'></script>   \n" +
                 "\n" +
 
                 "\t<!-- Commented out because the OpenSeaDragon library is being used instead. -->   \n" +
+                // Commented out because the OpenSeaDragon library is being used instead.
                 "\t<!-- <script src='https://www.unpkg.com/@panzoom/panzoom/dist/panzoom.js'></script> -->   \n" +
                 "\n" +
 
                 "\t<!-- The custom scripts file should only be used if you move the contents of the scipts tag (from the bottom of the page) to it. -->   \n" +
+                //      The custom scripts file should only be used if you move the contents of the scipts tag (from the bottom of the page) to it.
                 "\t<!-- <script src='../js/plateScripts.js' type='module'></script> -->   \n" +
                 "\n" +
 
                 "\t<!-- ToDo - Replace with CDN -->   \n" +
+                //      ToDo - Replace with CDN
                 "\t<script src='../openseadragon/openseadragon.min.js'></script>   \n" +
                 "\t<!-- ToDo - Replace with CDN once 'svg flip' has been added to the library -->   \n" +
+                //      ToDo - Replace with CDN once 'svg flip' has been added to the library
                 "\t<script src='../svg-overlay-master/openseadragon-svg-overlay.js'></script>   \n" +
                 "\t<!-- <script src='../js/jquery-ui-1.13.1.custom/jquery-ui.js'></script> -->   \n" +
                 "\t<link rel='stylesheet' href='//code.jquery.com/ui/1.13.1/themes/ui-darkness/jquery-ui.css'>   \n" +
                 "\t<script src='https://code.jquery.com/ui/1.13.1/jquery-ui.js'></script>   \n" +
                 "\t<!-- Allows jQuery UI slider to work properly with touch -->   \n" +
+                //      Allows jQuery UI slider to work properly with touch
                 "\t<script type='text/javascript' src='//cdnjs.cloudflare.com/ajax/libs/jqueryui-touch-punch/0.2.3/jquery.ui.touch-punch.min.js'></script>   \n" +
                 "\n" +
 
                 "\t<!-- Questionable CDN link - Check with Devs to get the official one -->   \n" +
+                //      Questionable CDN link - Check with Devs to get the official one
                 "\t<!-- <script src='https://cdnjs.cloudflare.com/ajax/libs/openseadragon/3.0.0/openseadragon.min.js' integrity='sha512-Dq5iZeGNxm7Ql/Ix10sugr98niMRyuObKlIzKN1SzUysEXBxti479CTsCiTV00gFlDeDO3zhBsyCOO+v6QVwJw==' crossorigin='anonymous' referrerpolicy='no-referrer'></script> -->   \n" +
                 "\n" +
 
@@ -429,6 +452,7 @@ namespace PlateMaker
                 "\t\t\ttop: 0;   \n" +
                 "\t\t\tdisplay: grid;   \n" +
                 "\t\t\t/* To keep the header on top of the plate */   \n" +
+                //        To keep the header on top of the plate
                 "\t\t\tz-index: 1;   \n" +
                 "\t\t}   \n" +
                 "\n" +
@@ -537,6 +561,7 @@ namespace PlateMaker
                 "\n" +
 
                 "\t\t/* Original panzoom version */   \n" +
+                //      Original panzoom version
                 "\t\t/*#plateNumberDisplay {   \n" +
                 "\t\t\tposition: relative;   \n" +
                 "\t\t\ttop: 20px;   \n" +
@@ -545,6 +570,7 @@ namespace PlateMaker
                 "\n" +
 
                 "\t\t/* OpenSeaDragon version */   \n" +
+                //      OpenSeaDragon version
                 "\t\t#plateNumberDisplay {   \n" +
                 "\t\t\tposition: relative;   \n" +
                 "\t\t\ttop: 20px;   \n" +
@@ -556,6 +582,7 @@ namespace PlateMaker
                 "\n" +
 
                 "\t\t/* Probably not useful */   \n" +
+                //      Probably not useful
                 "\t\t#skyImageBoxBackgroundImage {   \n" +
                 "\t\t\timage-rendering: smooth;   \n" +
                 "\t\t}   \n" +
@@ -591,7 +618,7 @@ namespace PlateMaker
                $"<body {backgroundColor}>   \n" +
                 "\n" +
 
-                //This is the Plate Header
+                //      This is the Plate Header
                  "\t<!--This is the Plate Header-->   \n" +
                 "\t<div class='container'>   \n" +
                 "\t\t<div id='headerWrapper'>   \n" +
@@ -636,6 +663,7 @@ namespace PlateMaker
                 "\t\t\t\t\t<button id='backgroundImageButton' class='plateButton'>Background</button>   \n" +
                 "\t\t\t\t</div>   \n" +
                 "\t\t\t\t<!-- Original panzoom version -->   \n" +
+                //            Original panzoom version
                 "\t\t\t\t<!-- <div id='plateNumberDisplayWrapper'>   \n" +
                 "\t\t\t\t\t<div id='plateNumberDisplay'>   \n" +
                $"\t\t\t\t\t\tPlate {this.PlateNumber}   \n" +
@@ -667,15 +695,19 @@ namespace PlateMaker
                 "\t<script>   \n" +
                 "\t//If you want to run scripts from the plateScripts.js file, you will also probably need to move all your scripts from here to the plateScript.js file.   \n" +
                 "\t//Trying to use scripts both in the html and the plateScripts.js file causes jquery reference errors because things won't load in the correct order.   \n" +
+                //   If you want to run scripts from the plateScripts.js file, you will also probably need to move all your scripts from here to the plateScript.js file.
+                //   Trying to use scripts both in the html and the plateScripts.js file causes jquery reference errors because things won't load in the correct order.
                 "\n" +
 
                 "\t\t// Changes height of #svgImage on screen resize (and page load) so that the svg doesn't overflow   \n" +
+                //      Changes height of #svgImage on screen resize (and page load) so that the svg doesn't overflow
                 "\t\t$(window).resize(function() {   \n" +
                 "\t\t\t$('#svgImage').height((visualViewport.height - $('#headerWrapper').height()));   \n" +
                 "\t\t}).resize();   \n" +
                 "\n" +
 
                 "\t\t// Changes height of #OpenSeaDragonWrapper on screen resize (and page load) so that the image doesn't overflow   \n" +
+                //      Changes height of #OpenSeaDragonWrapper on screen resize (and page load) so that the image doesn't overflow
                 "\t\t$(window).resize(function() {   \n" +
                 "\t\t\t$('#openSeaDragonWrapper').height((visualViewport.height - $('#headerWrapper').height()) -20);   \n" +
                 "\t\t}).resize();   \n" +
@@ -683,21 +715,27 @@ namespace PlateMaker
 
                 "\t\t// panzoom reset logic   \n" +
                 "\t\t// Commented out because the OpenSeaDragon library is being used instead.   \n" +
+                //      panzoom reset logic
+                //      Commented out because the OpenSeaDragon library is being used instead.
                 "\t\t//$('#plateResetPanZoomButton').click(function() {   \n" +
                 "\t\t\t//panzoom.reset();   \n" +
                 "\t\t//});   \n" +
                 "\n" +
 
                 "\t\t// Plate flipping logic   \n" +
+                //      Plate flipping logic
                 "\t\t$('#plateFlipButton').click(function() {   \n" +
                 "\n" +
 
                 "\t\t\t// Triggers a plate reset so that the flip animates   \n" +
                 "\t\t\t// Commented out because the OpenSeaDragon library is being used instead.   \n" +
+                //        Triggers a plate reset so that the flip animates
+                //        Commented out because the OpenSeaDragon library is being used instead.
                 "\t\t\t//panzoom.reset();   \n" +
                 "\n" +
 
                 "\t\t\t// Does the flipping and highlights button   \n" +
+                //        Does the flipping and highlights button
                 "\t\t\tif($('#svgWrapper').hasClass('plateflipped')) {   \n" +
                 "\t\t\t\t$('#svgWrapper').removeClass('plateflipped');   \n" +
                 "\t\t\t\t$('#plateFlipButton').css('background-color', 'lightgray');   \n" +
@@ -712,16 +750,19 @@ namespace PlateMaker
                 "\n" +
 
                 "\t\t// Plate background image logic   \n" +
+                //      Plate background image logic
                 "\t\t$('#backgroundImageButton').click(function() {   \n" +
                 "\n" +
 
                 "\t\t\t// Turns on the skyImage background and hilights button   \n" +
+                //        Turns on the skyImage background and hilights button
                 "\t\t\tif($('#skyImageBox').hasClass('skyImageOn')) {   \n" +
                 "\t\t\t\t$('#skyImageBox').removeClass('skyImageOn');   \n" +
                 "\t\t\t\t$('#skyImageBox').hide();   \n" +
                 "\t\t\t\t$('#backgroundImageButton').css('background-color', 'lightgray');   \n" +
                 "\t\t\t}   \n" +
                 "\t\t\t// Turns off the skyImage background and un-hilights button   \n" +
+                //        Turns off the skyImage background and un-hilights button
                 "\t\t\telse {   \n" +
                 "\t\t\t\t$('#skyImageBox').addClass('skyImageOn');   \n" +
                 "\t\t\t\t$('#skyImageBox').show();   \n" +
@@ -729,12 +770,14 @@ namespace PlateMaker
                 "\t\t\t}   \n" +
                 "\n" +
 
-                "\t\t\t// turns off the plate fill (so that it doesn't cover the skyImage background)   \n" +
+                "\t\t\t// Turns off the plate fill (so that it doesn't cover the skyImage background)   \n" +
+                //        Turns off the plate fill (so that it doesn't cover the skyImage background)
                 "\t\t\tif ($('#backgroundFill').hasClass('fillOn')) {   \n" +
                 "\t\t\t\t$('#backgroundFill').removeClass('fillOn')   \n" +
                 "\t\t\t\t$('#backgroundFill').hide();   \n" +
                 "\t\t\t}   \n" +
-                "\t\t\t// turns on the plate fill   \n" +
+                "\t\t\t// Turns on the plate fill   \n" +
+                //        Turns on the plate fill
                 "\t\t\telse {   \n" +
                 "\t\t\t\t$('#backgroundFill').addClass('fillOn')   \n" +
                 "\t\t\t\t$('#backgroundFill').show();   \n" +
@@ -746,18 +789,25 @@ namespace PlateMaker
 
                 "\t\t// Commented out because the OpenSeaDragon library is being used instead.   \n" +
                 "\t\t// panzoom library settings   \n" +
+                //      Commented out because the OpenSeaDragon library is being used instead.
+                //      panzoom library settings
                 "\t\t//const element = document.getElementById('svgWrapper');   \n" +
                 "\t\t//const panzoom = Panzoom(element, {   \n" +
                 "\t\t\t//// options here   \n" +
+                //          options here
                $"\t\t\t//{maxScale},   \n" +
                $"\t\t\t//{minScale},   \n" +
                $"\t\t\t//{zoomStep},   \n" +
                 "\t\t\t////determines how the transorms function.   \n" +
+                //         determines how the transorms function.
                 "\t\t\t//setTransform: (_, { scale, x, y }) => {   \n" +
                 "\t\t\t\t////You need a different setStyle property depending on if you flip the plate or not.   \n" +
+                //           You need a different setStyle property depending on if you flip the plate or not.
                 "\t\t\t\t//if($('#svgWrapper').hasClass('plateflipped')){   \n" +
                 "\t\t\t\t\t//// If you put `-${x}` into the translate property below, you can not pan the svg into negative x values.   \n" +
+                //              If you put `-${x}` into the translate property below, you can not pan the svg into negative x values.
                 "\t\t\t\t\t////Instead you must calculate the negative value of x before pluggin it in.   \n" +
+                //             Instead you must calculate the negative value of x before pluggin it in.
                 "\t\t\t\t\t//let negativeX = -x;   \n" +
                 "\t\t\t\t\t//panzoom.setStyle('transform', `scale(-${scale},${scale}) translate(${negativeX}px, ${y}px)`)   \n" +
                 "\t\t\t\t//}   \n" +
@@ -769,11 +819,14 @@ namespace PlateMaker
                 "\n" +
 
                 "\t\t// Commented out because the OpenSeaDragon library is being used instead.   \n" +
+                //      Commented out because the OpenSeaDragon library is being used instead.
                 "\t\t//// enable mouse wheel   \n" +
+                //        enable mouse wheel 
                 "\t\t//const parent = element.parentElement;   \n" +
                 "\t\t//parent.addEventListener('wheel', panzoom.zoomWithWheel);   \n" +
                 "\n" +
-
+                "\t\t// OpenSeadragon settings   \n" +
+                //      OpenSeadragon settings
                 "\t\tvar viewer = OpenSeadragon({   \n" +
                 "\t\t\tid: 'openSeaDragonWrapper',   \n" +
                 "\t\t\tprefixUrl: '../openseadragon/images/',   \n" +
@@ -788,6 +841,9 @@ namespace PlateMaker
                 "\t\t\t// Degrees set to != 0 to prevent bug -- Where while the tiled image is flipped,   \n" +
                 "\t\t\t// if you zoom in beyond the max pixel ratio (maxZoomPixelRation) of 1.1,   \n" +
                 "\t\t\t// the tiled image flips back to its original orientation.   \n" +
+                //        Degrees set to != 0 to prevent bug -- Where while the tiled image is flipped
+                //        if you zoom in beyond the max pixel ratio (maxZoomPixelRation) of 1.1,
+                //        the tiled image flips back to its original orientation.
                 "\t\t\tdegrees: .000001,   \n" +
                $"\t\t\tmaxZoomPixelRatio: {this.OpenSeaDragonMaxZoomPixelRatio},   \n" +
                $"\t\t\tzoomPerScroll: {OpenSeaDragonZoomPerScroll},   \n" +
@@ -795,13 +851,15 @@ namespace PlateMaker
                 "\t\t\t\t{   \n" +
                $"\t\t\t\t\twidth: {OpenSeaDragonOuterTileSourceWidthHtml},   \n" +
                 "\t\t\t\t\ttileSource: {   \n" +
-                "\t\t\t\t\t\t//required   \n" +
+                "\t\t\t\t\t\t//Required   \n" +
+                //             Required
                 "\t\t\t\t\t\ttype: 'zoomifytileservice',   \n" +
                 "\t\t\t\t\t\twidth: 2048,   \n" +
                 "\t\t\t\t\t\theight: 2048,   \n" +
                 "\t\t\t\t\t\ttilesUrl:   \n" +
                $"\t\t\t\t\t\t\t'../assets/Zoomify_Images-8.05-2048/{this.PlateNumber}/',   \n" +
-                "\t\t\t\t\t\t//optional   \n" +
+                "\t\t\t\t\t\t//Optional   \n" +
+                //             Optional
                 "\t\t\t\t\t\ttileSize: 256,   \n" +
                 "\t\t\t\t\t\tfileFormat: 'jpg'   \n" +
                 "\t\t\t\t\t},   \n" +
@@ -830,8 +888,10 @@ namespace PlateMaker
                 "\n" +
 
                 "\t\t// jQuery UI slider scripts   \n" +
+                //      jQuery UI slider scripts
                 "\t\t$('#slider').slider({   \n" +
                 "\t\t\t// min and max values can not be 0 or 360 or an OpenSeadragon bug is triggered where the tile image flips when zooming in past a maxZoomPixelRation of 1.1   \n" +
+                //        min and max values can not be 0 or 360 or an OpenSeadragon bug is triggered where the tile image flips when zooming in past a maxZoomPixelRation of 1.1
                 "\t\t\tmin: 0.000001,   \n" +
                 "\t\t\tmax: 359.999999,   \n" +
                 "\t\t\tstep: .000001   \n" +
@@ -839,6 +899,7 @@ namespace PlateMaker
                 "\n" +
 
                 "\t\t//This edits the size and placement of the slider handle.  Doing it in the styles doesn't seem to work.   \n" +
+                //     This edits the size and placement of the slider handle.  Doing it in the styles doesn't seem to work.
                 "\t\t$('.ui-slider-handle')   \n" +
                 "\t\t\t.height(30)   \n" +
                 "\t\t\t.width(70)   \n" +
@@ -849,6 +910,7 @@ namespace PlateMaker
                 "\n" +
 
                 "\t\t// Sets the rotation angle of the SVG to that of the value of the slider   \n" +
+                //      Sets the rotation angle of the SVG to that of the value of the slider
                 "\t\t$('#slider').slider({slide: function(event, ui) {   \n" +
                 "\t\t\t\tviewer.viewport.setRotation(ui.value);   \n" +
                 "\t\t\t\tconsole.log('jQuery Script', ui.value)   \n" +
@@ -869,8 +931,15 @@ namespace PlateMaker
             // Converts the Stringbuilder to a string
             string htmlString = htmlStringBuilder.ToString();
 
+            // Suppresses "CS8602: Dereference of possibly null reference" warning for fileSavingDirectory.
+            // As this application controls the directory structure, and we have already done a null check in Program.cs, we can know that svgFilePath will not be null.
+            #pragma warning disable CS8602 // Dereference of a possibly null reference.
+
             // Creates the file directory if the directory does not already exist.  If the directory does already exist, this method does nothing.
             HtmlFilePath.Directory.Create();
+
+            // Un-suppresses 8602 warnings
+            #pragma warning restore CS8602 // Dereference of a possibly null reference.
 
             // Writes the html file to disk based on the htmlString, which in turn is based partially on the svgString
             File.WriteAllText($"{HtmlFilePath}{PlateNumber}.html", htmlString);

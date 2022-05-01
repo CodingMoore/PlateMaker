@@ -40,7 +40,7 @@ namespace PlateMaker
             // Creates Api request client
             var client = new RestClient();
             // Creates the API request
-            var request = new RestRequest(BaseUrl + ContentFormat);
+            var request = new RestRequest(BaseUrl + EncodedQueryString + ContentFormat);
             // Makes the API request and saves the response
             var response = client.ExecuteAsync(request, Method.GET).GetAwaiter().GetResult();
 
